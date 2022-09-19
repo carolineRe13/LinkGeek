@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+          "value": "centralus"
+        },
+        "databaseOptions": {
+            "value": {
+                "databaseName": "LinkGeek-cosmosdb"
+            }
+        },
+        "redundancyOptions": {
+            "value": {
+                "locations": [
+                    "Central US",
+                    "East US"
+                ]
+            }
+        },
+        "endpointLocations": {
+            "value": {
+                "locations": [
+                    "Central US",
+                    "East US"
+                ]
+            }
+        },
+        "endpointsStatus": {
+          "value": {
+              "statuses": [
+                  "Enabled",
+                  "Enabled"
+              ]
+          }
+        }
+    }
+}

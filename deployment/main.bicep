@@ -2,6 +2,9 @@
 @maxLength(11)
 param storagePrefix string
 
+param databaseOptions object = {}
+param redundancyOptions object = {}
+
 @allowed([
   'Standard_LRS'
   'Standard_GRS'
@@ -18,7 +21,7 @@ param location string = resourceGroup().location
 
 var uniqueStorageName = '${storagePrefix}${uniqueString(resourceGroup().id)}'
 
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource stg 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: uniqueStorageName
   location: location
   sku: {
@@ -31,3 +34,12 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 output storageEndpoint object = stg.properties.primaryEndpoints
+
+module cosmosDB 'modules/database.bicep' = if (!empty(databaseOptions)) {
+  name: 'LinkGeek-CosmosDB-${location}'
+  params: {
+    location: location
+    databaseOptions: databaseOptions
+    redundancyOptions: redundancyOptions
+  }
+}
