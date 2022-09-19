@@ -16,6 +16,6 @@ module webApp 'modules/appService.bicep' = {
   name: 'LinkGeek-app'
   params: {
     location: location
-    webAppName: 'LinkGeek-webApp'
+    webAppName: 'LinkGeek'
   }
 }
