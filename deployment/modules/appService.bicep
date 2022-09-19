@@ -2,8 +2,6 @@ param webAppName string
 param sku string = 'F1' // The SKU of App Service Plan
 param linuxFxVersion string = 'DOTNETCORE|Latest' // The runtime stack of web app
 param location string = resourceGroup().location
-param repositoryUrl string = 'https://github.com/carolineRe13/LinkGeek'
-param branch string = 'main'
 var appServicePlanName = toLower('AppServicePlan-${webAppName}')
 var webSiteName = toLower('wapp-${webAppName}')
 
