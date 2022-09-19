@@ -17,22 +17,6 @@
                     "East US"
                 ]
             }
-        },
-        "endpointLocations": {
-            "value": {
-                "locations": [
-                    "Central US",
-                    "East US"
-                ]
-            }
-        },
-        "endpointsStatus": {
-          "value": {
-              "statuses": [
-                  "Enabled",
-                  "Enabled"
-              ]
-          }
         }
     }
 }
