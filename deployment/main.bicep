@@ -12,7 +12,7 @@ module cosmosDB 'modules/database.bicep' = if (!empty(databaseOptions)) {
   }
 }
 
-module webApp 'modules/appService.bicep' {
+module webApp 'modules/appService.bicep' = {
   name: 'LinkGeek-app'
   params: {
     location: location
