@@ -28,11 +28,3 @@ resource appService 'Microsoft.Web/sites@2022-03-01' = {
     }
   }
 }
-resource srcControls 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
-  name: '${appService.name}/web'
-  properties: {
-    repoUrl: repositoryUrl
-    branch: branch
-    isManualIntegration: true
-  }
-}
