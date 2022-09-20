@@ -19,4 +19,4 @@ RUN dotnet publish "LinkGeek.csproj" -c Release -o /app/publish /p:UseAppHost=fa
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LinkGeek.dll", "--server.urls", "http://+:80;https://+:443"]
+ENTRYPOINT ["dotnet", "LinkGeek.dll"]

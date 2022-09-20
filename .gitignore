@@ -85,3 +85,9 @@ artifacts/
 
 # Certificates
 .aspnet
+
+# docker
+.dockerignore
+
+
+.config/dotnet-tools.json
