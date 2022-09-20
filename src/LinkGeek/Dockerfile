@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["LinkGeek/LinkGeek/LinkGeek.csproj", "LinkGeek/LinkGeek/"]
-RUN dotnet restore "LinkGeek/LinkGeek/LinkGeek.csproj"
+COPY ["LinkGeek/LinkGeek.csproj", "LinkGeek/"]
+RUN dotnet restore "LinkGeek/LinkGeek.csproj"
 COPY . .
-WORKDIR "/src/LinkGeek/LinkGeek"
+WORKDIR "/src/LinkGeek"
 RUN dotnet build "LinkGeek.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -19,4 +19,4 @@ RUN dotnet publish "LinkGeek.csproj" -c Release -o /app/publish /p:UseAppHost=fa
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LinkGeek.dll"]
+ENTRYPOINT ["dotnet", "LinkGeek.dll", "--server.urls", "http://+:80;https://+:443"]
