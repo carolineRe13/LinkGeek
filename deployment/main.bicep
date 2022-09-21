@@ -3,7 +3,15 @@ param redundancyOptions object = {}
 
 param location string = resourceGroup().location
 
-module cosmosDB 'modules/database.bicep' = if (!empty(databaseOptions)) {
+module SQLServer 'modules/databaseSQLServer.bicep' = if (!empty(databaseOptions)) {
+  name: 'LinkGeek-SQLServer-${location}'
+  params: {
+    location: location
+    databaseOptions: databaseOptions
+  }
+}
+
+module cosmosDB 'modules/databaseCosmos.bicep' = if (!empty(databaseOptions)) {
   name: 'LinkGeek-CosmosDB-${location}'
   params: {
     location: location
