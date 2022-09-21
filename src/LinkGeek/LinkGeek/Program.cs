@@ -1,7 +1,6 @@
 using LinkGeek;
 using LinkGeek.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 // Chat
 // https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/chat/get-started?tabs=windows&pivots=programming-language-csharp

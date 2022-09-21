@@ -63,6 +63,14 @@ namespace LinkGeek.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            
+            [Required]
+            public string FirstName { get; set; }
+            
+            
+            [Required]
+            public string LastName { get; set; }
+            
             [Required]
             public string Username { get; set; }
 
@@ -112,13 +120,12 @@ namespace LinkGeek.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                Input = new InputModel
                 {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-                }
+                    FirstName = GetClaimValue(info, ClaimTypes.GivenName),
+                    LastName = GetClaimValue(info, ClaimTypes.Surname),
+                    Email = GetClaimValue(info, ClaimTypes.Email)
+                };
                 return Page();
             }
         }
@@ -137,8 +144,10 @@ namespace LinkGeek.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
+                await _userStore.SetUserFirstNameAsync(user, Input.FirstName, CancellationToken.None);
+                await _userStore.SetUserLastNameAsync(user, Input.LastName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 var result = await _userManager.CreateAsync(user);
@@ -203,6 +212,13 @@ namespace LinkGeek.Areas.Identity.Pages.Account
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
+        }
+        
+        private static string GetClaimValue(ExternalLoginInfo info, string claimType)
+        {
+            return info.Principal.HasClaim(c => c.Type == claimType)
+                ? info.Principal.FindFirstValue(claimType)
+                : string.Empty;
         }
     }
 }
