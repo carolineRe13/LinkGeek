@@ -49,9 +49,9 @@ else
 // Run migrations on startup
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+    var servicesProvider = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<ApplicationDbContext>();    
+    var context = servicesProvider.GetRequiredService<ApplicationDbContext>();    
     context.Database.Migrate();
 }
 
