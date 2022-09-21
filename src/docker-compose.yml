@@ -12,6 +12,13 @@ services:
       - 'ASPNETCORE_HTTPS_PORT=443' 
       - 'ASPNETCORE_Kestrel__Certificates__Default__Password=pwd' 
       - 'ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx' 
-  
     volumes:
       - ..\.aspnet\https:/https/
+
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - SA_PASSWORD=YourSTRONG!Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
