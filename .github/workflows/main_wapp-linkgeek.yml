@@ -5,6 +5,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - wapp-linkgeek
 
 env:
   DOTNET_VERSION: '6.0.x'
+   AZURE_WEBAPP_PACKAGE_PATH: './src/LinkGeek'
+   AZURE_WEBAPP_NAME: wapp-linkgeek-webapp
 
 
 on:
@@ -27,10 +29,14 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -55,7 +61,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'wapp-linkgeek'
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2333840BFAB44ABE88BC6938428CEC8B }}
           package: .
