@@ -10,14 +10,6 @@
         "databaseName": "LinkGeek-cosmosdb",
         "databaseNameSQLServer": "LinkGeek-SQLServer"
       }
-    },
-    "redundancyOptions": {
-      "value": {
-        "locations": [
-          "Central US",
-          "East US"
-        ]
-      }
     }
   }
 }
