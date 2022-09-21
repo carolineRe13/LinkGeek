@@ -12,6 +12,7 @@ var configuration = builder.Configuration;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// commented out to make the website work in Azure
 // services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
 //{
 //    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
