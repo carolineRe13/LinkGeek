@@ -14,8 +14,8 @@ builder.Services.AddSwaggerGen();
 
 services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
 {
-    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-    microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+    microsoftOptions.ClientId = configuration["ClientId"];
+    microsoftOptions.ClientSecret = configuration["ClientSecret"];
 });
 
 // Add services to the container.
