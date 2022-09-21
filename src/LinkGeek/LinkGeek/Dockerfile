@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["LinkGeek/LinkGeek.csproj", "LinkGeek/"]
+COPY ["LinkGeek/LinkGeek/LinkGeek.csproj", "LinkGeek/"]
 RUN dotnet restore "LinkGeek/LinkGeek.csproj"
 COPY . .
-WORKDIR "/src/LinkGeek"
+WORKDIR "/src/LinkGeek/LinkGeek"
 RUN dotnet build "LinkGeek.csproj" -c Release -o /app/build
 
 FROM build AS publish

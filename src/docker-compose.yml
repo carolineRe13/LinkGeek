@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: LinkGeek/Dockerfile
+      dockerfile: LinkGeek/LinkGeek/Dockerfile
     ports:
       - "80:80"
       - "443:443"
