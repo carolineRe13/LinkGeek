@@ -1,5 +1,4 @@
 param databaseOptions object = {}
-param redundancyOptions object = {}
 
 param location string = resourceGroup().location
 
