@@ -12,12 +12,11 @@ var configuration = builder.Configuration;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// commented out to make the website work in Azure
-// services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-//{
-//    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-//    microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-//});
+services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+{
+    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
+    microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+});
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
