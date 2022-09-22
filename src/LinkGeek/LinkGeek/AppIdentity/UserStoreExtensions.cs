@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace LinkGeek;
+namespace LinkGeek.AppIdentity;
 
 public static class UserStoreExtensions
 {

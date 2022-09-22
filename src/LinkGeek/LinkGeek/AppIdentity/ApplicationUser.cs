@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
-namespace LinkGeek;
+namespace LinkGeek.AppIdentity;
 
 public class ApplicationUser : IdentityUser
 {

@@ -26,13 +26,4 @@
     <_ContentIncludedByDefault Remove="Areas\Discoverability\Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="Areas\Discoverability\Pages\_ViewImports.cshtml" />
-    <AdditionalFiles Include="Areas\Discoverability\Pages\_ViewStart.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Main" />
-  </ItemGroup>
-
 </Project>
