@@ -77,6 +77,12 @@ namespace LinkGeek.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [BindProperty]
+            public string Gender { get; set; }
+            
+            public byte[] ProfilePicture { get; set; }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -148,6 +154,8 @@ namespace LinkGeek.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _userStore.SetUserFirstNameAsync(user, Input.FirstName, CancellationToken.None);
                 await _userStore.SetUserLastNameAsync(user, Input.LastName, CancellationToken.None);
+                await _userStore.SetGenderAsync(user, Input.Gender, CancellationToken.None);
+                await _userStore.SetProfilePictureAsync(user, Input.ProfilePicture, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 var result = await _userManager.CreateAsync(user);

@@ -38,8 +38,29 @@
                 <label asp-for="Input.Email" class="form-label"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
+            <select class="gender">
+                <option value="">Select a gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
+        {
+            @Html.AntiForgeryToken()
+            <fieldset>
+                <legend>Photo</legend>
+                <div class="editor-label">
+                    <label for="profile">FileName:</label>
+                </div>
+                <div class="editor-field">
+                    <input name="Profile" id="profile" type="file" />
+                </div>
+                <p>
+                    <input type="submit" value="Create" />
+                </p>
+            </fieldset>
+        }
     </div>
 </div>
 

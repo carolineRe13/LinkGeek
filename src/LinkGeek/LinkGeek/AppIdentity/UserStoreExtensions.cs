@@ -27,4 +27,28 @@ public static class UserStoreExtensions
         user.LastName = lastName;
         return Task.CompletedTask;
     }
+
+    public static Task SetGenderAsync(this IUserStore<ApplicationUser> userStore,
+        ApplicationUser user, string gender, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+        user.Gender = gender;
+        return Task.CompletedTask;
+    }
+    
+    public static Task SetProfilePictureAsync(this IUserStore<ApplicationUser> userStore,
+        ApplicationUser user, byte[] profilePicture, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+        user.ProfilePicture = profilePicture;
+        return Task.CompletedTask;
+    }
 }

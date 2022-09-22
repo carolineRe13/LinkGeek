@@ -4,6 +4,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using LinkGeek;
@@ -15,6 +16,12 @@ namespace LinkGeek.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
+        public List<ItemList> GenderList { get; set; }  = new() {
+            new ItemList { Text = "Female", Value = 1 },  
+            new ItemList { Text = "Male", Value = 2 },  
+            new ItemList { Text = "Prefer not to say", Value = 3 }  
+        };
+        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -41,17 +48,27 @@ namespace LinkGeek.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            
+            [Display(Name = "Gender")]
+            public string Gender { get; set; }
+            
+            [Display(Name = "Profile picture")]
+            public byte[] ProfilePicture { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var profilePicture = await _userManager.GetProfilePicture(user);
+            var gender = await _userManager.GetGender(user);
 
             Input = new InputModel
             {
                 Username = userName,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Gender = gender,
+                ProfilePicture = profilePicture
             };
         }
 
@@ -99,6 +116,30 @@ namespace LinkGeek.Areas.Identity.Pages.Account.Manage
                 if (!setPhoneResult.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set phone number.";
+                    return RedirectToPage();
+                }
+            }
+            
+            var profilePicture = await _userManager.GetProfilePicture(user);
+            if (Input.ProfilePicture != profilePicture)
+            {
+                user.ProfilePicture = Input.ProfilePicture;
+                var update = await _userManager.UpdateAsync(user);
+                if (!update.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set gender.";
+                    return RedirectToPage();
+                }
+            }
+            
+            
+            if (Input.Gender != user.Gender)
+            {
+                user.Gender = Input.Gender;
+                var update = await _userManager.UpdateAsync(user);
+                if (!update.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set gender.";
                     return RedirectToPage();
                 }
             }
