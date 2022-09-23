@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\css\profile-card.scss" />
     <None Include="wwwroot\css\user-cards.scss" />
   </ItemGroup>
 
