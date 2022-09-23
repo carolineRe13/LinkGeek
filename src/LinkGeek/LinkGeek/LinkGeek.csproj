@@ -33,8 +33,4 @@
     <None Include="wwwroot\css\user-cards.scss" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Friends\Pages" />
-  </ItemGroup>
-
 </Project>
