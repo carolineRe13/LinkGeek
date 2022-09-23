@@ -1,0 +1,230 @@
+input[type=radio] {
+  display: none;
+}
+
+ul.horizontal-list {
+  list-style: none;
+  overflow-y: auto;
+  padding: 0;
+  min-height: 200px;
+  max-height: 400px;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0)));
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+ul.horizontal-list::-webkit-scrollbar {
+  display: none;
+}
+
+ul.horizontal-list li {
+  display: inline-block;
+  width: 33%;
+  padding: 0;
+}
+
+.user-card {
+  position: absolute;
+  width: 60%;
+  height: fit-content;
+  max-height: 600px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  transition: transform 0.8s ease;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.user-card-container {
+  margin: auto;
+  padding: 30px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "DM Sans", sans-serif;
+  transition: background 0.4s ease-in;
+  width: 100%;
+  max-width: 800px;
+  max-height: 800px;
+  height: 100%;
+  transform-style: preserve-3d;
+  flex-direction: column;
+}
+
+.user-cards {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+#item-0:checked ~ .user-cards #user-3 {
+  transform: translatex(-100%) scale(0.4) hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-0:checked ~ .user-cards #user-4 {
+  transform: translatex(-100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-0:checked ~ .user-cards #user-0 {
+  transform: translatex(0) scale(1);
+  opacity: 1;
+}
+
+#item-0:checked ~ .user-cards #user-1 {
+  transform: translatex(100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-0:checked ~ .user-cards #user-2 {
+  transform: translatex(100%) scale(0.4);
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-1:checked ~ .user-cards #user-4 {
+  transform: translatex(-100%) scale(0.4) hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-1:checked ~ .user-cards #user-0 {
+  transform: translatex(-100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-1:checked ~ .user-cards #user-1 {
+  transform: translatex(0) scale(1);
+  opacity: 1;
+}
+
+#item-1:checked ~ .user-cards #user-2 {
+  transform: translatex(100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-1:checked ~ .user-cards #user-3 {
+  transform: translatex(100%) scale(0.4);
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-2:checked ~ .user-cards #user-0 {
+  transform: translatex(-100%) scale(0.4) hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-2:checked ~ .user-cards #user-1 {
+  transform: translatex(-100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-2:checked ~ .user-cards #user-2 {
+  transform: translatex(0) scale(1);
+  opacity: 1;
+}
+
+#item-2:checked ~ .user-cards #user-3 {
+  transform: translatex(100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-2:checked ~ .user-cards #user-4 {
+  transform: translatex(100%) scale(0.4);
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-3:checked ~ .user-cards #user-1 {
+  transform: translatex(-100%) scale(0.4) hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-3:checked ~ .user-cards #user-2 {
+  transform: translatex(-100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-3:checked ~ .user-cards #user-3 {
+  transform: translatex(0) scale(1);
+  opacity: 1;
+}
+
+#item-3:checked ~ .user-cards #user-4 {
+  transform: translatex(100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-3:checked ~ .user-cards #user-0 {
+  transform: translatex(100%) scale(0.4);
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-4:checked ~ .user-cards #user-2 {
+  transform: translatex(-100%) scale(0.4) hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-4:checked ~ .user-cards #user-3 {
+  transform: translatex(-100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-4:checked ~ .user-cards #user-4 {
+  transform: translatex(0) scale(1);
+  opacity: 1;
+}
+
+#item-4:checked ~ .user-cards #user-0 {
+  transform: translatex(100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-4:checked ~ .user-cards #user-1 {
+  transform: translatex(100%) scale(0.4);
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-5:checked ~ .user-cards #user-3 {
+  transform: translatex(-100%) scale(0.4) hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#item-5:checked ~ .user-cards #user-4 {
+  transform: translatex(-100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-5:checked ~ .user-cards #user-5 {
+  transform: translatex(0) scale(1);
+  opacity: 1;
+}
+
+#item-5:checked ~ .user-cards #user-1 {
+  transform: translatex(100%) scale(0.7);
+  opacity: 0.7;
+}
+
+#item-5:checked ~ .user-cards #user-2 {
+  transform: translatex(100%) scale(0.4);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/*# sourceMappingURL=user-cards.css.map */

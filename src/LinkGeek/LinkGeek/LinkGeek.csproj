@@ -26,4 +26,8 @@
     <_ContentIncludedByDefault Remove="Areas\Discoverability\Pages\_ViewStart.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\user-cards.scss" />
+  </ItemGroup>
+
 </Project>

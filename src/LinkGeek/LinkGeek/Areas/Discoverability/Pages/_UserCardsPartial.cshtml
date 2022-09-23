@@ -1,0 +1,31 @@
+@using LinkGeek.Areas.Discoverability.Pages
+@model LinkGeek.Areas.Discoverability.Pages.UserCardsModel
+
+@{
+    int index = 0;
+
+    foreach (var userCard in Model.UserCards)
+    {
+        @if (index == 0)
+        {
+            <input type="radio" name="slider" id="item-0" checked/>
+        }
+        else
+        {
+            <input type="radio" name="slider" id="item-@index"/>
+        }
+        index++;
+    }
+}
+<div class="user-cards">
+
+    @{
+        index = 0;
+
+        foreach (var userCard in Model.UserCards)
+        {
+            @await Html.PartialAsync("_UserCardPartial", new UserCardModel(index, userCard))
+            index++;
+        }
+    }
+</div>

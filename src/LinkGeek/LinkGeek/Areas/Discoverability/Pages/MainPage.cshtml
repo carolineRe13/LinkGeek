@@ -1,11 +1,30 @@
 @page
-@model LinkGeek.Areas.Discoverability.Pages.Test
+@using LinkGeek.Areas.Discoverability.Pages
+@model LinkGeek.Areas.Discoverability.Pages.DiscoverabilityModel
 @{
     ViewData["Title"] = "Discoverability";
 }
 
-
-<div>
-    Hello world    
-    <img src="https://blznav.akamaized.net/img/games/logo-wow-3dd2cfe06df74407.png">
+<div class="user-card-container" id="user-cards">
+    @await Html.PartialAsync("_UserCardsPartial", new UserCardsModel(Model.UserCards))
+    
+    <button id="open-pack">
+        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmistertcg.com.au%2Fwp-content%2Fuploads%2F2021%2F04%2F4-768x1280.png&f=1&nofb=1" alt="booster pack image">
+        <span>Open pack</span>
+    </button>
 </div>
+
+@section scripts{
+    <script>
+        $("#open-pack").click(function () {
+            $.ajax({
+                method: 'get',
+                url: '?handler=UserCards',
+                success: function (result) {
+                    $('#user-cards').empty();
+                    $('#user-cards').html(result);
+                }
+            })
+        })
+    </script>
+}
