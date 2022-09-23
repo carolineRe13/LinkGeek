@@ -1,28 +1,10 @@
+using LinkGeek.AppIdentity;
+using LinkGeek.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LinkGeek.Areas.Discoverability.Pages;
 
-public class UserCard
-{
-    public string Login { get; init; }
-    public string? ProfilePicture { get; init; }
-    public List<Game> Games { get; init; } = new ();
-}
-
-public class Game
-{
-    public Game(string id, string name, Uri logo)
-    {
-        this.id = id;
-        this.name = name;
-        this.logo = logo;
-    }
-
-    public string id { get; init; }
-    public string name { get; init; }
-    public Uri logo { get; init; } 
-}
 public class DiscoverabilityModel : PageModel
 {
     private readonly ILogger<DiscoverabilityModel> _logger;

@@ -1,34 +1,24 @@
 @model LinkGeek.Areas.Discoverability.Pages.UserCardModel
 
-<label class="user-card w3-card-4" for="item-@Model.Index" id="user-@Model.Index">
-    <div id="updateDiv-@Model.UserCard.Login">
-        <form method="post"
-              data-ajax="true"
-              data-ajax-method="post"
-              data-ajax-url="@Url.Page("", "AddToCollection")"
-              data-ajax-loading="#loading-@Model.UserCard.Login"
-              data-ajax-mode="replace"
-              data-ajax-update="#updateDiv-@Model.UserCard.Login">
-            <img src="data:image/png;base64,@Model.UserCard.ProfilePicture" alt="@Model.UserCard.Login's profile pic">
-            <div class="w3-container w3-center">
-                @Model.UserCard.Login
-                <ul class="horizontal-list">
-                    @{
-                        foreach (var game in Model.UserCard.Games)
-                        {
-                            <li>
-                                <img src=@game.logo alt="@game.name logo">
-                                @game.name
-                            </li>
-                        }
-                    }
-                </ul>
-
-                <button type="submit" class="btn solid-btn" id="AddToCollection-@Model.UserCard.Login">Add to collection</button>
-                <span id="loading-@Model.UserCard.Login" style="display:none;">
-                    <i class="fas fa-spinner fa-spin"></i>
-                </span>
-            </div>
-        </form>
+<li class="user-card">
+    <img src="data:image/png;base64,@Model.UserCard.ProfilePicture" alt="@Model.UserCard.Login's profile picture">
+    <div class="login">@Model.UserCard.Login</div>
+    <div id="album-rotator">
+        <div id="album-rotator-holder">
+            @{
+                foreach (var game in Model.UserCard.Games)
+                {
+                    <div target="_top" class="album-item">
+                        <span class="album-details">
+                            <img src="@game.Logo" alt="@game.Name's logo">
+                            <span class="title">@game.Name</span>
+                        </span>
+                    </div>
+                }
+            }
+        </div>
     </div>
-</label>
+    <div>
+
+    </div>
+</li>

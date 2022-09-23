@@ -1,3 +1,4 @@
+using LinkGeek.AppIdentity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LinkGeek.Areas.Discoverability.Pages
