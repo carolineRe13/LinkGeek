@@ -5,13 +5,24 @@ namespace LinkGeek.AppIdentity;
 
 public class ApplicationUser : IdentityUser
 {
-    public async Task<IdentityResult> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+    public ApplicationUser(string firstName, string lastName, string gender, string? steamAccount, byte[]? profilePicture)
     {
-        var userIdentity = await manager.CreateAsync(this);
-        // Add custom user claims here
-        return userIdentity;
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        SteamAccount = steamAccount;
+        ProfilePicture = profilePicture;
     }
-    
+
+    public ApplicationUser(string userName, string firstName, string lastName, string gender, string? steamAccount, byte[]? profilePicture) : base(userName)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        SteamAccount = steamAccount;
+        ProfilePicture = profilePicture;
+    }
+
     [PersonalData]   
     public string FirstName { get; set; }
  
