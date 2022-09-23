@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LinkGeek.AppIdentity;
+using Microsoft.AspNetCore.Identity;
 
 namespace LinkGeek;
 
