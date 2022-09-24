@@ -1,15 +1,14 @@
-@using LinkGeek.Areas.Discoverability.Pages
+@using LinkGeek.Pages.Shared
 @model LinkGeek.Areas.Discoverability.Pages.UserCardsModel
 
 <ul class="user-cards">
-
     @{
-        int index = 0;
-
-        foreach (var userCard in Model.UserCards)
+        foreach (var user in Model.Users)
         {
-            @await Html.PartialAsync("_UserCardPartial", new UserCardModel(index, userCard))
-            index++;
+            <li class="user-card">
+
+                @await Html.PartialAsync("_UserCardPartial", new UserCardModel(user, false))
+            </li>
         }
     }
 </ul>

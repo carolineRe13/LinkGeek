@@ -1,0 +1,66 @@
+@model LinkGeek.Pages.Shared.UserCardModel
+
+<div class="wrapper">
+
+
+    <div class="profilePictureBackground">
+        <div class="profilePicture">
+            @if (@Model.ApplicationUser.ProfilePicture == null || @Model.ApplicationUser.ProfilePicture.Length == 0)
+            {
+                <img src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
+            }
+            else
+            {
+                <img src="@Model.ApplicationUser.ProfilePicture" alt="Profile picture">
+            }
+        </div>
+    </div>
+
+    <div class="profileSpecifications">
+        <h1> @Model.ApplicationUser.UserName </h1>
+        <p2>Oslo</p2>
+        <p> Hey! </p>
+
+        <div class="gameInterests">
+            @{
+                if (@Model.ApplicationUser.Games == null || @Model.ApplicationUser.Games.Count == 0)
+                {
+                    <p> No games added </p>
+                }
+                else
+                {
+                    @foreach (var game in Model.ApplicationUser.Games)
+                    {
+                        <div class="feature">
+                            <div class="featureIcon">
+                                <img src="@game.Logo" alt="@game.Name's logo"/>
+                            </div>
+                            <div class="featureText">
+                                <p>@game.Name</p>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+
+        @if (!@Model.IsCurrentUser)
+        {
+            <button class="add">
+                <p>Add friend</p>
+                <div class="addFriend">
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                            fill="currentColor"/>
+                    </svg>
+                </div>
+            </button>
+        }
+    </div>
+</div>

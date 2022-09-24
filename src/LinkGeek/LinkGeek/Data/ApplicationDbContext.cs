@@ -7,7 +7,7 @@ namespace LinkGeek.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public static DbContextOptions<ApplicationDbContext> Options;
+        public static DbContextOptions<ApplicationDbContext>? Options;
         
         public DbSet<Game> Game { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

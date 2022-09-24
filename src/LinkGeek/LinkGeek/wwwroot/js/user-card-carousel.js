@@ -9,6 +9,7 @@ const cellCount = 5;
 const xMultiplier = cellWidth/20;
 const radius = 20;
 const theta = 2 * Math.PI / cellCount;
+const zOffset = -20;
 
 let angle = 0;
 let selected = 0;
@@ -21,7 +22,7 @@ function rotateCarousel() {
 
         let newX = radius * Math.sin(newCellAngle);
         let newZ = radius * Math.cos(newCellAngle);
-        cell.style.transform = 'translateZ(' + newZ + 'px) ' + 'translateX(' + newX * xMultiplier + 'px)';
+        cell.style.transform = 'translateZ(' + (newZ + zOffset) + 'px) ' + 'translateX(' + newX * xMultiplier + 'px)';
     });
 }
 
@@ -57,7 +58,7 @@ function initCarousel() {
 
             let x = radius * Math.sin(cellAngle);
             let z = radius * Math.cos(cellAngle);
-            cell.style.transform = 'translateZ(' + z + 'px) ' + 'translateX(' + x * xMultiplier + 'px)';
+            cell.style.transform = 'translateZ(' + (z + zOffset) + 'px) ' + 'translateX(' + x * xMultiplier + 'px)';
         }
     }, 10)
 

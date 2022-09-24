@@ -1,14 +1,17 @@
 using LinkGeek.AppIdentity;
+using LinkGeek.Data;
 using LinkGeek.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LinkGeek.Areas.Discoverability.Pages;
 
+[Authorize]
 public class DiscoverabilityModel : PageModel
 {
     private readonly ILogger<DiscoverabilityModel> _logger;
-    public List<UserCard> UserCards = new();
+    public List<ApplicationUser> UserCards = new();
 
     public DiscoverabilityModel(ILogger<DiscoverabilityModel> logger)
     {
@@ -26,65 +29,25 @@ public class DiscoverabilityModel : PageModel
         return Partial("_UserCardsPartial", new UserCardsModel(this.UserCards));
     }
 
-    private List<UserCard> GetUserCards()
+    private List<ApplicationUser> GetUserCards()
     {
-        return new()
+        using(var context = new ApplicationDbContext())
         {
-            new ()
+            var users = context.Users.ToList();
+
+            if (users.Count < 5)
             {
-                Login = "User1",
-                ProfilePicture = Constants.CorgyPP,
-                Games = new List<Game>
+                var a = new List<ApplicationUser>();
+
+                for (var i = 0;i < 5; i++)
                 {
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("2", "Overwatch", new Uri(Constants.OverwatchLogo))
-                }
-            }, 
-            new ()
-            {
-                Login = "User2",
-                ProfilePicture = Constants.ShibaPP,
-                Games = new List<Game> {
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("2", "Overwatch 2", new Uri(Constants.Overwatch2Logo))
+                    a.Add(users[i % users.Count]);
                 }
 
-            }, 
-            new ()
-            {
-                Login = "User3",
-                ProfilePicture = Constants.ShibaPP,
-                Games = new List<Game> {
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("2", "Overwatch 2", new Uri(Constants.Overwatch2Logo))
-                }
-
-            }, 
-            new ()
-            {
-                Login = "User4",
-                ProfilePicture = Constants.ShibaPP,
-                Games = new List<Game> {
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("2", "Overwatch", new Uri(Constants.OverwatchLogo))
-                }
-
-            }, 
-            new ()
-            {
-                Login = "User5",
-                ProfilePicture = Constants.ShibaPP,
-                Games = new List<Game> {
-                    new("1", "Diablo II: Resurrected", new Uri(Constants.Diablo2RLogo)),
-                    new("2", "Overwatch 2", new Uri(Constants.Overwatch2Logo))
-                }
-
+                return a;
             }
-        };
+            
+            return users;
+        }
     }
 }

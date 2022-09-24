@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\profile-card.scss" />
-    <None Include="wwwroot\css\user-cards.scss" />
+    <None Include="wwwroot\css\user-carousel.scss" />
   </ItemGroup>
 
 </Project>

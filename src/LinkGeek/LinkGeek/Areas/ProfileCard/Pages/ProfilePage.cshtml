@@ -1,0 +1,6 @@
+﻿@page
+@using LinkGeek.Pages.Shared
+@model LinkGeek.Areas.ProfileCard.Pages.ProfilePageModel
+
+
+@await Html.PartialAsync("_UserCardPartial", new UserCardModel(@Model.ApplicationUser, true))
