@@ -1,10 +1,8 @@
 using LinkGeek.AppIdentity;
-using LinkGeek.Data;
-using LinkGeek.Models;
+using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LinkGeek.Controllers;
 
@@ -13,12 +11,12 @@ namespace LinkGeek.Controllers;
 public class UserController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILogger<UserController> _logger;
+    private readonly UserService _userService;
 
-    public UserController(UserManager<ApplicationUser> userManager, ILogger<UserController> logger)
+    public UserController(UserManager<ApplicationUser> userManager, UserService userService)
     {
         _userManager = userManager;
-        _logger = logger;
+        _userService = userService;
     }
 
     [HttpPost("game")]
@@ -26,26 +24,44 @@ public class UserController : Controller
     {
         var sessionUser = await _userManager.GetUserAsync(User);
         var userId = sessionUser.Id;
-        
-        using (var context = new ApplicationDbContext())
+
+        var result = await _userService.AddGameToUser(id, userId);
+        if (result == null)
         {
-            var existingGame = await context.Game.FindAsync(id);
-
-            if (existingGame == null)
-            {
-                return BadRequest();
-            }
-
-            var applicationUser = context.Users.Include(u => u.Games).FirstOrDefaultAsync(u => u.Id == userId).Result;
-            if (applicationUser != null)
-            {
-                applicationUser.Games
-                    .Add(existingGame);
-            }
-
-            var changes = await context.SaveChangesAsync();
-            // _logger.LogInformation("{Changes}", changes);
-            return Ok(existingGame);
+            return BadRequest();
         }
+
+        return Ok(result);
+    }
+
+    [HttpPost("location")]
+    public async Task<IActionResult> UpdateLocation(string location)
+    {
+        var sessionUser = await _userManager.GetUserAsync(User);
+        var userId = sessionUser.Id;
+
+        var result = await _userService.UpdateLocation(userId, location);
+        if (result == null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [Route("status")]
+    public async Task<IActionResult> UpdateStatus(string status)
+    {
+        var sessionUser = await _userManager.GetUserAsync(User);
+        var userId = sessionUser.Id;
+
+        var result = await _userService.UpdateStatus(userId, status);
+        if (result == null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(result);
     }
 }

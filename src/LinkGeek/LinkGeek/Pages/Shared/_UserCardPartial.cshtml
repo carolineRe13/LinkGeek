@@ -18,8 +18,31 @@
 
     <div class="profileSpecifications">
         <h1> @Model.ApplicationUser.UserName </h1>
-        <p2>Oslo</p2>
-        <p> Hey! </p>
+        <p2>
+            @{
+                var location = @Model.ApplicationUser.Location ?? "Help people find you!";
+                <span id="userLocation">@location</span>
+            }
+            @if (@Model.IsCurrentUser)
+            {
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationChange">
+                    <i class="bi-pencil"></i>
+                </button>
+            }
+        </p2>
+
+        <p>
+            @{
+                var status = @Model.ApplicationUser.Status ?? "Let people know what you're up to!";
+                <span id="userStatus">@status</span>
+            }
+            @if (@Model.IsCurrentUser)
+            {
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusChange">
+                    <i class="bi-pencil"></i>
+                </button>
+            }
+        </p>
 
         <div class="gameInterests">
             @{

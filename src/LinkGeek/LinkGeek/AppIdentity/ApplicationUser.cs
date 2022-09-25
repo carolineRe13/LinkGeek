@@ -31,4 +31,10 @@ public class ApplicationUser : IdentityUser
         ChatMessagesFromUsers = new HashSet<ChatMessage>();
         ChatMessagesToUsers = new HashSet<ChatMessage>();
     }
+
+    public string? Status { get; set; }
+    
+    public string? TimeZone { get; set; }
+    
+    public string? Location { get; set; }
 }

@@ -4,6 +4,7 @@ using LinkGeek.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LinkGeek.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220924134904_AddNewUserDetails")]
+    partial class AddNewUserDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +115,7 @@ namespace LinkGeek.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("location")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -145,38 +147,6 @@ namespace LinkGeek.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Game");
-                });
-
-            modelBuilder.Entity("LinkGeek.Shared.ChatMessage", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FromUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ToUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromUserId");
-
-                    b.HasIndex("ToUserId");
-
-                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -331,23 +301,6 @@ namespace LinkGeek.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkGeek.Shared.ChatMessage", b =>
-                {
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "FromUser")
-                        .WithMany("ChatMessagesFromUsers")
-                        .HasForeignKey("FromUserId")
-                        .IsRequired();
-
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "ToUser")
-                        .WithMany("ChatMessagesToUsers")
-                        .HasForeignKey("ToUserId")
-                        .IsRequired();
-
-                    b.Navigation("FromUser");
-
-                    b.Navigation("ToUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -397,13 +350,6 @@ namespace LinkGeek.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("LinkGeek.AppIdentity.ApplicationUser", b =>
-                {
-                    b.Navigation("ChatMessagesFromUsers");
-
-                    b.Navigation("ChatMessagesToUsers");
                 });
 #pragma warning restore 612, 618
         }
