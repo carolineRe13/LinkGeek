@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ExternalLoginModel
 @{
     ViewData["Title"] = "Register";
@@ -38,12 +39,9 @@
                 <label asp-for="Input.Email" class="form-label"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <select class="gender">
-                <option value="">Select a gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Prefer not to say">Prefer not to say</option>
-            </select>
+            <select id="drpEmpList" class="form-control" asp-for="Input.Gender" asp-items="@(new SelectList(Model.GenderList, "Text", "Text"))">
+                <option value="">--Select Gender--</option>
+                </select>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
         {

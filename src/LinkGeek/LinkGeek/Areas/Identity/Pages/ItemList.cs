@@ -1,4 +1,4 @@
-﻿namespace LinkGeek.Areas.Identity.Pages.Account.Manage;
+﻿namespace LinkGeek.Areas.Identity.Pages;
 
 public class ItemList
 {

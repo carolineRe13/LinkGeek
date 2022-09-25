@@ -1,6 +1,8 @@
-using LinkGeek;
 using LinkGeek.AppIdentity;
 using LinkGeek.Data;
+using LinkGeek.Hubs;
+using LinkGeek.Services;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 
 // Chat
@@ -26,8 +28,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<ChatService>();
 builder.Services.AddControllers();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -66,6 +69,6 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapRazorPages();
+    endpoints.MapHub<SignalRHub>("/signalRHub");
 });
-
 app.Run();
