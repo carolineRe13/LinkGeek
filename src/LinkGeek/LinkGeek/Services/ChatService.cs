@@ -13,7 +13,7 @@ public class ChatService
             return await context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
         }
     }
-    public async Task<ICollection<ApplicationUser>> GetUsersAsync(string userId) {
+    public async Task<List<ApplicationUser>> GetUsersAsync(string userId) {
         using (var context = new ApplicationDbContext())
         {
             return await context.Users.Where(user => user.Id != userId).ToListAsync();

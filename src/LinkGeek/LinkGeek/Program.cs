@@ -28,6 +28,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<ChatService>();
 builder.Services.AddControllers();
@@ -69,6 +70,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapRazorPages();
+    endpoints.MapBlazorHub();
     endpoints.MapHub<SignalRHub>("/signalRHub");
 });
 app.Run();

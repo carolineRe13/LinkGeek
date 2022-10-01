@@ -138,6 +138,38 @@ namespace LinkGeek.Data.Migrations
                     b.ToTable("Game");
                 });
 
+            modelBuilder.Entity("LinkGeek.Shared.ChatMessage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FromUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -290,6 +322,23 @@ namespace LinkGeek.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LinkGeek.Shared.ChatMessage", b =>
+                {
+                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "FromUser")
+                        .WithMany("ChatMessagesFromUsers")
+                        .HasForeignKey("FromUserId")
+                        .IsRequired();
+
+                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "ToUser")
+                        .WithMany("ChatMessagesToUsers")
+                        .HasForeignKey("ToUserId")
+                        .IsRequired();
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -339,6 +388,13 @@ namespace LinkGeek.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LinkGeek.AppIdentity.ApplicationUser", b =>
+                {
+                    b.Navigation("ChatMessagesFromUsers");
+
+                    b.Navigation("ChatMessagesToUsers");
                 });
 #pragma warning restore 612, 618
         }

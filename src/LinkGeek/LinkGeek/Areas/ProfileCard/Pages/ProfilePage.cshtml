@@ -2,5 +2,7 @@
 @using LinkGeek.Pages.Shared
 @model LinkGeek.Areas.ProfileCard.Pages.ProfilePageModel
 
-
+@{
+    ViewData["Title"] = "My Profile Card";
+}
 @await Html.PartialAsync("_UserCardPartial", new UserCardModel(@Model.ApplicationUser, true))

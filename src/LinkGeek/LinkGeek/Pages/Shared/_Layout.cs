@@ -21,9 +21,8 @@ public class _Layout : PageModel
 
     public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
     
-    protected async Task OnInitializedAsync()
+    public async Task OnInit()
     {
-        
         hubConnection = new HubConnectionBuilder().WithUrl("/signalRHub").Build();
         await hubConnection.StartAsync();
         hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
