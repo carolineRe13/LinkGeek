@@ -10,7 +10,7 @@ public class Game
         this.Id = new Guid().ToString();
     }
     
-    public Game(string id, string name, Uri logo)
+    public Game(string id, string name, Uri? logo)
     {
         this.Id = id;
         this.Name = name;
@@ -22,5 +22,5 @@ public class Game
     
     public string Id { get; set; }
     public string Name { get; set; }
-    public Uri Logo { get; set; } 
+    public Uri? Logo { get; set; } 
 }

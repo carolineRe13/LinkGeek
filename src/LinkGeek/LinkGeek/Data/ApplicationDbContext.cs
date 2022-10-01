@@ -12,6 +12,7 @@ namespace LinkGeek.Data
         public DbSet<ChatMessage> ChatMessages { get; set; }
         
         public DbSet<Game> Game { get; set; }
+        public DbSet<GameSearchCacheItem> GameSearchCache { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -37,6 +38,9 @@ namespace LinkGeek.Data
                     .HasForeignKey(d => d.ToUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
+
+            builder.Entity<GameSearchCacheItem>()
+                .HasKey(c => new { c.Query, c.Rank });
         }
     }
 }
