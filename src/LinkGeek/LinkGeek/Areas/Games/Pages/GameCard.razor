@@ -1,0 +1,18 @@
+<div class="card" style="width: 18rem;">
+    @if (@Game.Logo != null)
+    {
+        <img class="card-img-top" src="@Game.Logo" alt="Card image cap">
+    }
+    else
+    {
+        <div class="placeholder"></div>
+    }
+    <div class="card-body">
+        <h5 class="card-title">@Game.Name</h5>
+    </div>
+    <button onclick="@(new Func<object, Task>(e => AddGame(@Game.Id)))" class="btn btn-primary">Add game</button>
+    @if (@DisplayGamePageButton)
+    {
+        <a href="/game/@Game.Id" class="btn btn-secondary">Open game page</a>
+    }
+</div>

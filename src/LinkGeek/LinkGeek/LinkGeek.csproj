@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0-rc.1.22427.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Maui.Graphics" Version="6.0.501" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.9" />
     <PackageReference Include="MudBlazor" Version="6.0.17-dev.1" />

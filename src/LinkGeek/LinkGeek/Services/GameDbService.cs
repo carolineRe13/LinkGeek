@@ -31,6 +31,7 @@ public class GameDbService
 {
     private const string Api = "https://api.igdb.com/v4/";
     private const int PageSize = 49;
+    private const int MinRatingCount = 100;
 
     private readonly HttpClient _httpClient;
     private readonly string _clientId;
@@ -46,10 +47,22 @@ public class GameDbService
         _httpClient.DefaultRequestHeaders.Add("Client-ID", _clientId);
     }
 
+    public async Task<ICollection<Game>> GetPopularGames(int page = 0)
+    {
+        var query = $"fields name, cover.url; where rating_count > {MinRatingCount}; sort rating desc; limit {PageSize}; offset {PageSize * page};";
+
+        return await this.CallGameEndpoint(query);
+    }
+    
     public async Task<ICollection<Game>> SearchGames(string search, int page = 0)
     {
         var query = $"search \"{search}\"; fields name, cover.url; limit {PageSize}; offset {PageSize * page};";
 
+        return await this.CallGameEndpoint(query);
+    }
+
+    private async Task<ICollection<Game>> CallGameEndpoint(string query)
+    {
         var cache = this.GetGameSearchCache(query);
         if (cache != null)
         {

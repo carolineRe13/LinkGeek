@@ -1,0 +1,21 @@
+@page "/game/{GameId}"
+
+<GameCard Game="@Game" DisplayGamePageButton="false"/>
+<div class="player-cards-container">
+    @foreach (var player in Players)
+    {
+        <div class="card player-card">
+            @if (@player.ProfilePicture is {Length: > 0 })
+            {
+                <img class="card-img-top" src="data:image/png;base64,@Base64ImageFromBytes(@player.ProfilePicture)" alt="Card image cap">
+            }
+            else
+            {
+                <div class="placeholder"></div>
+            }
+            <div class="card-body">
+                <h5 class="card-title">@player.UserName</h5>
+            </div>
+        </div>
+    }
+</div>

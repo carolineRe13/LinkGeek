@@ -33,9 +33,15 @@ public partial class Games
     public SearchModel search = new SearchModel();
     public ICollection<Game> results { get; set; } = new List<Game>();
     
+    protected override async Task OnInitializedAsync()
+    {
+        results = await GameDbService.GetPopularGames();
+    }
+    
     public async Task Search()
     {
         results = await GameDbService.SearchGames(search.Search);
+        
     }
     
     public async Task AddGame(string id)

@@ -2,8 +2,6 @@ using LinkGeek.AppIdentity;
 using LinkGeek.Data;
 using LinkGeek.Hubs;
 using LinkGeek.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
@@ -29,8 +27,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services
     .AddSingleton<UserService>()
+    .AddSingleton<DiscoverUserService>()
     .AddSingleton<GameDbService>()
-    .AddSingleton<DiscoverUserService>();
+    .AddSingleton<GameService>();
 builder.Services.AddMudServices(c => { c.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight; });
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

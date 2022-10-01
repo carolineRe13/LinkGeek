@@ -1,0 +1,86 @@
+.game-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    margin: 10px;
+    background-image: linear-gradient(120deg, #343A4F, #0F1620);
+}
+
+.card .placeholder {
+    height: 18rem;
+    background: none;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.input-group-addon {
+    border-color: rgb(81, 81, 81);
+    border-width: 1px;
+    border-style: solid;
+}
+
+.btn-primary {
+    background-image: linear-gradient(176deg, var(--lightblue), var(--darkblue));
+}
+
+.btn-secondary {
+    background-image: linear-gradient(120deg, var(--darkerblue), var(--darkererblue));
+}
+
+.btn:hover {
+    background-image: linear-gradient(176deg, var(--darkblue), var(--darkerblue));
+}
+
+.btn-secondary:hover {
+    border-radius: 0;
+}
+
+.card .btn-primary {
+    border-radius: 0;
+}
+
+.player-cards-container {
+    width: 18rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: auto;
+    margin: 10px;
+    
+    background-image: linear-gradient(120deg, #343A4F, #0F1620);
+    border: solid 1px rgb(81, 81, 81);
+    border-radius: 4px;
+    
+    max-height: 36rem;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.player-cards-container::-webkit-scrollbar {
+    display: none;
+}
+
+.player-card {
+    margin: 0.2rem;
+    width: 5.5rem;
+    float: left;
+}
+
+.player-card>.card-body {
+    padding: .25rem 0 0;
+}
+
+.player-card>.card-body>h5 {
+    font-size: 0.8rem;
+}
+
+.player-card .placeholder {
+    height: 5.5rem;
+    background: none;
+}

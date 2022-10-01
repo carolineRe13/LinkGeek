@@ -86,8 +86,8 @@ h1 {
     line-height: 1.5;
 }
 .profileSpecifications .gameInterests {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     margin: 20px 0;
     grid-row-gap: 16px;
     height: 150px;

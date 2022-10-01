@@ -4,16 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkGeek.Services;
 
+public enum AddGameToUserResponse
+{
+    Success,
+    GameNotFound,
+    UserNotFound,
+    GameAlreadyAdded
+}
+
 public class UserService
 {
-    public async Task<Game?> AddGameToUser(string userId, string gameId)
+    public async Task<AddGameToUserResponse?> AddGameToUser(string userId, string gameId)
     {
         await using (var context = new ApplicationDbContext())
         {
             var game = await context.Game.FindAsync(gameId);
             if (game == null)
             {
-                return null;
+                return AddGameToUserResponse.GameNotFound;
             }
 
             var user = await context.Users.Include(u => u.Games)
@@ -21,14 +29,18 @@ public class UserService
 
             if (user == null)
             {
-                return null;
+                return AddGameToUserResponse.UserNotFound;
             }
 
             user.Games ??= new List<Game>();
+            if (user.Games.Contains(game))
+            {
+                return AddGameToUserResponse.GameAlreadyAdded;
+            }
             user.Games.Add(game);
 
             await context.SaveChangesAsync();
-            return game;
+            return AddGameToUserResponse.Success;
         }
     }
 
