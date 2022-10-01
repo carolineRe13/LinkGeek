@@ -1,11 +1,7 @@
-using System.Security.Claims;
 using LinkGeek.AppIdentity;
-using LinkGeek.Services;
 using LinkGeek.Shared;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -20,10 +16,13 @@ public partial class Chat
     [Parameter] public string CurrentMessage { get; set; }
     [Parameter] public string CurrentUserId { get; set; }
     [Parameter] public string CurrentUserEmail { get; set; }    
+    [Parameter] public string CurrentUserUsername { get; set; } 
     [Parameter] public string ContactEmail { get; set; }
     [Parameter] public string ContactId { get; set; }
-    public List<ApplicationUser> ChatUsers;
-    private List<ChatMessage> _messages;
+    public List<ApplicationUser> ChatUsers = new List<ApplicationUser>();
+    private List<ChatMessage> _messages = new List<ChatMessage>();
+    private string selectedUserId = "-1";
+    private string selectedUserName = "";
 
     string currentUserId;
 
@@ -56,6 +55,7 @@ public partial class Chat
             var currentUserEmail = currentUser.Email;
             var currentUserPhone = currentUser.PhoneNumber;
             var currentUserEmailConfirmed = currentUser.EmailConfirmed;
+            CurrentUserUsername = currentUser.UserName;
         }
         
         if (HubConnection == null)
@@ -90,9 +90,11 @@ public partial class Chat
     }
     public async Task LoadUserChat(string contactId)
     {
+        selectedUserId = contactId;
         var contact = await _chatManager.GetUserDetailsAsync(contactId);
         ContactId = contact.Id;
         ContactEmail = contact.Email;
+        selectedUserName = contact.UserName;
         _messages = new List<ChatMessage>();
         _messages = await _chatManager.GetConversationAsync(currentUserId, contactId);
     }
