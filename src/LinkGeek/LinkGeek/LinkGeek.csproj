@@ -29,17 +29,11 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Discoverability\Pages\_ViewStart.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Counter\Counter.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\profile-card.scss" />
-    <None Include="wwwroot\css\user-carousel.scss" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\Shared\_Layout.cs">
-      <DependentUpon>_Layout.cshtml</DependentUpon>
-    </Compile>
+    <AdditionalFiles Include="Areas\_Imports.razor" />
   </ItemGroup>
 
 </Project>

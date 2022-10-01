@@ -2,11 +2,9 @@ using LinkGeek.AppIdentity;
 using LinkGeek.Data;
 using LinkGeek.Hubs;
 using LinkGeek.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
-
-// Chat
-// https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/chat/get-started?tabs=windows&pivots=programming-language-csharp
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -27,7 +25,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<ChatService>();
@@ -71,6 +68,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
     endpoints.MapRazorPages();
     endpoints.MapBlazorHub();
+    endpoints.MapFallbackToPage("/_Host");
     endpoints.MapHub<SignalRHub>("/signalRHub");
 });
 app.Run();

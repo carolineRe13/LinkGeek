@@ -4,22 +4,18 @@ using LinkGeek.Services;
 using LinkGeek.Shared;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace LinkGeek.Areas.Chat.Pages;
 
 [Authorize]
-public class ChatModel : PageModel
+public partial class Chat
 {
-    public ChatModel(ChatService chatManager, UserManager<ApplicationUser> userManager)
-    {
-        _chatManager = chatManager;
-        _userManager = userManager;
-    }
-
+    [Inject]
+    UserManager<ApplicationUser> UserManager { get; set; }
     [CascadingParameter] public HubConnection HubConnection { get; set; }
     [Parameter] public string CurrentMessage { get; set; }
     [Parameter] public string CurrentUserId { get; set; }
@@ -27,10 +23,10 @@ public class ChatModel : PageModel
     [Parameter] public string ContactEmail { get; set; }
     [Parameter] public string ContactId { get; set; }
     public List<ApplicationUser> ChatUsers;
-    private readonly ChatService _chatManager;
-    private readonly  UserManager<ApplicationUser> _userManager;
     private List<ChatMessage> _messages;
-    
+
+    string currentUserId;
+
     private async Task SubmitAsync()
     {
         if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
@@ -41,18 +37,30 @@ public class ChatModel : PageModel
                 ToUserId = ContactId,
                 CreatedDate = DateTime.Now
             };
-            var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-            await _chatManager.SaveMessageAsync(chatHistory, userId);
+            await _chatManager.SaveMessageAsync(chatHistory, currentUserId);
             chatHistory.FromUserId = CurrentUserId;
             await HubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
             CurrentMessage = string.Empty;
         }
     }
-    public async Task OnGet()
+    protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        // var user = (await authenticationStateTask).User;
+        
+        if (user.Identity.IsAuthenticated)
+        {
+            var currentUser = await UserManager.GetUserAsync(user);
+            currentUserId = currentUser.Id;
+            var currentUserEmail = currentUser.Email;
+            var currentUserPhone = currentUser.PhoneNumber;
+            var currentUserEmailConfirmed = currentUser.EmailConfirmed;
+        }
+        
         if (HubConnection == null)
         {
-            HubConnection = new HubConnectionBuilder().WithUrl(HttpContext.Request.GetDisplayUrl() +"/signalRHub").Build();
+            HubConnection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/signalRHub")).Build();
         }
         if (HubConnection.State == HubConnectionState.Disconnected)
         {
@@ -75,9 +83,6 @@ public class ChatModel : PageModel
             }
         });
         await GetUsersAsync();
-        var user = await _userManager.GetUserAsync(User);
-        CurrentUserId = user.Id;
-        CurrentUserEmail = user.Email;
         if (!string.IsNullOrEmpty(ContactId))
         {
             await LoadUserChat(ContactId);
@@ -89,13 +94,11 @@ public class ChatModel : PageModel
         ContactId = contact.Id;
         ContactEmail = contact.Email;
         _messages = new List<ChatMessage>();
-        var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-        _messages = await _chatManager.GetConversationAsync(userId, contactId);
+        _messages = await _chatManager.GetConversationAsync(currentUserId, contactId);
     }
     private async Task GetUsersAsync()
     {
-        var userId = User.Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).Select(a => a.Value).FirstOrDefault();
-        ChatUsers = await _chatManager.GetUsersAsync(userId);
+        ChatUsers = await _chatManager.GetUsersAsync(currentUserId);
     }
 }
 

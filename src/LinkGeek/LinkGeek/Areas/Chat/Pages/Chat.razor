@@ -1,13 +1,17 @@
-@page
+﻿@page "/chat"
+@using LinkGeek.AppIdentity
+@using LinkGeek.Services
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.JSInterop
 @using MudBlazor
 @inject IJSRuntime _jsRuntime
-@model LinkGeek.Areas.Chat.Pages.ChatModel
-@{
-    ViewData["Title"] = "Chat";
-}
+@inject NavigationManager NavigationManager
+@inject ChatService _chatManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
 
 <div class="chatcontainer">
   <div class="row">
@@ -28,9 +32,9 @@
         </div>
         <div class="timer">12 sec</div>
       </div>
-      @foreach (var user in Model.ChatUsers)
+      @foreach (var user in ChatUsers)
       {
-        <div class="discussion" onclick="@(() => Model.LoadUserChat(user.Id))">
+        <div class="discussion" onclick="@(() => LoadUserChat(user.Id))">
           <div class="photo" style="background-image: url(https://i.pinimg.com/originals/a9/26/52/a926525d966c9479c18d3b4f8e64b434.jpg);">
             <div class="online"></div>
           </div>
@@ -96,8 +100,3 @@
     </section>
   </div>
 </div>
-
-@section Styles
-{
-    <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true"/>
-}
