@@ -21,6 +21,9 @@ public class ApplicationUser : IdentityUser
     public byte[]? ProfilePicture { get; set; }
 
     public ICollection<Game>? Games { get; set; }
+    public ICollection<ApplicationUser>? Friends { get; set; }
+    public ICollection<ApplicationUser>? PendingIncomingFriendsRequests { get; set; }
+    public ICollection<ApplicationUser>? PendingOutgoingFriendsRequests { get; set; }
     
     public virtual ICollection<ChatMessage> ChatMessagesFromUsers { get; set; }
     

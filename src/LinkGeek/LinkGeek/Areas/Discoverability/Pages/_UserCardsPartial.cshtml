@@ -3,12 +3,18 @@
 
 <ul class="user-cards">
     @{
-        foreach (var user in Model.Users)
+        if(Model.Users.Count != 0) 
         {
-            <li class="user-card">
-
-                @await Html.PartialAsync("_UserCardPartial", new UserCardModel(user, false))
-            </li>
+            foreach (var user in Model.Users)
+            {
+                <li class="user-card">
+                    @await Html.PartialAsync("_UserCardPartial", new UserCardModel(user, false))
+                </li>
+            }
+        }
+        else
+        {
+            <div>No new users</div>
         }
     }
 </ul>

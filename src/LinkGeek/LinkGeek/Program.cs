@@ -27,7 +27,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services
     .AddSingleton<UserService>()
-    .AddSingleton<GameDbService>();
+    .AddSingleton<GameDbService>()
+    .AddSingleton<DiscoverUserService>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();

@@ -20,12 +20,12 @@ public class UserController : Controller
     }
 
     [HttpPost("game")]
-    public async Task<IActionResult> AddGameToUser(string id)
+    public async Task<IActionResult> AddGameToUser(string gameId)
     {
         var sessionUser = await _userManager.GetUserAsync(User);
         var userId = sessionUser.Id;
 
-        var result = await _userService.AddGameToUser(id, userId);
+        var result = await _userService.AddGameToUser(userId, gameId);
         if (result == null)
         {
             return BadRequest();

@@ -1,7 +1,9 @@
 using LinkGeek.AppIdentity;
 using LinkGeek.Data;
 using LinkGeek.Models;
+using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,12 +12,16 @@ namespace LinkGeek.Areas.Discoverability.Pages;
 [Authorize]
 public class DiscoverabilityModel : PageModel
 {
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<DiscoverabilityModel> _logger;
     public List<ApplicationUser> UserCards = new();
+    private readonly DiscoverUserService _service;
 
-    public DiscoverabilityModel(ILogger<DiscoverabilityModel> logger)
+    public DiscoverabilityModel(ILogger<DiscoverabilityModel> logger, UserManager<ApplicationUser> userManager, DiscoverUserService service)
     {
+        _userManager = userManager;
         _logger = logger;
+        _service = service;
     }
 
     public async Task<IActionResult> OnPostAddToCollectionAsync(UserCard userCard)
@@ -31,23 +37,7 @@ public class DiscoverabilityModel : PageModel
 
     private List<ApplicationUser> GetUserCards()
     {
-        using(var context = new ApplicationDbContext())
-        {
-            var users = context.Users.ToList();
-
-            if (users.Count < 5)
-            {
-                var a = new List<ApplicationUser>();
-
-                for (var i = 0;i < 5; i++)
-                {
-                    a.Add(users[i % users.Count]);
-                }
-
-                return a;
-            }
-            
-            return users;
-        }
+        var currentUser = _userManager.GetUserAsync(User).Result;
+        return _service.GetUsers(currentUser).Result;
     }
 }
