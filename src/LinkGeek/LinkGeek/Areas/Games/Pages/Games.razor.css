@@ -1,0 +1,45 @@
+﻿.game-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.game-cards-container .card {
+    margin: 10px;
+    background-image: linear-gradient(120deg, #343A4F, #0F1620);
+}
+
+.card .placeholder {
+    height: 18rem;
+    background: none;
+}
+
+.card-title {
+    text-align: center;
+}
+
+.input-group-addon {
+    border-color: rgb(81, 81, 81);
+    border-width: 1px;
+    border-style: solid;
+}
+
+.btn-primary {
+    background-image: linear-gradient(176deg, var(--lightblue), var(--darkblue));
+}
+
+.btn-secondary {
+    background-image: linear-gradient(120deg, var(--darkerblue), var(--darkererblue));
+}
+
+.btn:hover {
+    background-image: linear-gradient(176deg, var(--darkblue), var(--darkerblue));
+}
+
+.btn-secondary:hover {
+    border-radius: 0;
+}
+
+.card .btn-primary {
+    border-radius: 0;
+}

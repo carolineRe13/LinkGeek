@@ -16,7 +16,7 @@ public class DiscoverabilityController : Controller
         _gameDbService = gameDbService;
     }
 
-    [HttpPost("discoverability/game/{search}")]
+    [HttpPost("game/search/{search}")]
     public async Task<IActionResult> SearchGamesAsync(string search, int page = 0)
     {
         var games = await _gameDbService.SearchGames(search, page);

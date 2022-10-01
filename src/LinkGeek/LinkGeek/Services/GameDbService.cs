@@ -30,7 +30,7 @@ public class GameEndpointResponse
 public class GameDbService
 {
     private const string Api = "https://api.igdb.com/v4/";
-    private const int PageSize = 50;
+    private const int PageSize = 49;
 
     private readonly HttpClient _httpClient;
     private readonly string _clientId;

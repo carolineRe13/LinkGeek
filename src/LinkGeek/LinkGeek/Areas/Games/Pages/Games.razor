@@ -1,0 +1,33 @@
+﻿@page "/games"
+
+<div class="game-search">
+    <EditForm Model="@search" OnSubmit="@Search">
+        <div class="input-group">
+            <InputText class="form-control" id="name" @bind-Value="search.Search"/>
+            <button type="submit" class="btn btn-primary input-group-addon">
+                <i class="bi-search"></i>
+            </button>
+        </div>
+    </EditForm>
+
+    <div class="game-cards-container">
+        @foreach (var game in results)
+        {
+            <div class="card" style="width: 18rem;">
+                @if (@game.Logo != null)
+                {
+                    <img class="card-img-top" src="@game.Logo" alt="Card image cap">
+                }
+                else
+                {
+                    <div class="placeholder"></div>
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@game.Name</h5>
+                </div>
+                <button onclick="@(new Func<object, Task>(e => AddGame(@game.Id)))" class="btn btn-primary">Add game</button>
+                <a href="#" class="btn btn-secondary">Open game page</a>
+            </div>
+        }
+    </div>
+</div>
