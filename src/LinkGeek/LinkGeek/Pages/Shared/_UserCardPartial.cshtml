@@ -19,28 +19,33 @@
     <div class="profileSpecifications">
         <h1> @Model.ApplicationUser.UserName </h1>
         <p2>
-            @{
-                var location = @Model.ApplicationUser.Location ?? "Help people find you!";
-                <span id="userLocation">@location</span>
-            }
             @if (@Model.IsCurrentUser)
-            {
+            {var location = @Model.ApplicationUser.Location ?? "Help people find you!";
+                <span id="userLocation">@location</span>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationChange">
                     <i class="bi-pencil"></i>
                 </button>
             }
+            else
+             {
+                 var location = @Model.ApplicationUser.Location ?? "Unknown location";
+                 <span id="userLocation">@location</span>
+             }
         </p2>
 
         <p>
-            @{
-                var status = @Model.ApplicationUser.Status ?? "Let people know what you're up to!";
-                <span id="userStatus">@status</span>
-            }
             @if (@Model.IsCurrentUser)
             {
+                var status = @Model.ApplicationUser.Status ?? "Let people know what you're up to!";
+                <span id="userStatus">@status</span>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusChange">
                     <i class="bi-pencil"></i>
                 </button>
+            }
+            else
+            {
+                var status = @Model.ApplicationUser.Status ?? "";
+                <span id="userStatus">@status</span>
             }
         </p>
 

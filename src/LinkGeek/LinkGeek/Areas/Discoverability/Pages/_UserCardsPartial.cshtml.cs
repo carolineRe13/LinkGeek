@@ -1,5 +1,4 @@
 using LinkGeek.AppIdentity;
-using LinkGeek.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LinkGeek.Areas.Discoverability.Pages
