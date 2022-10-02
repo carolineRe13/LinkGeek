@@ -30,7 +30,12 @@ builder.Services
     .AddSingleton<DiscoverUserService>()
     .AddSingleton<GameDbService>()
     .AddSingleton<GameService>();
-builder.Services.AddMudServices(c => { c.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight; });
+
+builder.Services.AddMudServices(c =>
+{
+    c.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+});
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();

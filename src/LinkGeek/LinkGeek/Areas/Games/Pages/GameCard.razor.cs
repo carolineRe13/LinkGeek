@@ -4,6 +4,7 @@ using LinkGeek.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using MudBlazor;
 
 namespace LinkGeek.Areas.Games.Pages;
 
@@ -17,6 +18,9 @@ public partial class GameCard
 
     [Inject] 
     private UserService UserService { get; set; }
+    
+    [Inject]
+    private ISnackbar Snackbar { get; set; }
 
     [Parameter]
     public Game Game { get; set; }
@@ -36,13 +40,13 @@ public partial class GameCard
             switch (response)
             {
                 case AddGameToUserResponse.Success:
-                    // await NotificationService.Success("Game added to library");
+                    Snackbar.Add("Game added to library", Severity.Success);
                     break;
                 case AddGameToUserResponse.GameAlreadyAdded:
-                    // await NotificationService.Warning("Game already in library");
+                    Snackbar.Add("Game already in library", Severity.Warning);
                     break;
                 default:
-                    // await NotificationService.Error("Error adding game to library");
+                    Snackbar.Add("Error adding game to library", Severity.Error);
                     break;
             }
         }
