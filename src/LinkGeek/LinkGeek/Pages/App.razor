@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.SignalR.Client
+@using MudBlazor
 
 <Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
@@ -9,3 +11,50 @@
         <p>Sorry, but there's nothing here!</p>
     </NotFound>
 </Router>
+
+@*
+@code
+{
+    
+    private HubConnection hubConnection;
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    [Inject]
+    UserManager<ApplicationUser> UserManager { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var CurrentUserId = "-1";
+        
+        if (user.Identity.IsAuthenticated)
+        {
+            var currentUser = await UserManager.GetUserAsync(user);
+            CurrentUserId = currentUser.Id;
+        }
+        
+        hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub")).Build();
+        await hubConnection.StartAsync();
+        hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
+        {
+            if (CurrentUserId == receiverUserId)
+            {
+                _snackBar.Add(message, Severity.Info, config =>
+                {
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                    config.Action = "Chat?";
+                    config.ActionColor = Color.Info;
+                    config.Onclick = snackbar =>
+                    {
+                        _navigationManager.NavigateTo($"chat/{senderUserId}");
+                        return Task.CompletedTask;
+                    };
+                });
+            }
+        });
+    }
+}
+*@
+ 

@@ -5,6 +5,8 @@ using LinkGeek.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -29,6 +31,7 @@ builder.Services
     .AddSingleton<UserService>()
     .AddSingleton<GameDbService>()
     .AddSingleton<DiscoverUserService>();
+builder.Services.AddMudServices(c => { c.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight; });
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSignalR();

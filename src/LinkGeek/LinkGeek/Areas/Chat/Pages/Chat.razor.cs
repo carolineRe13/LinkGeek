@@ -14,8 +14,7 @@ public partial class Chat
     UserManager<ApplicationUser> UserManager { get; set; }
     [CascadingParameter] public HubConnection HubConnection { get; set; }
     [Parameter] public string CurrentMessage { get; set; }
-    [Parameter] public string CurrentUserId { get; set; }
-    [Parameter] public string CurrentUserEmail { get; set; }    
+    [Parameter] public string CurrentUserId { get; set; }   
     [Parameter] public string CurrentUserUsername { get; set; } 
     [Parameter] public string ContactEmail { get; set; }
     [Parameter] public string ContactId { get; set; }
@@ -23,8 +22,6 @@ public partial class Chat
     private List<ChatMessage> _messages = new List<ChatMessage>();
     private string selectedUserId = "-1";
     private string selectedUserName = "";
-
-    string currentUserId;
 
     private async Task SubmitAsync()
     {
@@ -36,22 +33,23 @@ public partial class Chat
                 ToUserId = ContactId,
                 CreatedDate = DateTime.Now
             };
-            await _chatManager.SaveMessageAsync(chatHistory, currentUserId);
+            await _chatManager.SaveMessageAsync(chatHistory, CurrentUserId);
             chatHistory.FromUserId = CurrentUserId;
-            await HubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserEmail);
+            await HubConnection.SendAsync("SendMessageAsync", chatHistory, CurrentUserUsername);
             CurrentMessage = string.Empty;
+            await InvokeAsync(() => StateHasChanged())
+                .ConfigureAwait(true);
         }
     }
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        // var user = (await authenticationStateTask).User;
         
         if (user.Identity.IsAuthenticated)
         {
             var currentUser = await UserManager.GetUserAsync(user);
-            currentUserId = currentUser.Id;
+            CurrentUserId = currentUser.Id;
             var currentUserEmail = currentUser.Email;
             var currentUserPhone = currentUser.PhoneNumber;
             var currentUserEmailConfirmed = currentUser.EmailConfirmed;
@@ -73,13 +71,15 @@ public partial class Chat
                    
                 if ((ContactId == message.ToUserId && CurrentUserId == message.FromUserId))
                 {
-                    _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = CurrentUserEmail } } );
+                    _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = CurrentUserUsername} } );
                     await HubConnection.SendAsync("ChatNotificationAsync", $"New Message From {userName}", ContactId, CurrentUserId);
                 }
                 else if ((ContactId == message.FromUserId && CurrentUserId == message.ToUserId))
                 {
-                    _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { Email = ContactEmail } });
+                    _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = selectedUserName} });
                 }
+                await InvokeAsync(() => StateHasChanged())
+                    .ConfigureAwait(true);
             }
         });
         await GetUsersAsync();
@@ -95,12 +95,13 @@ public partial class Chat
         ContactId = contact.Id;
         ContactEmail = contact.Email;
         selectedUserName = contact.UserName;
-        _messages = new List<ChatMessage>();
-        _messages = await _chatManager.GetConversationAsync(currentUserId, contactId);
+        _messages = await _chatManager.GetConversationAsync(CurrentUserId, contactId);
+        await InvokeAsync(() => StateHasChanged())
+            .ConfigureAwait(true);
     }
     private async Task GetUsersAsync()
     {
-        ChatUsers = await _chatManager.GetUsersAsync(currentUserId);
+        ChatUsers = await _chatManager.GetUsersAsync(CurrentUserId);
     }
 }
 

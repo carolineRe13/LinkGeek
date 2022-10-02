@@ -26,7 +26,7 @@
             </div>
             <div class="desc-contact">
               <p class="name">@user.UserName</p>
-              <p class="message">9 pm at the bar if possible 😳</p>
+              <p class="message">LAST MESSAGE</p>
             </div>
           </div>
         }
@@ -60,13 +60,12 @@
               {
                 <div class="message">
                   <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
-                    <div class="online"></div>
-                    <MudAvatar Color="Color.Secondary" Style="height:50px; width:50px;">@message.FromUser.Email.ToUpper().FirstOrDefault()</MudAvatar>
+                    <div class="online">
+                    </div>
                   </div>
                   <div>
-                    <MudText Typo="Typo.body1">@message.FromUser.UserName</MudText>
-                    <MudText Typo="Typo.caption" class="response-time time">@message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</MudText>
-                    <MudText Typo="Typo.body2" class="text">@message.Message</MudText>
+                    <p class="time"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
+                    <p class="text">@message.Message</p>
                   </div>
                 </div>
               }
@@ -74,25 +73,21 @@
               {
                 <div class="message text-only">
                   <div class="response">
-                    <MudAvatar Color="Color.Secondary" Style="height:50px; width:50px;">@message.FromUser.Email.ToUpper().FirstOrDefault()</MudAvatar>
                   </div>
                   <div>
-                    <MudText Typo="Typo.body1">@message.FromUser.UserName</MudText>
-                    <MudText Typo="Typo.caption" class="response-time time">@message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</MudText>
-                    <MudText Typo="Typo.body2" class="text">@message.Message</MudText>
+                    <p class="time"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
+                    <p class="text">@message.Message</p>
                   </div>
                 </div>
               }
             }
-            <div class="footer-chat">
-              
-              <MudTextField T="string" Placeholder="Type your message here"DisableUnderLine="true" Class="write-message"
-                            @bind-Value="CurrentMessage" For="@(() => CurrentMessage)"/>
-              <MudButton OnClick="SubmitAsync" StartIcon="@Icons.Material.Outlined.Send" Color="Color.Secondary" ButtonType="ButtonType.Button">Send</MudButton>
-            </div>
           </div>
-          }
-        </section>
+            <div class="footer-chat">
+              <MudTextField T="string" Placeholder="Type your message here" DisableUnderLine="true" size="95%" 
+                            @bind-Value="CurrentMessage" For="@(() => CurrentMessage)"/>
+              <MudButton OnClick="SubmitAsync" StartIcon="@Icons.Material.Outlined.Send" Style="width: 4%;" Color="Color.Dark" ButtonType="ButtonType.Button">Send</MudButton>
+            </div>
+            </section>
       }
   </div>
 </div>
