@@ -118,8 +118,8 @@ namespace LinkGeek.Areas.Identity.Pages.Account.Manage
                 {
                     await Input.ProfilePicture.CopyToAsync(ms);
                     if (ms.Length > 0 ) {
-                        var profilePictureBytes = ms.ToArray();
-                        user.ProfilePicture = profilePictureBytes;
+                        user.ProfilePictureContentType = Input.ProfilePicture.ContentType;
+                        user.ProfilePictureData = Convert.ToBase64String(ms.ToArray()); 
                         await UpdateSuccessful(user, "profile picture");
                     }
                     else

@@ -48,7 +48,7 @@ public static class UserStoreExtensions
         {
             throw new ArgumentNullException(nameof(user));
         }
-        user.ProfilePicture = profilePicture;
+        // user.ProfilePicture = profilePicture;
         return Task.CompletedTask;
     }
 }

@@ -21,7 +21,7 @@
         if (user.Id == selectedUserId)
         {
           <div class="discussion message-active" onclick="@(() => LoadUserChat(user.Id))">
-            <div class="photo" style="background-image: @user.ProfilePicture;">
+            <div class="photo" style="background-image: @user.ProfilePictureData;">
               <div class="online"></div>
             </div>
             <div class="desc-contact">
@@ -33,7 +33,7 @@
         else
         {
           <div class="discussion" onclick="@(() => LoadUserChat(user.Id))">
-            <div class="photo" style="background-image: @user.ProfilePicture;">
+            <div class="photo" style="background-image: @user.ProfilePictureData;">
               <div class="online"></div>
             </div>
             <div class="desc-contact">

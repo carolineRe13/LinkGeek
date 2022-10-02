@@ -5,13 +5,13 @@
 
     <div class="profilePictureBackground">
         <div class="profilePicture">
-            @if (@Model.ApplicationUser.ProfilePicture == null || @Model.ApplicationUser.ProfilePicture.Length == 0)
+            @if (@Model.ApplicationUser.ProfilePictureContentType == null)
             {
                 <img src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
             }
             else
             {
-                <img src="@Model.ApplicationUser.ProfilePicture" alt="Profile picture">
+                <img src="@Model.GetImageSrc()" alt="Profile picture">
             }
         </div>
     </div>

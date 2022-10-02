@@ -14,13 +14,14 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; }
 
     [PersonalData]  
-    public string Gender { get; set; }
+    public string? Gender { get; set; }
     
     [PersonalData]
     public string? SteamAccount { get; set; }
 
-    public byte[]? ProfilePicture { get; set; }
-    
+    public string? ProfilePictureContentType { get; set; }
+    public string? ProfilePictureData { get; set; }
+
     public ICollection<Game>? Games { get; set; }
     public ICollection<ApplicationUser>? Friends { get; set; }
     public ICollection<ApplicationUser>? PendingIncomingFriendsRequests { get; set; }

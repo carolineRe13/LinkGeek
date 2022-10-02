@@ -155,7 +155,7 @@ namespace LinkGeek.Areas.Identity.Pages.Account
                 await _userStore.SetUserFirstNameAsync(user, Input.FirstName, CancellationToken.None);
                 await _userStore.SetUserLastNameAsync(user, Input.LastName, CancellationToken.None);
                 await _userStore.SetGenderAsync(user, Input.Gender, CancellationToken.None);
-                await _userStore.SetProfilePictureAsync(user, Input.ProfilePicture, CancellationToken.None);
+                // await _userStore.SetProfilePictureAsync(user, Input.ProfilePicture, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 var result = await _userManager.CreateAsync(user);

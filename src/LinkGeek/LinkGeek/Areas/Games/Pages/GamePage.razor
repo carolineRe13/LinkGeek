@@ -5,9 +5,9 @@
     @foreach (var player in Players)
     {
         <div class="card player-card">
-            @if (@player.ProfilePicture is {Length: > 0 })
+            @if (@player.ProfilePictureData != null && @player.ProfilePictureContentType != null)
             {
-                <img class="card-img-top" src="data:image/png;base64,@Base64ImageFromBytes(@player.ProfilePicture)" alt="Card image cap">
+                <img class="card-img-top" src="@GetImageSrc(player)" alt="Card image cap">
             }
             else
             {

@@ -23,4 +23,10 @@ public class UserCardModel : PageModel
             }
         }
     }
+
+    public string GetImageSrc()
+    {
+        return "data:" + ApplicationUser.ProfilePictureContentType + ";base64," + ApplicationUser.ProfilePictureData;
+    }
+        
 }

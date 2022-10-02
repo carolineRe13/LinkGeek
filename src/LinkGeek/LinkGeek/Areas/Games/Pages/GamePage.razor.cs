@@ -35,7 +35,11 @@ public partial class GamePage
         
         IImage image;
         image = PlatformImage.FromStream(ms);
-        
         return image.AsBase64();
+    }
+
+    private string GetImageSrc(ApplicationUser player)
+    {
+        return "data:" + player.ProfilePictureContentType + ";base64," + player.ProfilePictureData;
     }
 }
