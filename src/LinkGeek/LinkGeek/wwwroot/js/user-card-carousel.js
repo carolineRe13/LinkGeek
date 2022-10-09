@@ -69,7 +69,7 @@ function initCarousel() {
 $("#open-pack").click(function () {
     $.ajax({
         method: 'get',
-        url: '?handler=UserCards',
+        url: '/Discoverability/MainPage?handler=UserCards',
         success: function (result) {
             $('#user-cards').empty();
             $('#user-cards').html(result);

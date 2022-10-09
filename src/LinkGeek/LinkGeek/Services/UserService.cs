@@ -12,6 +12,14 @@ public enum AddGameToUserResponse
     GameAlreadyAdded
 }
 
+public enum RemoveGameFromUserResponse
+{
+    Success,
+    GameNotFound,
+    UserNotFound,
+    GameAlreadyRemoved
+}
+
 public class UserService
 {
     public async Task<AddGameToUserResponse?> AddGameToUser(string userId, string gameId)
@@ -37,10 +45,69 @@ public class UserService
             {
                 return AddGameToUserResponse.GameAlreadyAdded;
             }
+
             user.Games.Add(game);
 
             await context.SaveChangesAsync();
             return AddGameToUserResponse.Success;
+        }
+    }
+    
+    public async Task<RemoveGameFromUserResponse?> RemoveGameFromUser(string userId, string gameId)
+    {
+        await using (var context = new ApplicationDbContext())
+        {
+            var game = await context.Game.FindAsync(gameId);
+            if (game == null)
+            {
+                return RemoveGameFromUserResponse.GameNotFound;
+            }
+
+            var user = await context.Users.Include(u => u.Games)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return RemoveGameFromUserResponse.UserNotFound;
+            }
+
+            user.Games ??= new List<Game>();
+            if (!user.Games.Contains(game))
+            {
+                return RemoveGameFromUserResponse.GameAlreadyRemoved;
+            }
+
+            user.Games.Remove(game);
+
+            await context.SaveChangesAsync();
+            return RemoveGameFromUserResponse.Success;
+        }
+    }
+
+    public async Task<bool> HasGameInLibrary(string userId, string gameId)
+    {
+        await using (var context = new ApplicationDbContext())
+        {
+            var game = context.Game.FindAsync(gameId).Result;
+            if (game == null)
+            {
+                return false;
+            }
+
+            var user = context.Users.Include(u => u.Games)
+                .FirstOrDefaultAsync(u => u.Id == userId).Result;
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            if (user.Games.Contains(game))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 

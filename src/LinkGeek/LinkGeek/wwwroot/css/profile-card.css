@@ -9,6 +9,8 @@
 :root {
     --bg-shape-color:linear-gradient(120deg, #343A4F, #0F1620) ;
     --lightblue: #3D9DEA;
+    --lightred: #f63c3c;
+    --darkerred: #910000;
     --darkblue: #4A4EEE;
     --darkerblue: #22249a;
     --darkererblue: #161862;
@@ -102,6 +104,14 @@ h1 {
 
 .profileSpecifications .gameInterests .feature {
     display: flex;
+    font-size: 1.25rem;
+    text-align: center;
+    color: var(--bs-body-color);
+    margin-top: 0;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: .5rem;
+    text-decoration: none;
 }
 
 /* Add friend button*/

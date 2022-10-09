@@ -59,14 +59,14 @@
                 {
                     @foreach (var game in Model.ApplicationUser.Games)
                     {
-                        <div class="feature">
+                        <a href="/game/@game.Id" class="feature">
                             <div class="featureIcon">
                                 <img src="@game.Logo" alt="@game.Name's logo"/>
                             </div>
                             <div class="featureText">
                                 <p>@game.Name</p>
                             </div>
-                        </div>
+                        </a>
                     }
                 }
             }

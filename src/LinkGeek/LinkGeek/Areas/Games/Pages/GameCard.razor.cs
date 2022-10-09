@@ -50,6 +50,42 @@ public partial class GameCard
                     break;
             }
         }
-        
+    }
+    
+    private async Task RemoveGame(string id)
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity is { IsAuthenticated: true })
+        {
+            var userId = (await UserManager.GetUserAsync(user)).Id;
+            var response = await UserService.RemoveGameFromUser(userId, id);
+            
+            switch (response)
+            {
+                case RemoveGameFromUserResponse.Success:
+                    Snackbar.Add("Game removed from library", Severity.Success);
+                    break;
+                case RemoveGameFromUserResponse.GameAlreadyRemoved:
+                    Snackbar.Add("Game already removed from library", Severity.Warning);
+                    break;
+                default:
+                    Snackbar.Add("Error adding game to library", Severity.Error);
+                    break;
+            }
+        }
+    }
+    
+    private bool IsGameInLibrary(string id)
+    {
+        var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;
+        var user = authState.User;
+        if (user.Identity is { IsAuthenticated: true })
+        {
+            var userId = (UserManager.GetUserAsync(user)).Result.Id;
+            return UserService.HasGameInLibrary(userId, id).Result;
+        }
+
+        return false;
     }
 }
