@@ -23,9 +23,10 @@ public class ApplicationUser : IdentityUser
     public string? ProfilePictureData { get; set; }
 
     public ICollection<Game>? Games { get; set; }
-    public ICollection<ApplicationUser>? Friends { get; set; }
-    public ICollection<ApplicationUser>? PendingIncomingFriendsRequests { get; set; }
-    public ICollection<ApplicationUser>? PendingOutgoingFriendsRequests { get; set; }
+    
+    public virtual ICollection<FriendLinkFriend>? Friends { get; set; }
+    public virtual ICollection<FriendLinkIncoming>? PendingIncomingFriendsRequests { get; set; }
+    public virtual ICollection<FriendLinkOutgoing>? PendingOutgoingFriendsRequests { get; set; }
     
     [JsonIgnore]
     public virtual ICollection<ChatMessage> ChatMessagesFromUsers { get; set; }

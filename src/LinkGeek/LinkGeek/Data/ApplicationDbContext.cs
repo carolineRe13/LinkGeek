@@ -41,6 +41,19 @@ namespace LinkGeek.Data
 
             builder.Entity<GameSearchCacheItem>()
                 .HasKey(c => new { c.Query, c.Rank });
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Friends)
+                .WithOne(f => f.User2)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.PendingOutgoingFriendsRequests)
+                .WithOne(f => f.User2)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.PendingIncomingFriendsRequests)
+                .WithOne(f => f.User2)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
