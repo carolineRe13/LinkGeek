@@ -109,6 +109,7 @@
     font-family:'Montserrat', sans-serif;
     font-size: 11pt;
     color:#747272;
+    text-decoration: none;
 }
 
 .discussions .discussion .message {
@@ -155,6 +156,7 @@
     font-family:'Montserrat', sans-serif;
     font-size: 18pt;
     color:#FFF;
+    text-decoration: none;
 }
 
 .chat .header-chat .right {

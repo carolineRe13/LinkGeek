@@ -29,24 +29,27 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/chat">Chat</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/games">Games</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Discoverability" asp-page="/MainPage">Discover</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="ProfileCard" asp-page="/ProfilePage">My Profile card</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/myFriends">My Friends</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/chat">Chat</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/games">Games</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Discoverability" asp-page="/MainPage">Discover</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="ProfileCard" asp-page="/ProfilePage">My Profile card</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" href="/myFriends">My Friends</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial"/>
                 </div>
@@ -55,9 +58,7 @@
     </header>
     <div class="container container-sm container-md">
         <main role="main" class="pb-3">
-            <CascadingValue Value="hubConnection">
-                @RenderBody()
-            </CascadingValue>
+            @RenderBody()
         </main>
     </div>
 

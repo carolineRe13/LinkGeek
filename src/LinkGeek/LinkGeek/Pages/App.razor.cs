@@ -13,6 +13,7 @@ namespace LinkGeek.Pages;
 public partial class App
 {
     private HubConnection hubConnection;
+    private ApplicationUser currentUser;
     public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
     [Inject]
     UserManager<ApplicationUser> UserManager { get; set; }
@@ -28,16 +29,16 @@ public partial class App
 
     [Inject] 
     private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         var CurrentUserId = "-1";
         
-        if (user.Identity.IsAuthenticated)
+        if (user.Identity is { IsAuthenticated: true })
         {
-            var currentUser = await UserManager.GetUserAsync(user);
+            currentUser = await UserManager.GetUserAsync(user);
             CurrentUserId = currentUser.Id;
         }
         

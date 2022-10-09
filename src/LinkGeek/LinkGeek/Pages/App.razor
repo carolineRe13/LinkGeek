@@ -3,8 +3,12 @@
 
 <Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="routeData"/>
-        @*<audio id="notification" src="/media/notification.mp3" /> *@
+        <CascadingValue Value="@hubConnection">
+            <CascadingValue Value="@currentUser">
+                <RouteView RouteData="routeData"/>
+                @*<audio id="notification" src="/media/notification.mp3" /> *@
+            </CascadingValue>
+        </CascadingValue>
     </Found>
     <NotFound>
         <h1>Page not found</h1>
@@ -12,7 +16,6 @@
     </NotFound>
 </Router>
 
-<MudThemeProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
- 
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
