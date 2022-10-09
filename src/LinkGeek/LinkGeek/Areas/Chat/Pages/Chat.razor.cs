@@ -1,9 +1,14 @@
 using LinkGeek.AppIdentity;
+using LinkGeek.Services;
 using LinkGeek.Shared;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.JSInterop;
 
 namespace LinkGeek.Areas.Chat.Pages;
 
@@ -11,7 +16,15 @@ namespace LinkGeek.Areas.Chat.Pages;
 public partial class Chat
 {
     [Inject]
-    UserManager<ApplicationUser> UserManager { get; set; }
+    private UserManager<ApplicationUser> UserManager { get; set; }
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    [Inject]
+    private ChatService _chatManager { get; set; }
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [CascadingParameter] public HubConnection HubConnection { get; set; }
     [Parameter] public string CurrentMessage { get; set; }
     [Parameter] public string CurrentUserId { get; set; }   
@@ -23,6 +36,8 @@ public partial class Chat
     private string selectedUserId = "-1";
     private string selectedUserName = "";
 
+    private EditContext editContext;
+    
     private async Task SubmitAsync()
     {
         if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
@@ -39,6 +54,8 @@ public partial class Chat
             CurrentMessage = string.Empty;
             await InvokeAsync(() => StateHasChanged())
                 .ConfigureAwait(true);
+            await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
+
         }
     }
     protected override async Task OnInitializedAsync()
@@ -80,6 +97,7 @@ public partial class Chat
                 }
                 await InvokeAsync(() => StateHasChanged())
                     .ConfigureAwait(true);
+                await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
             }
         });
         await GetUsersAsync();
@@ -88,6 +106,22 @@ public partial class Chat
             await LoadUserChat(ContactId);
         }
     }
+    
+    private async Task OnValidSubmit()
+    {
+        await SubmitAsync();
+        StateHasChanged();
+    }
+    
+    
+    private async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await SubmitAsync();
+        }
+    }
+
     public async Task LoadUserChat(string contactId)
     {
         selectedUserId = contactId;
@@ -98,6 +132,7 @@ public partial class Chat
         _messages = await _chatManager.GetConversationAsync(CurrentUserId, contactId);
         await InvokeAsync(() => StateHasChanged())
             .ConfigureAwait(true);
+        await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
     }
     private async Task GetUsersAsync()
     {

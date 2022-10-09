@@ -1,13 +1,12 @@
-﻿
-.chatcontainer {
+﻿.chatcontainer {
     padding:0;
     background-color: var(--bg-shape-color);
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    height: 80vh ;
-}
+    height: 80vh;
+    visibility: visible;
+    }
 
 .discussions {
-    width: 35%;
     height: 80vh;
     box-shadow: 0px 8px 10px rgba(0,0,0,0.20);
     overflow: hidden;
@@ -29,6 +28,7 @@
     align-items: center;
     justify-content: center;
     color: #373b3e;
+    height: 10%;
 }
 
 .discussions .search .searchbar {
@@ -108,7 +108,7 @@
     margin: 0 0 0 20px;
     font-family:'Montserrat', sans-serif;
     font-size: 11pt;
-    color:#515151;
+    color:#747272;
 }
 
 .discussions .discussion .message {
@@ -130,14 +130,13 @@
 }
 
 .chat {
-    width: 65%;
     height:80vh;
     position: relative;
 }
 
 .header-chat {
     background-color: #FFF;
-    height: 90px;
+    height: 10%;
     box-shadow: 0px 3px 2px rgba(0,0,0,0.100);
     display:flex;
     align-items: center;
@@ -146,7 +145,7 @@
 
 .chat .header-chat .icon {
     margin-left: 30px;
-    color:#515151;
+    color:#747272;
     font-size: 14pt;
 }
 
@@ -164,9 +163,9 @@
 }
 
 .chat .messages-chat {
-    padding: 25px 35px;
     height: 80%;
     overflow: auto;
+    width: 100%
 }
 
 .chat .messages-chat .message {
@@ -196,7 +195,7 @@
 }
 
 .text-only {
-    margin-left: 45px;
+    margin-right: 2px;
 }
 
 .time {
@@ -220,14 +219,15 @@
     background-color: #e3effd !important;
 }
 
-.footer-chat {
+.chat>.footer-chat {
     position: absolute;
     display:flex;
     align-items: center;
     bottom: 0;
-    background-color: transparent;
+    background-color: #222;
     border-top: 2px solid #EEE;
-
+    height: 10%;
+    width: 100%
 }
 
 .chat .footer-chat .icon {
@@ -297,4 +297,12 @@
 .row>* {
     padding-left: 0;
     padding-right: 0;
+}
+
+.input-group {
+    padding-right: 10px;
+}
+
+.input-group-addon {
+    margin-left: 10px;
 }

@@ -1,93 +1,87 @@
 ﻿@page "/chat"
-@using LinkGeek.Services
-@using Microsoft.AspNetCore.Components.Authorization
 @using MudBlazor
-@inject IJSRuntime _jsRuntime
-@inject NavigationManager NavigationManager
-@inject ChatService _chatManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="chatcontainer">
-  <div class="row">
-    <section class="discussions">
-      <div class="discussion search">
-        <div class="searchbar">
-          <i class="fa fa-search" aria-hidden="true"></i>
-          <input type="text" placeholder="Search...">
-        </div>
-      </div>
-      @foreach (var user in ChatUsers)
-      {
-        if (user.Id == selectedUserId)
-        {
-          <div class="discussion message-active" onclick="@(() => LoadUserChat(user.Id))">
-            <div class="photo" style="background-image: @user.ProfilePictureData;">
-              <div class="online"></div>
+    <div class="row" id="overview">
+        <section class="discussions col-1 col-md-3">
+            <div class="discussion search">
+                <div class="searchbar">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
             </div>
-            <div class="desc-contact">
-              <p class="name">@user.UserName</p>
-              <p class="message">LAST MESSAGE</p>
-            </div>
-          </div>
-        }
-        else
-        {
-          <div class="discussion" onclick="@(() => LoadUserChat(user.Id))">
-            <div class="photo" style="background-image: @user.ProfilePictureData;">
-              <div class="online"></div>
-            </div>
-            <div class="desc-contact">
-              <p class="name">@user.UserName</p>
-              <p class="message">Let's meet for a coffee or something today ?</p>
-            </div>
-          </div>
-        }
-      }
-      
-    </section>
-      @if (!string.IsNullOrEmpty(selectedUserName))
-      {
-        <section class="chat">
-          <div class="header-chat">
-            <i class="icon fa fa-user-o" aria-hidden="true"></i>
-            <p class="name">@selectedUserName</p>
-            <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
-          </div>
-          <div class="messages-chat">
-            @foreach (var message in _messages)
+            @foreach (var user in ChatUsers)
             {
-              if (@message.FromUser.UserName != CurrentUserUsername)
-              {
-                <div class="message">
-                  <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
-                    <div class="online">
+                if (user.Id == selectedUserId)
+                {
+                    <div class="discussion message-active" onclick="@(() => LoadUserChat(user.Id))">
+                        <div class="photo" style="background-image: @user.ProfilePictureData;">
+                            <div class="online"></div>
+                        </div>
+                        <div class="desc-contact">
+                            <p class="name">@user.UserName</p>
+                            <p class="message">LAST MESSAGE</p>
+                        </div>
                     </div>
-                  </div>
-                  <div>
-                    <p class="time"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
-                    <p class="text">@message.Message</p>
-                  </div>
-                </div>
-              }
-              else
-              {
-                <div class="message text-only">
-                  <div class="response">
-                  </div>
-                  <div>
-                    <p class="time"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
-                    <p class="text">@message.Message</p>
-                  </div>
-                </div>
-              }
+                }
+                else
+                {
+                    <div class="discussion" onclick="@(() => LoadUserChat(user.Id))">
+                        <div class="photo" style="background-image: @user.ProfilePictureData;">
+                            <div class="online"></div>
+                        </div>
+                        <div class="desc-contact">
+                            <p class="name">@user.UserName</p>
+                            <p class="message">LAST MESSAGE?</p>
+                        </div>
+                    </div>
+                }
             }
-          </div>
-            <div class="footer-chat">
-              <MudTextField T="string" Placeholder="Type your message here" DisableUnderLine="true" size="95%" 
-                            @bind-Value="CurrentMessage" For="@(() => CurrentMessage)"/>
-              <MudButton OnClick="SubmitAsync" StartIcon="@Icons.Material.Outlined.Send" Style="width: 4%;" Color="Color.Dark" ButtonType="ButtonType.Button">Send</MudButton>
-            </div>
+
+        </section>
+        @if (!string.IsNullOrEmpty(selectedUserName))
+        {
+            <section class="chat col-11 col-md-9">
+                <div class="header-chat">
+                    <i class="icon fa fa-user-o" aria-hidden="true"></i>
+                    <p class="name">@selectedUserName</p>
+                    <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+                </div>
+                <div class="chat messages-chat" id="chatcontainer">
+                    @foreach (var message in _messages)
+                    {
+                        if (@message.FromUser.UserName != CurrentUserUsername)
+                        {
+                            <div class="message">
+                                <div class="photo" style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
+                                    <div class="online">
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="time"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
+                                    <p class="text">@message.Message</p>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="message text-only">
+                                <div class="response">
+                                </div>
+                                <div>
+                                    <p class="time"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
+                                    <p class="text">@message.Message</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="footer-chat input-group">
+                    <MudTextField Class="form-control" T="string" Placeholder="Type your message here" DisableUnderLine="true"
+                                  @bind-Value="CurrentMessage" Immediate="true" extUpdateSuppression="false"/>
+                    <MudButton Class="input-group-addon" OnClick="SubmitAsync" StartIcon="@Icons.Material.Outlined.Send" ButtonType="ButtonType.Button">Send</MudButton>
+                </div>
             </section>
-      }
-  </div>
+        }
+    </div>
 </div>

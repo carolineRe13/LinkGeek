@@ -41,8 +41,8 @@ public class GameDbService
 
     public GameDbService(IConfiguration configuration)
     {
-        _clientId = configuration["igdb-clientId"];
-        _clientSecret = configuration["igdb-clientSecret"];
+        _clientId = configuration["igdb_clientId"];
+        _clientSecret = configuration["igdb_clientSecret"];
         _httpClient = new HttpClient();
         _httpClient.DefaultRequestHeaders.Add("Client-ID", _clientId);
     }
@@ -118,8 +118,8 @@ public class GameDbService
                 Game = gamesDict[g.Id],
                 LastUpdated = DateTimeOffset.UtcNow
             }).ToList();
-        
-            context.GameSearchCache.AddRange(gameSearchCache);
+            
+            context.GameSearchCache.UpdateRange(gameSearchCache);
             context.SaveChanges();
         }
     }

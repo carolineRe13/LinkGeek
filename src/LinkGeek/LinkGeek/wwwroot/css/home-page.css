@@ -1,12 +1,4 @@
-﻿* {
-    box-sizing: border-box;
-}
-body {
-    padding: 0 1em;
-    font-family: sans-serif;
-}
-
-:root {
+﻿:root {
     --bg-shape-color:linear-gradient(120deg, #343A4F, #0F1620) ;
     --lightgrey: #6b7270;
     --lightblue: #3D9DEA;

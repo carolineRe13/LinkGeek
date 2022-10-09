@@ -42,7 +42,7 @@
                             <a class="nav-link text-dark" asp-area="ProfileCard" asp-page="/ProfilePage">My Profile card</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Friends" asp-page="/main">My Friends</a>
+                            <a class="nav-link text-dark" href="/myFriends">My Friends</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
@@ -53,7 +53,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container container-sm container-md">
         <main role="main" class="pb-3">
             <CascadingValue Value="hubConnection">
                 @RenderBody()
@@ -71,6 +71,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/scroll.js"></script>
 
     <script src="~/_framework/blazor.server.js"></script>
     <script src="~/_content/MudBlazor/MudBlazor.min.js"></script>

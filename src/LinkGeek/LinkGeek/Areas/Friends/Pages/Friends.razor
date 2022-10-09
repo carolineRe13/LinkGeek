@@ -1,0 +1,18 @@
+﻿@page "/myFriends"
+
+<div class="friends-search">
+    <EditForm Model="@search" OnSubmit="@Search">
+        <div class="input-group">
+            <InputText class="form-control" id="name" @bind-Value="search.Search"/>
+            <button type="submit" class="btn btn-primary input-group-addon">
+                <i class="bi-search"></i>
+            </button>
+        </div>
+    </EditForm>
+    <div class="game-cards-container">
+        @foreach (var friend in results)
+        {
+            <ProfilePageModel Friend="@friend"/>
+        }
+    </div>
+</div>

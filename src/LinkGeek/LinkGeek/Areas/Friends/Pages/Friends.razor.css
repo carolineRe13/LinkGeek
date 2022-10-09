@@ -1,4 +1,4 @@
-.game-cards-container {
+﻿.game-cards-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -15,16 +15,7 @@
 }
 
 .card-title {
-    font-size: 1.25rem;
     text-align: center;
-    color: var(--bs-body-color);
-    margin-top: 0;
-    font-weight: 500;
-    line-height: 1.2;
-    margin-bottom: .5rem;
-    text-align: center;
-    text-decoration: none;
-
 }
 
 .input-group-addon {

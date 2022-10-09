@@ -46,21 +46,23 @@ function selectNext() {
 
 function initCarousel() {
     carousel = document.querySelector('.user-cards');
-    cells = carousel.querySelectorAll('.user-card');
-    for (let i = 0; i < cells.length; i++) {
-        const cell = cells[i];
-        cell.style.transform = 'translateZ(' + i*10 + 'px) ' + 'translateX(' + 0 + 'px)';
-    }
-    setTimeout(() => {
+    if (carousel != null) {
+        cells = carousel.querySelectorAll('.user-card');
         for (let i = 0; i < cells.length; i++) {
             const cell = cells[i];
-            const cellAngle = theta * i;
-
-            let x = radius * Math.sin(cellAngle);
-            let z = radius * Math.cos(cellAngle);
-            cell.style.transform = 'translateZ(' + (z + zOffset) + 'px) ' + 'translateX(' + x * xMultiplier + 'px)';
+            cell.style.transform = 'translateZ(' + i * 10 + 'px) ' + 'translateX(' + 0 + 'px)';
         }
-    }, 10)
+        setTimeout(() => {
+            for (let i = 0; i < cells.length; i++) {
+                const cell = cells[i];
+                const cellAngle = theta * i;
+
+                let x = radius * Math.sin(cellAngle);
+                let z = radius * Math.cos(cellAngle);
+                cell.style.transform = 'translateZ(' + (z + zOffset) + 'px) ' + 'translateX(' + x * xMultiplier + 'px)';
+            }
+        }, 10)
+    }
 
 }
 

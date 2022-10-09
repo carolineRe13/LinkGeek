@@ -10,7 +10,7 @@
         <div class="placeholder"></div>
     }
     <div class="card-body">
-        <h5 class="card-title">@Game.Name</h5>
+        <a class="card-title" href="/game/@Game.Id"> @Game.Name </a>
     </div>
     <button onclick="@(new Func<object, Task>(e => AddGame(@Game.Id)))" class="btn btn-primary">Add game</button>
     @if (@DisplayGamePageButton)

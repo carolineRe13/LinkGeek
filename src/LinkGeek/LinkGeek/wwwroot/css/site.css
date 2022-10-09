@@ -8,6 +8,12 @@ html {
   }
 }
 
+@media (max-width: 576px) {
+  body {
+    padding: 0;
+  }
+}
+
 html {
   position: relative;
   min-height: 100%;
@@ -15,4 +21,16 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.container-sm {
+  padding: 0;
+}
+
+.footer-chat>.mud-input-control {
+  margin-top: 0;
+}
+
+.footer-chat>.mud-input-control>.mud-input-control-input-container>div.mud-input.mud-input-text {
+  margin-top: 0;
 }
