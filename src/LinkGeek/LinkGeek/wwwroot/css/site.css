@@ -34,3 +34,8 @@ body {
 .footer-chat>.mud-input-control>.mud-input-control-input-container>div.mud-input.mud-input-text {
   margin-top: 0;
 }
+
+.modal-input {
+    width: 100%;
+    padding: .5rem;
+}

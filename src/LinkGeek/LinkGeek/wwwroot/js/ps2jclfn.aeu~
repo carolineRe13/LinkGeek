@@ -1,12 +1,12 @@
 let carousel = document.querySelector('.user-cards');
-let cells;
+let cells = carousel.querySelectorAll('.user-card');
 
-let cellWidth = 0;
-let cellHeight = 0;
-let cellSize = 0;
+const cellWidth = carousel.offsetWidth;
+const cellHeight = carousel.offsetHeight;
+const cellSize = cellWidth;
 const cellCount = 5;
 
-let xMultiplier = 0;
+const xMultiplier = cellWidth/20;
 const radius = 20;
 const theta = 2 * Math.PI / cellCount;
 const zOffset = -20;
@@ -46,12 +46,6 @@ function selectNext() {
 
 function initCarousel() {
     carousel = document.querySelector('.user-cards');
-
-    cellWidth = carousel.offsetWidth;
-    cellHeight = carousel.offsetHeight;
-    cellSize = cellWidth;
-    xMultiplier = cellWidth / 20;
-
     if (carousel != null) {
         cells = carousel.querySelectorAll('.user-card');
         for (let i = 0; i < cells.length; i++) {

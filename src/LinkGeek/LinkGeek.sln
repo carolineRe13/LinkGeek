@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkGeek", "LinkGeek\LinkGeek.csproj", "{57A547C4-9257-4454-8470-A31D2D585B17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkGeek", "LinkGeek\LinkGeek.csproj", "{57A547C4-9257-4454-8470-A31D2D585B17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

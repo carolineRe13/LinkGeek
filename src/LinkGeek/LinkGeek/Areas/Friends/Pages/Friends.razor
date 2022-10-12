@@ -1,5 +1,6 @@
 ﻿@page "/myFriends"
 
+<a href="/pendiiiiing" class="btn-primary"> Pending friends requests </a>
 <div class="friends-search">
     <EditForm Model="@search" OnSubmit="@Search">
         <div class="input-group">
@@ -10,7 +11,7 @@
         </div>
     </EditForm>
     <div class="game-cards-container">
-        @foreach (var friend in results)
+        @foreach (var friend in friendList)
         {
             <ProfilePageModel Friend="@friend"/>
         }

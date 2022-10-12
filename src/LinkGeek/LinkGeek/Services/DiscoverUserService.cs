@@ -12,7 +12,7 @@ public class DiscoverUserService
         {
             userList = context.Users.AsQueryable()
                 .Where(u => u.Id != currentUser.Id)
-                .Where(u => null == currentUser.Friends || !currentUser.Friends.Select(f => f.User2).Contains(u))
+                .Where(u => null == currentUser.Friends || !currentUser.Friends.Select(f => f.To).Contains(u))
                 .Take(4).ToList();
         }
 

@@ -1,0 +1,73 @@
+﻿@page "/profile"
+@page "/profile/{UserName}"
+@using LinkGeek.Pages.Shared
+
+@if (@_displayedUser != null)
+{
+    <UserCardPartial User="@_displayedUser" IsCurrentUser="@DisplayedUserIsCurrentUser()" />
+
+    @if (DisplayedUserIsCurrentUser())
+    {
+        <div class="modal fade" id="locationChange" tabindex="-1" role="dialog" aria-labelledby="locationChangeLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="locationChangeLabel">Change location</h5>
+                        <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <EditForm OnValidSubmit="@UpdateLocation" Model="@_locationForm">
+                        <DataAnnotationsValidator />
+                        <div class="modal-body">
+                            <InputText id="location" @bind-Value="_locationForm.Value" class="modal-input" />
+                            <ValidationSummary />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="statusChange" tabindex="-1" role="dialog" aria-labelledby="statusChangeLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="statusChangeLabel">Change status</h5>
+                        <button type="button" class="btn btn-secondary close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <EditForm OnValidSubmit="@UpdateStatus" Model="@_statusForm">
+                        <DataAnnotationsValidator />
+                        <div class="modal-body">
+                            <InputText id="status" @bind-Value="_statusForm.Value" class="modal-input" />
+                            <ValidationSummary />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    if (@_loading)
+    {
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    }
+    else
+    {
+        <h1>Could not find user</h1>
+    }
+}

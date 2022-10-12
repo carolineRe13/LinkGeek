@@ -1,3 +1,4 @@
+using LinkGeek.AppIdentity;
 using LinkGeek.Data;
 using LinkGeek.Models;
 using Microsoft.EntityFrameworkCore;
@@ -32,8 +33,7 @@ public class UserService
                 return AddGameToUserResponse.GameNotFound;
             }
 
-            var user = await context.Users.Include(u => u.Games)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = GetUserWithGames(context, userId);
 
             if (user == null)
             {
@@ -63,8 +63,7 @@ public class UserService
                 return RemoveGameFromUserResponse.GameNotFound;
             }
 
-            var user = await context.Users.Include(u => u.Games)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = GetUserWithGames(context, userId);
 
             if (user == null)
             {
@@ -94,8 +93,7 @@ public class UserService
                 return false;
             }
 
-            var user = context.Users.Include(u => u.Games)
-                .FirstOrDefaultAsync(u => u.Id == userId).Result;
+            var user = GetUserWithGames(context, userId);
 
             if (user == null)
             {
@@ -110,6 +108,10 @@ public class UserService
             return false;
         }
     }
+
+    public async Task<string?> UpdateLocation(ApplicationUser user, string location) =>
+        await UpdateLocation(user.Id, location);
+
 
     public async Task<string?> UpdateLocation(string userId, string location)
     {
@@ -127,6 +129,9 @@ public class UserService
         }
     }
 
+    public async Task<string?> UpdateStatus(ApplicationUser user, string status) =>
+        await UpdateStatus(user.Id, status);
+
     public async Task<string?> UpdateStatus(string userId, string status)
     {
         // TODO: Add profanity filter
@@ -142,5 +147,33 @@ public class UserService
             await context.SaveChangesAsync();
             return user.Status;
         }
+    }
+
+    public async Task<ICollection<Game>> GetUsersGamesAsync(string userId)
+    {
+        await using (var context = new ApplicationDbContext())
+        {
+            var user = GetUserWithGames(context, userId);
+            if (user == null)
+            {
+                return new List<Game>();
+            }
+            return user.Games ?? new List<Game>();
+        }
+    }
+
+    public ApplicationUser? GetUserFromUserName(string userName)
+    {
+        using (var context = new ApplicationDbContext())
+        {
+            return context.Users.Include(u => u.Games)
+                .FirstOrDefault(u => u.UserName == userName);
+        }
+    }
+
+    private ApplicationUser? GetUserWithGames(ApplicationDbContext context, string userId)
+    {
+        return context.Users.Include(u => u.Games)
+            .FirstAsync(u => u.Id == userId).Result;
     }
 }

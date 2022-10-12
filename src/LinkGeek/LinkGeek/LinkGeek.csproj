@@ -37,4 +37,8 @@
     <AdditionalFiles Include="Areas\_Imports.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Pages\Shared\UserCardPartial.razor.cs" />
+  </ItemGroup>
+
 </Project>

@@ -44,15 +44,15 @@ namespace LinkGeek.Data
 
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.Friends)
-                .WithOne(f => f.User2)
+                .WithOne(f => f.To)
                 .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.PendingOutgoingFriendsRequests)
-                .WithOne(f => f.User2)
+                .WithOne(f => f.To)
                 .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.PendingIncomingFriendsRequests)
-                .WithOne(f => f.User2)
+                .WithOne(f => f.From)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

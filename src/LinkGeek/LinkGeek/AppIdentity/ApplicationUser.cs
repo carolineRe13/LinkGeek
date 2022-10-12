@@ -45,4 +45,19 @@ public class ApplicationUser : IdentityUser
     public string? TimeZone { get; set; }
     
     public string? Location { get; set; }
+    
+    public ICollection<ApplicationUser> GetPendingIncomingFriendList()
+    {
+        return (PendingIncomingFriendsRequests ?? new List<FriendLinkIncoming>()).Select(f => f.From).ToList();
+    }
+    
+    public ICollection<ApplicationUser> GetPendingOutgoingFriendList()
+    {
+        return (PendingOutgoingFriendsRequests ?? new List<FriendLinkOutgoing>()).Select(f => f.To).ToList();
+    }
+    
+    public ICollection<ApplicationUser> GetFriendList()
+    {
+        return (Friends ?? new List<FriendLinkFriend>()).Select(f => f.To).ToList();
+    }
 }

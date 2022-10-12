@@ -20,17 +20,18 @@
         <h1> @Model.ApplicationUser.UserName </h1>
         <p2>
             @if (@Model.IsCurrentUser)
-            {var location = @Model.ApplicationUser.Location ?? "Help people find you!";
+            {
+                var location = @Model.ApplicationUser.Location ?? "Help people find you!";
                 <span id="userLocation">@location</span>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationChange">
                     <i class="bi-pencil"></i>
                 </button>
             }
             else
-             {
-                 var location = @Model.ApplicationUser.Location ?? "Unknown location";
-                 <span id="userLocation">@location</span>
-             }
+            {
+                var location = @Model.ApplicationUser.Location ?? "Unknown location";
+                <span id="userLocation">@location</span>
+            }
         </p2>
 
         <p>
@@ -72,11 +73,65 @@
             }
         </div>
 
-        @if (!@Model.IsCurrentUser)
+        @if (!(@Model.IsCurrentUser && @Model.AreCurrentlyFriends() && @Model.AreCurrentlyPendingFriends() && @Model.IsAdded()))
         {
             <button class="add">
                 <p>Add friend</p>
                 <div class="addFriend">
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                            fill="currentColor"/>
+                    </svg>
+                </div>
+            </button>
+        }
+        else if (!@Model.IsCurrentUser && @Model.AreCurrentlyFriends() && !@Model.AreCurrentlyPendingFriends() && !@Model.IsAdded())
+        {
+            <button class="remove">
+                <p>Remove friend</p>
+                <div class="removeFriend">
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                            fill="currentColor"/>
+                    </svg>
+                </div>
+            </button>
+        }
+        else if (!@Model.IsCurrentUser && !@Model.AreCurrentlyFriends() && @Model.AreCurrentlyPendingFriends() && !@Model.IsAdded())
+        {
+            <button class="cancel">
+                <p>Cancel friend request</p>
+                <div class="cancelFriendRequest">
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                            fill="currentColor"/>
+                    </svg>
+                </div>
+            </button>
+        }
+        else if (!@Model.IsCurrentUser && !@Model.AreCurrentlyFriends() && !@Model.AreCurrentlyPendingFriends() && @Model.IsAdded())
+        {
+            <button class="accept">
+                <p>Accept friend request</p>
+                <div class="cancelFriendRequest">
                     <svg
                         width="24"
                         height="24"

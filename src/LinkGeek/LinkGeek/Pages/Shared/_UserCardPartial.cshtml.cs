@@ -8,12 +8,15 @@ public class UserCardModel : PageModel
 {
     public readonly ApplicationUser ApplicationUser;
     public readonly bool IsCurrentUser;
+    public readonly ApplicationUser OtherUser;
 
-    public UserCardModel(ApplicationUser applicationUser, bool isCurrentUser)
+    public UserCardModel(ApplicationUser applicationUser, bool isCurrentUser, ApplicationUser otherUser)
     {
         IsCurrentUser = isCurrentUser;
-
-        this.ApplicationUser = applicationUser;
+        
+        ApplicationUser = applicationUser;
+        OtherUser = otherUser;
+        
         if (applicationUser.Games == null 
             || applicationUser.Games.Count == 0)
         {
@@ -22,6 +25,36 @@ public class UserCardModel : PageModel
                 applicationUser.Games = context.Game.Where(g => g.Players.Contains(applicationUser)).ToList();
             }
         }
+    }
+
+    public bool AreCurrentlyFriends()
+    {
+        if (ApplicationUser.GetFriendList().Contains(OtherUser))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public bool AreCurrentlyPendingFriends()
+    {
+        if (ApplicationUser.GetPendingOutgoingFriendList().Contains(OtherUser))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public bool IsAdded()
+    {
+        if (ApplicationUser.GetPendingIncomingFriendList().Contains(OtherUser))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public string GetImageSrc()
