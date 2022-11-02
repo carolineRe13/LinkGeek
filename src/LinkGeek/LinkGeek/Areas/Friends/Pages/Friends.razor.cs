@@ -19,6 +19,7 @@ public partial class Friends
 {
     public SearchModel search = new SearchModel();
     public ICollection<ApplicationUser> friendList { get; set; } = new List<ApplicationUser>();
+    
     [Inject]
     AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     
@@ -33,7 +34,7 @@ public partial class Friends
         if (user.Identity is { IsAuthenticated: true })
         {
             var currentUser = await UserManager.GetUserAsync(user);
-            friendList = currentUser.GetFriendList();
+            friendList = currentUser?.Friends ?? new List<ApplicationUser>();
         }
     }
 

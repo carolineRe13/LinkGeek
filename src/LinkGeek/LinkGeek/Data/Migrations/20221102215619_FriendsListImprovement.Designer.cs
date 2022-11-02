@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LinkGeek.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221013214121_realFriends")]
-    partial class realFriends
+    [Migration("20221102215619_FriendsListImprovement")]
+    partial class FriendsListImprovement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,17 +26,32 @@ namespace LinkGeek.Data.Migrations
 
             modelBuilder.Entity("Friends", b =>
                 {
-                    b.Property<string>("MyRealFriendsId")
+                    b.Property<string>("FriendsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RealFriendsId")
+                    b.Property<string>("MyFriendsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("MyRealFriendsId", "RealFriendsId");
+                    b.HasKey("FriendsId", "MyFriendsId");
 
-                    b.HasIndex("RealFriendsId");
+                    b.HasIndex("MyFriendsId");
 
                     b.ToTable("Friends");
+                });
+
+            modelBuilder.Entity("FriendRequests", b =>
+                {
+                    b.Property<string>("ReceivedFriendRequestsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SentFriendRequestsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ReceivedFriendRequestsId", "SentFriendRequestsId");
+
+                    b.HasIndex("SentFriendRequestsId");
+
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("ApplicationUserGame", b =>
@@ -146,72 +161,6 @@ namespace LinkGeek.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("LinkGeek.Models.FriendLinkFriend", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FromId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ToId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromId");
-
-                    b.HasIndex("ToId");
-
-                    b.ToTable("FriendLinkFriend");
-                });
-
-            modelBuilder.Entity("LinkGeek.Models.FriendLinkIncoming", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FromId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ToId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromId");
-
-                    b.HasIndex("ToId");
-
-                    b.ToTable("FriendLinkIncoming");
-                });
-
-            modelBuilder.Entity("LinkGeek.Models.FriendLinkOutgoing", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FromId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ToId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromId");
-
-                    b.HasIndex("ToId");
-
-                    b.ToTable("FriendLinkOutgoing");
                 });
 
             modelBuilder.Entity("LinkGeek.Models.Game", b =>
@@ -426,13 +375,28 @@ namespace LinkGeek.Data.Migrations
                 {
                     b.HasOne("LinkGeek.AppIdentity.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("MyRealFriendsId")
+                        .HasForeignKey("FriendsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LinkGeek.AppIdentity.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("RealFriendsId")
+                        .HasForeignKey("MyFriendsId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FriendRequests", b =>
+                {
+                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("ReceivedFriendRequestsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("SentFriendRequestsId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
@@ -450,63 +414,6 @@ namespace LinkGeek.Data.Migrations
                         .HasForeignKey("PlayersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("LinkGeek.Models.FriendLinkFriend", b =>
-                {
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "From")
-                        .WithMany()
-                        .HasForeignKey("FromId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "To")
-                        .WithMany("Friends")
-                        .HasForeignKey("ToId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("From");
-
-                    b.Navigation("To");
-                });
-
-            modelBuilder.Entity("LinkGeek.Models.FriendLinkIncoming", b =>
-                {
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "From")
-                        .WithMany("PendingIncomingFriendsRequests")
-                        .HasForeignKey("FromId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "To")
-                        .WithMany()
-                        .HasForeignKey("ToId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("From");
-
-                    b.Navigation("To");
-                });
-
-            modelBuilder.Entity("LinkGeek.Models.FriendLinkOutgoing", b =>
-                {
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "From")
-                        .WithMany()
-                        .HasForeignKey("FromId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "To")
-                        .WithMany("PendingOutgoingFriendsRequests")
-                        .HasForeignKey("ToId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("From");
-
-                    b.Navigation("To");
                 });
 
             modelBuilder.Entity("LinkGeek.Models.GameSearchCacheItem", b =>
@@ -593,12 +500,6 @@ namespace LinkGeek.Data.Migrations
                     b.Navigation("ChatMessagesFromUsers");
 
                     b.Navigation("ChatMessagesToUsers");
-
-                    b.Navigation("Friends");
-
-                    b.Navigation("PendingIncomingFriendsRequests");
-
-                    b.Navigation("PendingOutgoingFriendsRequests");
                 });
 #pragma warning restore 612, 618
         }

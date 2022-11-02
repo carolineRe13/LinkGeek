@@ -29,7 +29,7 @@ public class UserCardModel : PageModel
 
     public bool AreCurrentlyFriends()
     {
-        if (ApplicationUser.GetFriendList().Contains(OtherUser))
+        if (ApplicationUser.Friends.Contains(OtherUser))
         {
             return true;
         }
@@ -39,7 +39,7 @@ public class UserCardModel : PageModel
     
     public bool AreCurrentlyPendingFriends()
     {
-        if (ApplicationUser.GetPendingOutgoingFriendList().Contains(OtherUser))
+        if (ApplicationUser.SentFriendRequests.Contains(OtherUser))
         {
             return true;
         }
@@ -49,7 +49,7 @@ public class UserCardModel : PageModel
     
     public bool IsAdded()
     {
-        if (ApplicationUser.GetPendingIncomingFriendList().Contains(OtherUser))
+        if (ApplicationUser.ReceivedFriendRequests.Contains(OtherUser))
         {
             return true;
         }

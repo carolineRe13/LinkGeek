@@ -30,7 +30,7 @@ public partial class UserCardPartial
 
     public bool AreCurrentlyFriends()
     {
-        if (CurrentUser != null && CurrentUser.GetFriendList().Contains(DisplayedUser))
+        if (CurrentUser != null && DisplayedUser != null && CurrentUser.Friends.Contains(DisplayedUser))
         {
             return true;
         }
@@ -40,7 +40,7 @@ public partial class UserCardPartial
 
     public bool AreCurrentlyPendingFriends()
     {
-        if (CurrentUser != null && CurrentUser.GetPendingOutgoingFriendList().Contains(DisplayedUser))
+        if (CurrentUser != null && DisplayedUser != null && CurrentUser.SentFriendRequests.Contains(DisplayedUser))
         {
             return true;
         }
@@ -50,7 +50,7 @@ public partial class UserCardPartial
 
     public bool IsAdded()
     {
-        if (CurrentUser != null && CurrentUser.GetPendingIncomingFriendList().Contains(DisplayedUser))
+        if (CurrentUser != null && DisplayedUser != null && CurrentUser.ReceivedFriendRequests.Contains(DisplayedUser))
         {
             return true;
         }
@@ -60,7 +60,7 @@ public partial class UserCardPartial
 
     public string GetImageSrc()
     {
-        return "data:" + CurrentUser.ProfilePictureContentType + ";base64," + CurrentUser.ProfilePictureData;
+        return "data:" + CurrentUser?.ProfilePictureContentType + ";base64," + CurrentUser?.ProfilePictureData;
     }
 
     public async Task<ICollection<Game>> GetGames()

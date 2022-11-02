@@ -44,19 +44,18 @@ namespace LinkGeek.Data
 
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.Friends)
-                .WithOne(f => f.To)
-                .OnDelete(DeleteBehavior.NoAction);
+                .WithMany(u => u.MyFriends)
+                .UsingEntity(x =>
+                {
+                    x.ToTable("Friends");
+                });
             builder.Entity<ApplicationUser>()
-                .HasMany(u => u.PendingOutgoingFriendsRequests)
-                .WithOne(f => f.To)
-                .OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<ApplicationUser>()
-                .HasMany(u => u.PendingIncomingFriendsRequests)
-                .WithOne(f => f.From)
-                .OnDelete(DeleteBehavior.NoAction);
-            builder.Entity<ApplicationUser>()
-                .HasMany<ApplicationUser>(a => a.RealFriends)
-                .WithMany(f => f.MyRealFriends);
+                .HasMany(u => u.SentFriendRequests)
+                .WithMany(u => u.ReceivedFriendRequests)
+                .UsingEntity(x =>
+                {
+                    x.ToTable("FriendRequests");
+                });
         }
     }
 }

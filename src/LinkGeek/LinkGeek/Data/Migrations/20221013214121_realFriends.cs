@@ -17,30 +17,30 @@ namespace LinkGeek.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUserApplicationUser", x => new { x.MyRealFriendsId, x.RealFriendsId });
+                    table.PrimaryKey("PK_Friends", x => new { x.MyRealFriendsId, x.RealFriendsId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUserApplicationUser_AspNetUsers_MyRealFriendsId",
+                        name: "FK_Friends_AspNetUsers_MyRealFriendsId",
                         column: x => x.MyRealFriendsId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUserApplicationUser_AspNetUsers_RealFriendsId",
+                        name: "FK_Friends_AspNetUsers_RealFriendsId",
                         column: x => x.RealFriendsId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserApplicationUser_RealFriendsId",
-                table: "ApplicationUserApplicationUser",
+                name: "IX_Friends_RealFriendsId",
+                table: "Friends",
                 column: "RealFriendsId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUserApplicationUser");
+                name: "Friends");
         }
     }
 }
