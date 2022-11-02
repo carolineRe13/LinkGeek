@@ -15,6 +15,9 @@ public class SearchModel
     public string? Search { get; set; }
 }
 
+/// <summary>
+/// Class <c>Games</c> Overall games tab containing all game pages and a search functionality
+/// </summary>
 [Authorize]
 public partial class Games
 {
@@ -41,18 +44,6 @@ public partial class Games
     public async Task Search()
     {
         results = await GameDbService.SearchGames(search.Search);
-        
-    }
-    
-    public async Task AddGame(string id)
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity is { IsAuthenticated: true })
-        {
-            var userId = (await UserManager.GetUserAsync(user)).Id;
-            await UserService.AddGameToUser(userId, id);
-        }
         
     }
 }

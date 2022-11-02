@@ -23,6 +23,9 @@ public partial class GamePage
         Players = await GameService.GetGamePlayersAsync(GameId);
     }
 
+    /// <summary>
+    /// Method <c>Base64ImageFromBytes</c> Creates an image from bytes
+    /// </summary>
     public string Base64ImageFromBytes(byte[] profilePicture)
     {
         if (profilePicture.Length == 0)

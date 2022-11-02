@@ -29,7 +29,7 @@ public class ApplicationUser : IdentityUser
     public virtual ICollection<ApplicationUser>? MyRealFriends { get; set; } = new List<ApplicationUser>();
 
     public virtual ICollection<ApplicationUser>? RealRequestedFriends { get; set; } = new List<ApplicationUser>();
-    public virtual ICollection<ApplicationUser>? RealFriendRequests { get; set; } = new List<ApplicationUser>();8
+    public virtual ICollection<ApplicationUser>? RealFriendRequests { get; set; } = new List<ApplicationUser>();
 
 
     public virtual ICollection<FriendLinkFriend>? Friends { get; set; } = new List<FriendLinkFriend>();

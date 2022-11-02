@@ -12,6 +12,10 @@ using Microsoft.JSInterop;
 
 namespace LinkGeek.Areas.Chat.Pages;
 
+/// <summary>
+/// Class <c>Chat</c> logic for the chat function
+/// </summary>
+
 [Authorize]
 public partial class Chat
 {
@@ -36,7 +40,10 @@ public partial class Chat
     private string selectedUserName = "";
 
     private EditContext editContext;
-    
+
+    /// <summary>
+    /// Method <c>SumbmitAsync</c> Creates a new ChatMessage and calls the sending function
+    /// </summary>
     private async Task SubmitAsync()
     {
         if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
@@ -58,6 +65,9 @@ public partial class Chat
         }
     }
 
+    /// <summary>
+    /// Method <c>OnParametersSetAsync</c> Called afterOnInitialized is called
+    /// </summary>
     protected override async Task OnParametersSetAsync()
     {
         if (hubConnection == null || currentUser == null)
@@ -99,14 +109,10 @@ public partial class Chat
             await LoadUserChat(ContactId);
         }
     }
-    
-    private async Task OnValidSubmit()
-    {
-        await SubmitAsync();
-        StateHasChanged();
-    }
-    
-    
+
+    /// <summary>
+    /// Method <c>Enter</c> When the user hits enter, the message is send
+    /// </summary>
     private async Task Enter(KeyboardEventArgs e)
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
@@ -115,6 +121,9 @@ public partial class Chat
         }
     }
 
+    /// <summary>
+    /// Method <c>LoadUserChat</c> Loads the users chat
+    /// </summary>
     public async Task LoadUserChat(string contactId)
     {
         selectedUserId = contactId;
@@ -126,6 +135,10 @@ public partial class Chat
             .ConfigureAwait(true);
         await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
     }
+
+    /// <summary>
+    /// Method <c>GetUsersAsync</c> Gets the users by calling the service
+    /// </summary>
     private async Task GetUsersAsync()
     {
         ChatUsers = await _chatManager.GetUsersAsync(currentUser.Id);

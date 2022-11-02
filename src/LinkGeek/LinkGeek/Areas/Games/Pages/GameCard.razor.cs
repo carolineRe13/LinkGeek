@@ -8,6 +8,9 @@ using MudBlazor;
 
 namespace LinkGeek.Areas.Games.Pages;
 
+/// <summary>
+/// Class <c>GameCard</c> The functionality of the game cards including e.g. add, remove
+/// </summary>
 public partial class GameCard
 {
     [Inject]
@@ -27,7 +30,10 @@ public partial class GameCard
 
     [Parameter] 
     public bool DisplayGamePageButton { get; set; } = true;
-    
+
+    /// <summary>
+    /// Method <c>AddGame</c> Game will be added to current user's library
+    /// </summary>
     private async Task AddGame(string id)
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -51,7 +57,10 @@ public partial class GameCard
             }
         }
     }
-    
+
+    /// <summary>
+    /// Method <c>RemoveGame</c> Game will be removed from current user's library
+    /// </summary>
     private async Task RemoveGame(string id)
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -75,7 +84,10 @@ public partial class GameCard
             }
         }
     }
-    
+
+    /// <summary>
+    /// Method <c>IsGameInLibrary</c> returns true if the game is in the current user's library
+    /// </summary>
     private bool IsGameInLibrary(string id)
     {
         var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;

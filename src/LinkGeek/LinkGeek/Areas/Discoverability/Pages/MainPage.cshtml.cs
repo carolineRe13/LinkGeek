@@ -28,6 +28,9 @@ public class DiscoverabilityModel : PageModel
         return Content("");
     }
 
+    /// <summary>
+    /// Method <c>OnGetUserCardsAsync</c> Returns the partial user card
+    /// </summary>
     public async Task<IActionResult> OnGetUserCardsAsync()
     {
         this.UserCards = GetUserCards();

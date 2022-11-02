@@ -16,7 +16,9 @@ public class FormModel
     public string? Value { get; set; }
 }
 
-
+/// <summary>
+/// Class <c>ProfilePage</c> a user's profile page. This can be the current user or someone else's profile
+/// </summary>
 [Authorize]
 public partial class ProfilePage
 {
@@ -59,6 +61,9 @@ public partial class ProfilePage
         }
     }
 
+    /// <summary>
+    /// Method <c>UpdateLocation</c> updates the location or shows an error in a Snackbar if the method is called by the current user
+    /// </summary>
     public async Task UpdateLocation()
     {
         if (CurrentUser == null)
@@ -77,6 +82,9 @@ public partial class ProfilePage
         }
     }
 
+    /// <summary>
+    /// Method <c><UpdateStatus/c> updates the status or shows an error in a Snackbar if this is the method is called by the current user
+    /// </summary>
     public async Task UpdateStatus()
     {
         if (CurrentUser == null)
@@ -95,6 +103,9 @@ public partial class ProfilePage
         }
     }
 
+    /// <summary>
+    /// Method <c>DisplayedUserIsCurrentUser</c> returns true if the displayed card is the current user
+    /// </summary>
     public bool DisplayedUserIsCurrentUser()
     {
         if (UserName == null && CurrentUser != null)
