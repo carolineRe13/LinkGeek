@@ -10,7 +10,7 @@ namespace LinkGeek.Pages.Shared;
 [Authorize]
 public partial class UserCardPartial
 {
-    [Inject] 
+    [Inject]
     private UserService userService { get; init; }
 
     [Inject] 
@@ -28,52 +28,62 @@ public partial class UserCardPartial
     [Inject]
     private ISnackbar Snackbar { get; set; }
 
-    public bool AreCurrentlyFriends()
+    private bool AreCurrentlyFriends()
     {
-        if (CurrentUser != null && DisplayedUser != null && CurrentUser.Friends.Contains(DisplayedUser))
-        {
-            return true;
-        }
-
-        return false;
+        return CurrentUser != null
+               && DisplayedUser != null
+               && CurrentUser.Friends.Select(f => f.Id).Contains(DisplayedUser.Id);
     }
 
-    public bool AreCurrentlyPendingFriends()
+    private bool FriendRequestSent()
     {
-        if (CurrentUser != null && DisplayedUser != null && CurrentUser.SentFriendRequests.Contains(DisplayedUser))
-        {
-            return true;
-        }
-
-        return false;
+        return CurrentUser != null
+               && DisplayedUser != null
+               && CurrentUser.SentFriendRequests.Select(f => f.Id).Contains(DisplayedUser.Id);
     }
 
-    public bool IsAdded()
+    private bool FriendRequestReceived()
     {
-        if (CurrentUser != null && DisplayedUser != null && CurrentUser.ReceivedFriendRequests.Contains(DisplayedUser))
-        {
-            return true;
-        }
-
-        return false;
+        return CurrentUser != null
+               && DisplayedUser != null 
+               && CurrentUser.ReceivedFriendRequests.Select(f => f.Id).Contains(DisplayedUser.Id);
     }
 
-    public string GetImageSrc()
+    private string GetImageSrc()
     {
-        return "data:" + CurrentUser?.ProfilePictureContentType + ";base64," + CurrentUser?.ProfilePictureData;
+        return "data:" + DisplayedUser?.ProfilePictureContentType + ";base64," + DisplayedUser?.ProfilePictureData;
     }
 
-    public async Task<ICollection<Game>> GetGames()
+    private async Task<ICollection<Game>> GetGames()
     {
         return DisplayedUser == null ? new List<Game>() : await userService.GetUsersGamesAsync(DisplayedUser.Id);
     }
 
+    private async Task AddFriend()
+    {
+        await this.CallUserServiceMethod(FriendService.AddFriend);
+    }
 
-    public void AddFriend()
+    private async Task CancelFriendRequest()
+    {
+        await this.CallUserServiceMethod(FriendService.CancelFriendRequest);
+    }
+
+    private async Task DeclineFriendRequest()
+    {
+        await this.CallUserServiceMethod(FriendService.DeclineFriendRequest);
+    }
+
+    private async Task RemoveFriend()
+    {
+        await this.CallUserServiceMethod(FriendService.RemoveFriend);
+    }
+
+    private async Task CallUserServiceMethod(Func<string, string, Task<FriendsResponses>> method)
     {
         if (CurrentUser != null && DisplayedUser != null)
         {
-            var result = FriendService.AddFriend(CurrentUser.Id, DisplayedUser.Id);
+            var result = await method(CurrentUser.Id, DisplayedUser.Id);
             Snackbar.Add(result.ToString());
             StateHasChanged();
         }

@@ -164,11 +164,13 @@ public class UserService
 
     public ApplicationUser? GetUserFromUserName(string userName)
     {
-        using (var context = new ApplicationDbContext())
-        {
-            return context.Users.Include(u => u.Games)
-                .FirstOrDefault(u => u.UserName == userName);
-        }
+        using var context = new ApplicationDbContext();
+        return context.Users
+            .Include(u => u.Friends)
+            .Include(u => u.SentFriendRequests)
+            .Include(u => u.ReceivedFriendRequests)
+            .Include(u => u.Games)
+            .FirstOrDefault(u => u.UserName == userName);
     }
 
     private ApplicationUser? GetUserWithGames(ApplicationDbContext context, string userId)

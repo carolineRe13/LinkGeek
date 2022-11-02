@@ -71,66 +71,79 @@
         
         @if (!@IsCurrentUser)
         {
-            @if (!(AreCurrentlyFriends() && AreCurrentlyPendingFriends() && IsAdded()))
+            @if (AreCurrentlyFriends())
             {
-                <button @onclick="AddFriend" class="add">
-                    <p>Add friend</p>
-                    <div class="addFriend">
-                        <svg width="24"
-                     height="24"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
-                            <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
-                          fill="currentColor" />
-                        </svg>
-                    </div>
-                </button>
-            }
-            else if (@AreCurrentlyFriends() && !@AreCurrentlyPendingFriends() && !@IsAdded())
-            {
-                <button class="remove">
+                <button @onclick="RemoveFriend" class="action-button remove-friend">
                     <p>Remove friend</p>
-                    <div class="removeFriend">
+                    <div class="arrow">
                         <svg width="24"
-                     height="24"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
+                             height="24"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
-                          fill="currentColor" />
+                                  fill="currentColor" />
                         </svg>
                     </div>
                 </button>
             }
-            else if (!@AreCurrentlyFriends() && @AreCurrentlyPendingFriends() && !@IsAdded())
+            else if (FriendRequestSent())
             {
-                <button class="cancel">
+                <button @onclick="CancelFriendRequest" class="action-button cancel-friend">
                     <p>Cancel friend request</p>
-                    <div class="cancelFriendRequest">
+                    <div class="arrow">
                         <svg width="24"
-                     height="24"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
+                             height="24"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
-                          fill="currentColor" />
+                                  fill="currentColor" />
                         </svg>
                     </div>
                 </button>
             }
-            else if (!@AreCurrentlyFriends() && !@AreCurrentlyPendingFriends() && @IsAdded())
+            else if (FriendRequestReceived())
             {
-                <button class="accept">
+                <button @onclick="AddFriend" class="action-button accept-friend">
                     <p>Accept friend request</p>
-                    <div class="cancelFriendRequest">
+                    <div class="arrow">
                         <svg width="24"
-                     height="24"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
+                             height="24"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
-                          fill="currentColor" />
+                                  fill="currentColor" />
+                        </svg>
+                    </div>
+                </button>
+                <button @onclick="DeclineFriendRequest" class="action-button cancel-friend">
+                    <p>Decline friend request</p>
+                    <div class="arrow">
+                        <svg width="24"
+                             height="24"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                                  fill="currentColor" />
+                        </svg>
+                    </div>
+                </button>
+            }
+            else
+            {
+                <button @onclick="AddFriend" class="action-button add-friend">
+                    <p>Add friend</p>
+                    <div class="arrow">
+                        <svg width="24"
+                             height="24"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                                  fill="currentColor" />
                         </svg>
                     </div>
                 </button>
