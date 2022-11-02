@@ -18,7 +18,7 @@
 }
 
 .wrapper {
-    width: fit-content;
+    width: 35rem;
     border-radius: 40px;
     background-image: var(--bg-shape-color);
     overflow: hidden;
@@ -34,6 +34,8 @@
 
 .profilePicture img {
     border-radius: 20px;
+    width: 100%;
+    pointer-events: none;
 }
 
 .profilePictureBackground {
@@ -71,6 +73,7 @@ h1 {
 .featureIcon img {
     width: 100%;
     height: auto;
+    pointer-events: none;
 }
 
 .profileSpecifications h1 {
@@ -129,7 +132,7 @@ button.action-button {
 }
 
 .action-button p {
-    width: 140px;
+    width: 160px;
     height: 30px;
     padding-top: .7rem;
     padding-bottom: 2rem;
