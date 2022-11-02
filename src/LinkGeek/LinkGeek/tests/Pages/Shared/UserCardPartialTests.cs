@@ -49,10 +49,22 @@ namespace LinkGeek.tests.Pages.Shared
         }
 
         [TestMethod]
+        public void AreCurrentlyPendingFriendsTrueOnlyCurrentUserAdded()
+        {
+            // Arrange
+            _currentUser.Friends.Add(_otherUser);
+            // Act
+            bool result = partial.AreCurrentlyFriends();
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
         public void AreCurrentlyPendingFriendsTrue()
         {
             // Arrange
             _currentUser.Friends.Add(_otherUser);
+            _otherUser.Friends.Add(_currentUser);
             // Act
             bool result = partial.AreCurrentlyFriends();
             // Assert
@@ -60,35 +72,23 @@ namespace LinkGeek.tests.Pages.Shared
         }
 
         [TestMethod]
-        public void AreCurrentlyPendingFriendsFalse()
+        public void FriendRequestReceivedTrue()
         {
             // Arrange
-            _currentUser.Friends.Add(_otherUser);
-            _otherUser.Friends.Add(_currentUser);
+            _currentUser.ReceivedFriendRequests.Add(_otherUser);
             // Act
-            bool result = partial.AreCurrentlyFriends();
-            // Assert
-            Assert.IsFalse(result);
-        }
-
-        [TestMethod]
-        public void IsAddedTrue()
-        {
-            // Arrange
-            _otherUser.Friends.Add(_currentUser);
-            // Act
-            bool result = partial.IsAdded();
+            bool result = partial.FriendRequestReceived();
             // Assert
             Assert.IsTrue(result);
         }
 
         [TestMethod]
-        public void IsAddedFalse()
+        public void FriendRequestReceivedFalse()
         {
             // Arrange
             _currentUser.Friends.Add(_otherUser);
             // Act
-            bool result = partial.IsAdded();
+            bool result = partial.FriendRequestReceived();
             // Assert
             Assert.IsFalse(result);
         }

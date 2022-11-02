@@ -1,4 +1,6 @@
-﻿using LinkGeek.AppIdentity;
+﻿using System.Runtime.InteropServices;
+using LinkGeek.AppIdentity;
+using LinkGeek.Services;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -17,6 +19,9 @@ public partial class App
     public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
     [Inject]
     UserManager<ApplicationUser> UserManager { get; set; }
+    
+    [Inject]
+    UserService UserService { get; set; }
 
     [Inject] 
     private NavigationManager _navigationManager { get; set; }
@@ -34,19 +39,20 @@ public partial class App
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        var CurrentUserId = "-1";
+        var currentUserId = "-1";
         
         if (user.Identity is { IsAuthenticated: true })
         {
-            currentUser = await UserManager.GetUserAsync(user);
-            CurrentUserId = currentUser.Id;
+            var incompleteUser = await UserManager.GetUserAsync(user);
+            currentUser = UserService.GetUserFromUserName(incompleteUser.UserName) ?? incompleteUser;
+            currentUserId = currentUser.Id;
         }
         
         hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub")).Build();
         await hubConnection.StartAsync();
         hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
         {
-            if (CurrentUserId == receiverUserId)
+            if (currentUserId == receiverUserId)
             {
                 _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
                 _snackBar.Add(message, Severity.Info, config =>

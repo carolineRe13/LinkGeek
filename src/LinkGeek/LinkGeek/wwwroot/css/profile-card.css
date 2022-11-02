@@ -115,21 +115,20 @@ h1 {
 }
 
 /* Add friend button*/
-button.add {
+button.action-button {
     outline: 0;
     border: 0;
     border-radius: 6px;
     display: flex;
     align-items: center;
     overflow: hidden;
-    background-image: linear-gradient(85deg, #61c7ef, #4833fb);
     color: white;
     float: right;
     margin-bottom: 20px;
     margin-right: 20px;
 }
 
-.add p {
+.action-button p {
     width: 140px;
     height: 30px;
     padding-top: .7rem;
@@ -138,12 +137,28 @@ button.add {
     border-right: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-.addFriend {
+.arrow {
     border-left: 1px solid rgba(255, 255, 255, 0.2);
     padding: .5rem 5px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: rgba(255, 255, 255, 0.7);
+}
+
+.add-friend {
+    background-image: linear-gradient(85deg, #61c7ef, #4833fb);
+}
+
+.accept-friend {
+    background-image: linear-gradient(85deg, #7461ef, #7c33fb);
+}
+
+.remove-friend {
+    background-image: linear-gradient(85deg, #ef6161, #fb3333);
+}
+
+.cancel-friend {
+    background-image: linear-gradient(85deg, #efd761, #fb8633);
 }
 

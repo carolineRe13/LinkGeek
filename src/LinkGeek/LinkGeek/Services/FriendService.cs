@@ -54,44 +54,52 @@ public class FriendService
         return FriendsResponses.PendingFriends;
     }
 
-    private Task<ApplicationUser> GetApplicationUserWithFriendLists(ApplicationDbContext context, string id)
-    {
-        return context.Users
-            .Include(u => u.SentFriendRequests)
-            .Include(u => u.ReceivedFriendRequests)
-            .Include(u => u.Friends)
-            .FirstAsync(u => u.Id == id);
-    }
-
     public async Task<FriendsResponses> CancelFriendRequest(string userId, string userToAddId)
     {
         await using var context = new ApplicationDbContext();
-        var currentUser = await context.Users.FindAsync(userId);
-        var userToAdd = await context.Users.FindAsync(userToAddId);
-
-        if (currentUser == null || userToAdd == null) return FriendsResponses.Failure;
+        var currentUser = await this.GetApplicationUserWithFriendLists(context, userId);
+        var userToAdd = await this.GetApplicationUserWithFriendLists(context, userToAddId);
         
         currentUser.SentFriendRequests.Remove(userToAdd);
         userToAdd.ReceivedFriendRequests.Remove(currentUser);
 
         await context.SaveChangesAsync();
         return FriendsResponses.CanceledFriendRequest;
+    }
 
+    public async Task<FriendsResponses> DeclineFriendRequest(string userId, string userThatRequestedId)
+    {
+        await using var context = new ApplicationDbContext();
+        var currentUser = await this.GetApplicationUserWithFriendLists(context, userId);
+        var userThatRequested = await this.GetApplicationUserWithFriendLists(context, userThatRequestedId);
+        
+        userThatRequested.SentFriendRequests.Remove(currentUser);
+        currentUser.ReceivedFriendRequests.Remove(userThatRequested);
+
+        await context.SaveChangesAsync();
+        return FriendsResponses.CanceledFriendRequest;
     }
 
     public async Task<FriendsResponses> RemoveFriend(string userId, string userToRemoveId)
     {
         await using var context = new ApplicationDbContext();
-        var currentUser = await context.Users.FindAsync(userId);
-        var userToRemove = await context.Users.FindAsync(userToRemoveId);
-
-        if (currentUser == null || userToRemove == null) return FriendsResponses.Failure;
+        var currentUser = await this.GetApplicationUserWithFriendLists(context, userId);
+        var userToRemove = await this.GetApplicationUserWithFriendLists(context, userToRemoveId);
         
         currentUser.Friends.Remove(userToRemove);
         userToRemove.Friends.Remove(currentUser);
 
         await context.SaveChangesAsync();
         return FriendsResponses.FriendRemoved;
-
+    }
+    
+    private Task<ApplicationUser> GetApplicationUserWithFriendLists(ApplicationDbContext context, string id)
+    {
+        return context.Users
+            .Include(u => u.SentFriendRequests)
+            .Include(u => u.ReceivedFriendRequests)
+            .Include(u => u.Friends)
+            .Include(u => u.MyFriends)
+            .FirstAsync(u => u.Id == id);
     }
 }
