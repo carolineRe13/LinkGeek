@@ -7,6 +7,7 @@ namespace LinkGeek.Services;
 
 public enum FriendsResponses
 {
+    AlreadyFriends,
     YouAreNowFriends,
     PendingFriends,
     CanceledFriendRequest,
@@ -22,6 +23,8 @@ public class FriendService
         var currentUser = await GetApplicationUserWithFriendLists(context, userId);
         var userToAdd = await GetApplicationUserWithFriendLists(context, userToAddId);
 
+        if (currentUser.Friends.Contains(userToAdd)) return FriendsResponses.AlreadyFriends;
+        
         if (currentUser.ReceivedFriendRequests.Contains(userToAdd) &&
             userToAdd.SentFriendRequests.Contains(currentUser))
         {
@@ -44,7 +47,7 @@ public class FriendService
         
         if (!userToAdd.ReceivedFriendRequests.Contains(currentUser))
         {
-            currentUser.ReceivedFriendRequests.Add(currentUser);
+            userToAdd.ReceivedFriendRequests.Add(currentUser);
         }
 
         await context.SaveChangesAsync();
