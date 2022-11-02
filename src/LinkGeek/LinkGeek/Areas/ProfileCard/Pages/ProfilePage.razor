@@ -4,7 +4,7 @@
 
 @if (@_displayedUser != null)
 {
-    <UserCardPartial User="@_displayedUser" IsCurrentUser="@DisplayedUserIsCurrentUser()" />
+    <UserCardPartial DisplayedUser="@_displayedUser" IsCurrentUser="@DisplayedUserIsCurrentUser()" />
 
     @if (DisplayedUserIsCurrentUser())
     {

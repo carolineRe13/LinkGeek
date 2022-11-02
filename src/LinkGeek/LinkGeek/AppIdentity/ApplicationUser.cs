@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using LinkGeek.Models;
 using LinkGeek.Shared;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace LinkGeek.AppIdentity;
 
@@ -23,10 +24,21 @@ public class ApplicationUser : IdentityUser
     public string? ProfilePictureData { get; set; }
 
     public ICollection<Game>? Games { get; set; }
-    
-    public virtual ICollection<FriendLinkFriend>? Friends { get; set; }
-    public virtual ICollection<FriendLinkIncoming>? PendingIncomingFriendsRequests { get; set; }
-    public virtual ICollection<FriendLinkOutgoing>? PendingOutgoingFriendsRequests { get; set; }
+
+    public virtual ICollection<ApplicationUser>? RealFriends { get; set; } = new List<ApplicationUser>();
+    public virtual ICollection<ApplicationUser>? MyRealFriends { get; set; } = new List<ApplicationUser>();
+
+    public virtual ICollection<ApplicationUser>? RealRequestedFriends { get; set; } = new List<ApplicationUser>();
+    public virtual ICollection<ApplicationUser>? RealFriendRequests { get; set; } = new List<ApplicationUser>();8
+
+
+    public virtual ICollection<FriendLinkFriend>? Friends { get; set; } = new List<FriendLinkFriend>();
+
+    public virtual ICollection<FriendLinkIncoming>? PendingIncomingFriendsRequests { get; set; } =
+        new List<FriendLinkIncoming>();
+
+    public virtual ICollection<FriendLinkOutgoing>? PendingOutgoingFriendsRequests { get; set; } =
+        new List<FriendLinkOutgoing>();
     
     [JsonIgnore]
     public virtual ICollection<ChatMessage> ChatMessagesFromUsers { get; set; }

@@ -3,26 +3,34 @@ using LinkGeek.Models;
 using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace LinkGeek.Pages.Shared;
 
 [Authorize]
 public partial class UserCardPartial
 {
-    [Inject] private UserService userService { get; init; }
+    [Inject] 
+    private UserService userService { get; init; }
+
+    [Inject] 
+    private FriendService FriendService { get; init; }
 
     [Parameter]
-    public ApplicationUser? User { get; init; }
+    public ApplicationUser? DisplayedUser { get; init; }
 
     [Parameter]
     public bool IsCurrentUser { get; init; }
 
-    [Parameter]
-    public ApplicationUser? OtherUser { get; init; }
+    [CascadingParameter]
+    public ApplicationUser? CurrentUser { get; init; }
+
+    [Inject]
+    private ISnackbar Snackbar { get; set; }
 
     public bool AreCurrentlyFriends()
     {
-        if (User != null && User.GetFriendList().Contains(OtherUser))
+        if (CurrentUser != null && CurrentUser.GetFriendList().Contains(DisplayedUser))
         {
             return true;
         }
@@ -32,7 +40,7 @@ public partial class UserCardPartial
 
     public bool AreCurrentlyPendingFriends()
     {
-        if (User != null && User.GetPendingOutgoingFriendList().Contains(OtherUser))
+        if (CurrentUser != null && CurrentUser.GetPendingOutgoingFriendList().Contains(DisplayedUser))
         {
             return true;
         }
@@ -42,7 +50,7 @@ public partial class UserCardPartial
 
     public bool IsAdded()
     {
-        if (User != null && User.GetPendingIncomingFriendList().Contains(OtherUser))
+        if (CurrentUser != null && CurrentUser.GetPendingIncomingFriendList().Contains(DisplayedUser))
         {
             return true;
         }
@@ -52,11 +60,26 @@ public partial class UserCardPartial
 
     public string GetImageSrc()
     {
-        return "data:" + User.ProfilePictureContentType + ";base64," + User.ProfilePictureData;
+        return "data:" + CurrentUser.ProfilePictureContentType + ";base64," + CurrentUser.ProfilePictureData;
     }
 
     public async Task<ICollection<Game>> GetGames()
     {
-        return User == null ? new List<Game>() : await userService.GetUsersGamesAsync(User.Id);
+        return DisplayedUser == null ? new List<Game>() : await userService.GetUsersGamesAsync(DisplayedUser.Id);
+    }
+
+
+    public void AddFriend()
+    {
+        if (CurrentUser != null && DisplayedUser != null)
+        {
+            var result = FriendService.AddFriend(CurrentUser.Id, DisplayedUser.Id);
+            Snackbar.Add(result.ToString());
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Error");
+        }
     }
 }

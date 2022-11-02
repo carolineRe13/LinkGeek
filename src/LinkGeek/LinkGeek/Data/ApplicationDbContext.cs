@@ -54,6 +54,9 @@ namespace LinkGeek.Data
                 .HasMany(u => u.PendingIncomingFriendsRequests)
                 .WithOne(f => f.From)
                 .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ApplicationUser>()
+                .HasMany<ApplicationUser>(a => a.RealFriends)
+                .WithMany(f => f.MyRealFriends);
         }
     }
 }

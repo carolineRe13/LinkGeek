@@ -4,7 +4,7 @@ using LinkGeek.AppIdentity;
 namespace LinkGeek.Models;
 public abstract class FriendLink
 {
-    [Key] public string Id { get; set; } = new Guid().ToString();
+    [Key] public string Id { get; set; } = Guid.NewGuid().ToString();
     public ApplicationUser From { get; set; }
     public ApplicationUser To { get; set; }
 

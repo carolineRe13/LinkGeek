@@ -29,6 +29,7 @@ builder.Services
     .AddSingleton<UserService>()
     .AddSingleton<DiscoverUserService>()
     .AddSingleton<GameDbService>()
+    .AddSingleton<FriendService>()
     .AddSingleton<GameService>();
 
 builder.Services.AddMudServices(c =>

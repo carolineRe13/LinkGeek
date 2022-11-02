@@ -3,7 +3,7 @@
 <div class="wrapper">
     <div class="profilePictureBackground">
         <div class="profilePicture">
-            @if (@User?.ProfilePictureContentType == null)
+            @if (@DisplayedUser?.ProfilePictureContentType == null)
             {
                 <img src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
             }
@@ -15,11 +15,11 @@
     </div>
 
     <div class="profileSpecifications">
-        <h1> @User?.UserName </h1>
+        <h1> @DisplayedUser?.UserName </h1>
         <p2>
             @if (@IsCurrentUser)
             {
-                var location = @User?.Location ?? "Help people find you!";
+                var location = @DisplayedUser?.Location ?? "Help people find you!";
                 <span id="userLocation">@location</span>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationChange">
                     <i class="bi-pencil"></i>
@@ -27,7 +27,7 @@
             }
             else
             {
-                var location = @User?.Location ?? "Unknown location";
+                var location = @DisplayedUser?.Location ?? "Unknown location";
                 <span id="userLocation">@location</span>
             }
         </p2>
@@ -35,7 +35,7 @@
         <p>
             @if (@IsCurrentUser)
             {
-                var status = @User?.Status ?? "Let people know what you're up to!";
+                var status = @DisplayedUser?.Status ?? "Let people know what you're up to!";
                 <span id="userStatus">@status</span>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusChange">
                     <i class="bi-pencil"></i>
@@ -43,7 +43,7 @@
             }
             else
             {
-                var status = @User?.Status ?? "";
+                var status = @DisplayedUser?.Status ?? "";
                 <span id="userStatus">@status</span>
             }
         </p>
@@ -73,7 +73,7 @@
         {
             @if (!(AreCurrentlyFriends() && AreCurrentlyPendingFriends() && IsAdded()))
             {
-                <button class="add">
+                <button @onclick="AddFriend" class="add">
                     <p>Add friend</p>
                     <div class="addFriend">
                         <svg width="24"

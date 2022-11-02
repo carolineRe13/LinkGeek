@@ -20,11 +20,13 @@ public class FriendService
     public async Task<FriendsResponses> AddFriend(string userId, string userToAddId) {
         using (var context = new ApplicationDbContext())
         {
-            var currentUser = await context.Users.FindAsync(userId);
-            var userToAdd = await context.Users.FindAsync(userToAddId);
+            var currentUser = await GetApplicationUserWithFriendLists(context, userId);
+            var userToAdd = await GetApplicationUserWithFriendLists(context, userToAddId);
 
-            if (userToAdd.PendingOutgoingFriendsRequests.Contains(new FriendLinkOutgoing(userToAdd, currentUser)))
+            if (currentUser.GetPendingIncomingFriendList().Select(f => f.Id).Contains(userToAddId) &&
+                userToAdd.GetPendingOutgoingFriendList().Select(f => f.Id).Contains(userId))
             {
+                // Equivalent to accepting friend request
                 currentUser.Friends?.Add(new FriendLinkFriend(currentUser, userToAdd));
                 userToAdd.Friends?.Add(new FriendLinkFriend(userToAdd, currentUser));
 
@@ -34,11 +36,12 @@ public class FriendService
                 await context.SaveChangesAsync();
                 return FriendsResponses.YouAreNowFriends;
             }
-            else
+            else if (!currentUser.GetPendingOutgoingFriendList().Select(f => f.Id).Contains(userToAddId) || // prevent duplicates
+                     !userToAdd.GetPendingIncomingFriendList().Select(f => f.Id).Contains(userId))
             {
+                // Send friend request
                 currentUser.PendingOutgoingFriendsRequests?.Add(new FriendLinkOutgoing(currentUser, userToAdd));
-                userToAdd.PendingIncomingFriendsRequests?.Add(new FriendLinkIncoming(userToAdd, currentUser));
-
+                userToAdd.PendingIncomingFriendsRequests?.Add(new FriendLinkIncoming(currentUser, userToAdd));
 
                 await context.SaveChangesAsync();
                 return FriendsResponses.PendingFriends;
@@ -46,6 +49,15 @@ public class FriendService
         }
 
         return FriendsResponses.Failure;
+    }
+
+    private Task<ApplicationUser> GetApplicationUserWithFriendLists(ApplicationDbContext context, string id)
+    {
+        return context.Users
+            .Include(u => u.PendingIncomingFriendsRequests)
+            .Include(u => u.PendingOutgoingFriendsRequests)
+            .Include(u => u.Friends)
+            .FirstAsync(u => u.Id == id);
     }
 
     public async Task<FriendsResponses> CancelFriendRequest(string userId, string userToAddId)
