@@ -30,13 +30,12 @@ public partial class Chat
     [Inject]
     private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [CascadingParameter] public HubConnection? hubConnection { get; set; }
-    [CascadingParameter] public ApplicationUser? currentUser { get; set; }
-    public string CurrentMessage { get; set; }
+    [CascadingParameter] public ApplicationUser currentUser { get; set; }
+    [Parameter] public string ContactId { get; set; }
     
-    public string ContactId { get; set; }
-    public List<ApplicationUser> ChatUsers = new List<ApplicationUser>();
-    private List<ChatMessage> _messages = new List<ChatMessage>();
-    private string selectedUserId = "-1";
+    public string CurrentMessage { get; set; }
+    public List<ApplicationUser> ChatUsers = new();
+    private List<ChatMessage> _messages = new();
     private string selectedUserName = "";
 
     private EditContext editContext;
@@ -48,20 +47,20 @@ public partial class Chat
     {
         if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
         {
-            var chatHistory = new ChatMessage()
+            var message = new ChatMessage()
             {
                 Message = CurrentMessage,
                 ToUserId = ContactId,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                FromUserId = currentUser.Id
             };
-            await _chatManager.SaveMessageAsync(chatHistory, currentUser.Id);
-            chatHistory.FromUserId = currentUser.Id;
-            await hubConnection.SendAsync("SendMessageAsync", chatHistory, currentUser.UserName);
+            await _chatManager.SaveMessageAsync(message, currentUser.Id);
+            await hubConnection.SendAsync("SendMessageAsync", message, currentUser.UserName);
+            
             CurrentMessage = string.Empty;
             await InvokeAsync(() => StateHasChanged())
                 .ConfigureAwait(true);
-            await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
-
+            await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
         }
     }
 
@@ -86,9 +85,9 @@ public partial class Chat
         }
         hubConnection.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
         {
-            if ((ContactId == message.ToUserId && currentUser.Id == message.FromUserId) || (ContactId == message.FromUserId && currentUser.Id == message.ToUserId))
+            if ((ContactId == message.ToUserId && currentUser.Id == message.FromUserId) 
+                || (ContactId == message.FromUserId && currentUser.Id == message.ToUserId))
             {
-                   
                 if ((ContactId == message.ToUserId && currentUser.Id == message.FromUserId))
                 {
                     _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = currentUser.UserName} } );
@@ -98,12 +97,14 @@ public partial class Chat
                 {
                     _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = selectedUserName} });
                 }
+                
                 await InvokeAsync(() => StateHasChanged())
                     .ConfigureAwait(true);
-                await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
+                await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
             }
         });
-        await GetUsersAsync();
+        
+        GetUsers();
         if (!string.IsNullOrEmpty(ContactId))
         {
             await LoadUserChat(ContactId);
@@ -126,22 +127,28 @@ public partial class Chat
     /// </summary>
     public async Task LoadUserChat(string contactId)
     {
-        selectedUserId = contactId;
         var contact = await _chatManager.GetUserDetailsAsync(contactId);
         ContactId = contact.Id;
         selectedUserName = contact.UserName;
-        _messages = await _chatManager.GetConversationAsync(currentUser.Id, contactId);
-        await InvokeAsync(() => StateHasChanged())
+        await InvokeAsync(StateHasChanged)
             .ConfigureAwait(true);
-        await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chatcontainer");
+        _messages = await _chatManager.GetConversationAsync(currentUser.Id, contactId);
+        await InvokeAsync(StateHasChanged)
+            .ConfigureAwait(true);
+        await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
     }
 
     /// <summary>
     /// Method <c>GetUsersAsync</c> Gets the users by calling the service
     /// </summary>
-    private async Task GetUsersAsync()
+    private void GetUsers()
     {
-        ChatUsers = await _chatManager.GetUsersAsync(currentUser.Id);
+        ChatUsers = new List<ApplicationUser>(currentUser.Friends);
+    }
+    
+    private string GetImageSrc(ApplicationUser player)
+    {
+        return "data:" + player.ProfilePictureContentType + ";base64," + player.ProfilePictureData;
     }
 }
 

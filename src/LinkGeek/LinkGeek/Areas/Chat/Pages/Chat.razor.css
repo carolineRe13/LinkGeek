@@ -1,10 +1,10 @@
-﻿.chatcontainer {
-    padding:0;
+﻿.chat-container {
+    padding: 0;
     background-color: var(--bg-shape-color);
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     height: 80vh;
     visibility: visible;
-    }
+}
 
 .discussions {
     height: 80vh;
@@ -75,8 +75,8 @@
 .discussions .discussion .photo {
     margin-left:20px;
     display: block;
-    width: 45px;
-    height: 45px;
+    width: 60px;
+    height: 60px;
     background: #E6E7ED;
     -moz-border-radius: 50px;
     -webkit-border-radius: 50px;
@@ -133,6 +133,7 @@
 .chat {
     height:80vh;
     position: relative;
+    padding-left: 1rem;
 }
 
 .header-chat {
@@ -189,7 +190,7 @@
 }
 
 .chat .messages-chat .text {
-    margin: 0 35px;
+    margin: 0 25px;
     background-color: #f6f6f6;
     padding: 15px;
     border-radius: 12px;
@@ -307,4 +308,18 @@
 
 .input-group-addon {
     margin-left: 10px;
+}
+
+.no-friends {
+    padding-left: .6rem;
+}
+
+.time-other {
+    text-align: left;
+    margin-left: 25px;
+}
+
+.time-self {
+    text-align: right;
+    margin-right: 25px;
 }

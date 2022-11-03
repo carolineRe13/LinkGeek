@@ -39,3 +39,7 @@ body {
     width: 100%;
     padding: .5rem;
 }
+
+.mud-input-slot, .mud-button-label {
+  color: white !important;
+}

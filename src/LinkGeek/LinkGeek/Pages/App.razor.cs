@@ -70,5 +70,11 @@ public partial class App
                 });
             }
         });
+        
+        hubConnection.Closed += async (error) =>
+        {
+            // restart connection if it was closed
+            await hubConnection.StartAsync();
+        };
     }
 }

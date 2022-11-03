@@ -47,7 +47,10 @@ builder.Services.AddMudServices(c =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(o =>
+{
+    o.EnableDetailedErrors = true;
+});
 // Chat has to be a singleton to insure consistency
 builder.Services.AddSingleton<ChatService>();
 builder.Services.AddControllers();

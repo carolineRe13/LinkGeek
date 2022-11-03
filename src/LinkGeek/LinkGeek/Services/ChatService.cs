@@ -23,7 +23,9 @@ public class ChatService
     public async Task<List<ApplicationUser>> GetUsersAsync(string userId) {
         using (var context = contextProvider.GetContext())
         {
-            return await context.Users.Where(user => user.Id != userId).ToListAsync();
+            return await context.Users
+                .Where(user => user.Id != userId)
+                .ToListAsync();
         }
     }
 
@@ -56,7 +58,6 @@ public class ChatService
         {
             message.FromUserId = userId;
             message.CreatedDate = DateTime.Now;
-            message.ToUser = await context.Users.Where(user => user.Id == message.ToUserId).FirstOrDefaultAsync();
             await context.ChatMessages.AddAsync(message);
             return await context.SaveChangesAsync();
         }
