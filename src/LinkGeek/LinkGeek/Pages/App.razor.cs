@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using LinkGeek.AppIdentity;
+﻿using LinkGeek.AppIdentity;
 using LinkGeek.Services;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
@@ -48,7 +47,10 @@ public partial class App
             currentUserId = currentUser.Id;
         }
         
-        hubConnection = new HubConnectionBuilder().WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub")).Build();
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub"))
+            .Build();
+        
         await hubConnection.StartAsync();
         hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
         {

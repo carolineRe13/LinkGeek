@@ -43,3 +43,23 @@ body {
 .mud-input-slot, .mud-button-label {
   color: white !important;
 }
+
+.mud-input-label {
+  color: white !important;
+}
+
+.widget-post .mud-paper {
+  background-color: rgb(60, 60, 60);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+.mud-list {
+  background-image: var(--bg-shape-color);
+  color: white;
+}
+
+.mud-list .mud-typography {
+  overflow: hidden;
+}

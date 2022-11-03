@@ -29,13 +29,15 @@ public class ApplicationUser : IdentityUser
     
     public virtual ICollection<ApplicationUser> SentFriendRequests { get; set; } = new List<ApplicationUser>();
     public virtual ICollection<ApplicationUser> ReceivedFriendRequests { get; set; } = new List<ApplicationUser>();
-    
+
     [JsonIgnore]
     public virtual ICollection<ChatMessage> ChatMessagesFromUsers { get; set; }
     
     [JsonIgnore]
     public virtual ICollection<ChatMessage> ChatMessagesToUsers { get; set; }
     
+    public virtual ICollection<Post> Posts { get; set; }
+
     public ApplicationUser()
     {
         ChatMessagesFromUsers = new HashSet<ChatMessage>();

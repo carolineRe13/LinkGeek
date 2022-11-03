@@ -21,6 +21,11 @@ public enum RemoveGameFromUserResponse
     GameAlreadyRemoved
 }
 
+public enum CreatePostResponse
+{
+    Success,
+}
+
 public class UserService
 {
     private readonly IContextProvider contextProvider;
@@ -58,6 +63,26 @@ public class UserService
             await context.SaveChangesAsync();
             return AddGameToUserResponse.Success;
         }
+    }
+
+    public async Task<CreatePostResponse?> CreatePost(ApplicationUser user, string content, Game? game)
+    {
+        
+        await using (var context = contextProvider.GetContext())
+        {
+            var contextUser = GetUserFromUserName(context, user.UserName);
+            var contextGame = game != null ? await context.Game.FindAsync(game.Id) : null;
+            var post = new Post
+            {
+                ApplicationUser = contextUser!,
+                Content = content,
+                Game = contextGame
+            };
+            context.Posts.Add(post);
+            await context.SaveChangesAsync();
+        }
+
+        return CreatePostResponse.Success;
     }
     
     public async Task<RemoveGameFromUserResponse?> RemoveGameFromUser(string userId, string gameId)
@@ -172,6 +197,11 @@ public class UserService
     public ApplicationUser? GetUserFromUserName(string userName)
     {
         using var context = contextProvider.GetContext();
+        return GetUserFromUserName(context, userName);
+    }
+
+    public ApplicationUser? GetUserFromUserName(ApplicationDbContext context, string userName)
+    {
         return context.Users
             .Include(u => u.Friends)
             .Include(u => u.SentFriendRequests)

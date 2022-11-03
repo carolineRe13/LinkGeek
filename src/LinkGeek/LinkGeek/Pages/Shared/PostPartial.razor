@@ -1,0 +1,29 @@
+﻿@using MudBlazor
+
+<div class="widget-post">
+    <MudPaper>
+        <EditForm Model="postFormModel" OnValidSubmit="CreatePostAsync">
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudTextField T="string" Label="Create a post" Lines="5" @bind-Value="postFormModel.Content"/>
+                </MudItem>
+                @if (@currentUser?.Games?.Count > 0)
+                {
+                    <MudItem xs="9">
+                        <MudSelect @bind-Value="postFormModel.Game" Label="Game">
+                            @foreach (var game in @currentUser.Games)
+                            {
+                                <MudSelectItem Value="@game">
+                                    <img src="@game.Logo" height="30" alt="@game.Name logo"/> @game.Name
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                }
+                <MudItem xs="3">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Publish</MudButton>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </MudPaper>
+</div>
