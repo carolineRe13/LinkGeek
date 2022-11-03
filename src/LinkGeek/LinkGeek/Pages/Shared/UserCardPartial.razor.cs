@@ -10,6 +10,19 @@ namespace LinkGeek.Pages.Shared;
 [Authorize]
 public partial class UserCardPartial
 {
+    private record SnackBarContent(string Text, Severity Severity);
+
+    private Dictionary<FriendsResponses, SnackBarContent> _friendsResponses = new()
+    {
+        { FriendsResponses.AlreadyFriends, new SnackBarContent("You're already friends", Severity.Warning) },
+        { FriendsResponses.FriendRemoved, new SnackBarContent("Friend removed", Severity.Info) },
+        { FriendsResponses.PendingFriends, new SnackBarContent("Friend request sent", Severity.Success) },
+        { FriendsResponses.Failure, new SnackBarContent("Failure", Severity.Error) },
+        { FriendsResponses.YouAreNowFriends, new SnackBarContent("You are now friends", Severity.Success) },
+        { FriendsResponses.CanceledFriendRequest, new SnackBarContent("Canceled friend request", Severity.Warning) },
+        { FriendsResponses.DeclinedFriendRequest, new SnackBarContent("Declined friend request", Severity.Warning) }
+    };
+
     [Inject]
     private UserService userService { get; init; }
 
@@ -17,13 +30,13 @@ public partial class UserCardPartial
     private FriendService FriendService { get; init; }
 
     [Parameter]
-    public ApplicationUser? DisplayedUser { get; init; }
+    public ApplicationUser? DisplayedUser { get; set; }
 
     [Parameter]
     public bool IsCurrentUser { get; init; }
 
     [CascadingParameter]
-    public ApplicationUser? CurrentUser { get; init; }
+    public ApplicationUser? CurrentUser { get; set; }
 
     [Inject]
     private ISnackbar Snackbar { get; set; }
@@ -85,12 +98,19 @@ public partial class UserCardPartial
         if (CurrentUser != null && DisplayedUser != null)
         {
             var result = await method(CurrentUser.Id, DisplayedUser.Id);
-            Snackbar.Add(result.ToString());
+            Snackbar.Add(this._friendsResponses[result].Text, this._friendsResponses[result].Severity);
+            this.ReloadUsers();
             StateHasChanged();
         }
         else
         {
             Snackbar.Add("Error");
         }
+    }
+
+    private void ReloadUsers()
+    {
+        this.CurrentUser = this.userService.GetUserFromUserName(CurrentUser.UserName) ?? this.CurrentUser;
+        this.DisplayedUser = this.userService.GetUserFromUserName(DisplayedUser.UserName) ?? this.DisplayedUser;
     }
 }

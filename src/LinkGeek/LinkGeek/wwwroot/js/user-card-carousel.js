@@ -38,12 +38,6 @@ function selectNext() {
     rotateCarousel();
 }
 
-// let prevButton = document.querySelector('.previous-button');
-// prevButton.addEventListener('click', selectPrev);
-//
-// let nextButton = document.querySelector('.next-button');
-// nextButton.addEventListener('click', selectNext);
-
 function initCarousel() {
     carousel = document.querySelector('.user-carousel');
 

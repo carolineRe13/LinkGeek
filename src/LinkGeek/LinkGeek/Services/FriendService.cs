@@ -1,6 +1,5 @@
 ﻿using LinkGeek.AppIdentity;
 using LinkGeek.Data;
-using LinkGeek.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkGeek.Services;
@@ -11,6 +10,7 @@ public enum FriendsResponses
     YouAreNowFriends,
     PendingFriends,
     CanceledFriendRequest,
+    DeclinedFriendRequest,
     FriendRemoved,
     Failure
 }
@@ -84,7 +84,7 @@ public class FriendService
         currentUser.ReceivedFriendRequests.Remove(userThatRequested);
 
         await context.SaveChangesAsync();
-        return FriendsResponses.CanceledFriendRequest;
+        return FriendsResponses.DeclinedFriendRequest;
     }
 
     public async Task<FriendsResponses> RemoveFriend(string userId, string userToRemoveId)
