@@ -39,6 +39,8 @@ public partial class Chat
     private string selectedUserName = "";
 
     private EditContext editContext;
+    
+    private Dictionary<string, string> LastMessagePerUser = new();
 
     /// <summary>
     /// Method <c>SumbmitAsync</c> Creates a new ChatMessage and calls the sending function
@@ -104,7 +106,11 @@ public partial class Chat
             }
         });
         
-        GetUsers();
+        FetchUsers();
+        foreach (var chatUser in ChatUsers)
+        {
+            FetchLastMessage(chatUser.Id);
+        }
         if (!string.IsNullOrEmpty(ContactId))
         {
             await LoadUserChat(ContactId);
@@ -139,9 +145,23 @@ public partial class Chat
     }
 
     /// <summary>
+    /// Method <c>LoadUserChat</c> Loads the users chat
+    /// </summary>
+    public async Task FetchLastMessage(string contactId)
+    {
+        var messages = await _chatManager.GetConversationAsync(currentUser.Id, contactId, 1);
+        if (messages.Count > 0)
+        {
+            LastMessagePerUser[contactId] = messages[0].Message;
+            await InvokeAsync(StateHasChanged)
+                .ConfigureAwait(true);
+        }
+    }
+
+    /// <summary>
     /// Method <c>GetUsersAsync</c> Gets the users by calling the service
     /// </summary>
-    private void GetUsers()
+    private void FetchUsers()
     {
         ChatUsers = new List<ApplicationUser>(currentUser.Friends);
     }

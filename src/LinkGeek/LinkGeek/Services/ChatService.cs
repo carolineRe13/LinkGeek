@@ -29,12 +29,12 @@ public class ChatService
         }
     }
 
-    public async Task<List<ChatMessage>> GetConversationAsync(string userId, string contactId) {
+    public async Task<List<ChatMessage>> GetConversationAsync(string userId, string contactId, int count = int.MaxValue) {
         using (var context = contextProvider.GetContext())
         {
             var messages = await context.ChatMessages
                 .Where(h => (h.FromUserId == contactId && h.ToUserId == userId) || (h.FromUserId == userId && h.ToUserId == contactId))
-                .OrderBy(a => a.CreatedDate)
+                .OrderByDescending(a => a.CreatedDate) // needed to select the count most recent messages
                 .Include(a => a.FromUser)
                 .Include(a => a.ToUser)
                 .Select(x => new ChatMessage
@@ -46,7 +46,10 @@ public class ChatService
                     ToUserId = x.ToUserId,
                     ToUser = x.ToUser,
                     FromUser = x.FromUser
-                }).ToListAsync();
+                })
+                .Take(count)
+                .OrderBy(a => a.CreatedDate) // needed to re-order the messages in the correct order
+                .ToListAsync();
 
             return messages;
         }

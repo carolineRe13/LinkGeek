@@ -36,10 +36,6 @@
                                 {
                                     <p class="message">@_messages[^1].Message</p>
                                 }
-                                else
-                                {
-                                    <p class="message">LAST MESSAGE</p>
-                                }
                             </div>
                         </div>
                     }
@@ -56,7 +52,12 @@
                             }
                             <div class="desc-contact">
                                 <a href="/profile/@user.UserName" class="name">@user.UserName</a>
-                                <p class="message">LAST MESSAGE?</p>
+                                <p class="message">
+                                    @if (LastMessagePerUser.ContainsKey(@user.Id))
+                                    {
+                                        <text>@LastMessagePerUser[@user.Id]</text>
+                                    }
+                                </p>
                             </div>
                         </div>
                     }

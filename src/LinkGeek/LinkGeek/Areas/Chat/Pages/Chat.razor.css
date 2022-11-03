@@ -179,8 +179,8 @@
 
 .chat .messages-chat .message .photo {
     display: block;
-    width: 45px;
-    height: 45px;
+    width: 60px;
+    height: 60px;
     background: #E6E7ED;
     -moz-border-radius: 50px;
     -webkit-border-radius: 50px;
