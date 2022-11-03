@@ -45,12 +45,12 @@ function selectNext() {
 // nextButton.addEventListener('click', selectNext);
 
 function initCarousel() {
-    carousel = document.querySelector('.user-cards');
+    carousel = document.querySelector('.user-carousel');
 
     cellWidth = carousel.offsetWidth;
     cellHeight = carousel.offsetHeight;
     cellSize = cellWidth;
-    xMultiplier = cellWidth / 20;
+    xMultiplier = cellWidth / 40;
 
     if (carousel != null) {
         cells = carousel.querySelectorAll('.user-card');
@@ -69,18 +69,4 @@ function initCarousel() {
             }
         }, 10)
     }
-
 }
-
-$("#open-pack").click(function () {
-    $.ajax({
-        method: 'get',
-        url: '/Discoverability/MainPage?handler=UserCards',
-        success: function (result) {
-            $('#user-cards').empty();
-            $('#user-cards').html(result);
-            initCarousel();
-            initGameCarousel();
-        }
-    })
-})

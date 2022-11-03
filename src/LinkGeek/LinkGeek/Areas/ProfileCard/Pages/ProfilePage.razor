@@ -2,6 +2,8 @@
 @page "/profile/{UserName}"
 @using LinkGeek.Pages.Shared
 
+<PageTitle>Profile - LinkGeek</PageTitle>
+
 @if (@_displayedUser != null)
 {
     <UserCardPartial DisplayedUser="@_displayedUser" IsCurrentUser="@DisplayedUserIsCurrentUser()" />

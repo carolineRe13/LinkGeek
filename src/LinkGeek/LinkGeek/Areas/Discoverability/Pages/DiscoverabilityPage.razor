@@ -1,0 +1,26 @@
+@page "/discover"
+@using LinkGeek.Pages.Shared
+
+<PageTitle>Discover - LinkGeek</PageTitle>
+
+@if (users == null || users.Count == 0)
+{
+    <button @onclick="OpenPack" id="open-pack">
+        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmistertcg.com.au%2Fwp-content%2Fuploads%2F2021%2F04%2F4-768x1280.png&f=1&nofb=1" alt="booster pack image">
+        <span>Open pack</span>
+    </button>
+}
+else
+{
+    <div class="user-carousel">
+        <ul>
+            @foreach (var user in users)
+            {
+                <li class="user-card">
+                    <UserCardPartial DisplayedUser="@user" IsCurrentUser="false" />
+                </li>
+            }
+        </ul>
+    </div>
+}
+

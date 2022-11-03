@@ -24,8 +24,6 @@ public partial class ProfilePage
 {
     [Inject] private UserService _userService { get; set; }
 
-    [Inject] private UserManager<ApplicationUser> userManager { get; set; }
-
     [Inject]
     private ISnackbar Snackbar { get; set; }
 
@@ -56,7 +54,7 @@ public partial class ProfilePage
             {
                 this._displayedUser = _userService.GetUserFromUserName(UserName ?? "");
             }
-
+            
             this._loading = false;
         }
     }
