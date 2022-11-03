@@ -17,9 +17,16 @@ public enum FriendsResponses
 
 public class FriendService
 {
+    private readonly IContextProvider contextProvider;
+
+    public FriendService(IContextProvider contextProvider)
+    {
+        this.contextProvider = contextProvider;
+    }
+
     public async Task<FriendsResponses> AddFriend(string userId, string userToAddId)
     {
-        await using var context = new ApplicationDbContext();
+        await using var context = contextProvider.GetContext();
         var currentUser = await GetApplicationUserWithFriendLists(context, userId);
         var userToAdd = await GetApplicationUserWithFriendLists(context, userToAddId);
 
@@ -56,7 +63,7 @@ public class FriendService
 
     public async Task<FriendsResponses> CancelFriendRequest(string userId, string userToAddId)
     {
-        await using var context = new ApplicationDbContext();
+        await using var context = contextProvider.GetContext();
         var currentUser = await this.GetApplicationUserWithFriendLists(context, userId);
         var userToAdd = await this.GetApplicationUserWithFriendLists(context, userToAddId);
         
@@ -69,7 +76,7 @@ public class FriendService
 
     public async Task<FriendsResponses> DeclineFriendRequest(string userId, string userThatRequestedId)
     {
-        await using var context = new ApplicationDbContext();
+        await using var context = contextProvider.GetContext();
         var currentUser = await this.GetApplicationUserWithFriendLists(context, userId);
         var userThatRequested = await this.GetApplicationUserWithFriendLists(context, userThatRequestedId);
         
@@ -82,7 +89,7 @@ public class FriendService
 
     public async Task<FriendsResponses> RemoveFriend(string userId, string userToRemoveId)
     {
-        await using var context = new ApplicationDbContext();
+        await using var context = contextProvider.GetContext();
         var currentUser = await this.GetApplicationUserWithFriendLists(context, userId);
         var userToRemove = await this.GetApplicationUserWithFriendLists(context, userToRemoveId);
         

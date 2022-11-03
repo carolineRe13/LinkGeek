@@ -23,9 +23,16 @@ public enum RemoveGameFromUserResponse
 
 public class UserService
 {
+    private readonly IContextProvider contextProvider;
+
+    public UserService(IContextProvider contextProvider)
+    {
+        this.contextProvider = contextProvider;
+    }
+
     public async Task<AddGameToUserResponse?> AddGameToUser(string userId, string gameId)
     {
-        await using (var context = new ApplicationDbContext())
+        await using (var context = contextProvider.GetContext())
         {
             var game = await context.Game.FindAsync(gameId);
             if (game == null)
@@ -55,7 +62,7 @@ public class UserService
     
     public async Task<RemoveGameFromUserResponse?> RemoveGameFromUser(string userId, string gameId)
     {
-        await using (var context = new ApplicationDbContext())
+        await using (var context = contextProvider.GetContext())
         {
             var game = await context.Game.FindAsync(gameId);
             if (game == null)
@@ -85,7 +92,7 @@ public class UserService
 
     public async Task<bool> HasGameInLibrary(string userId, string gameId)
     {
-        await using (var context = new ApplicationDbContext())
+        await using (var context = contextProvider.GetContext())
         {
             var game = context.Game.FindAsync(gameId).Result;
             if (game == null)
@@ -115,7 +122,7 @@ public class UserService
 
     public async Task<string?> UpdateLocation(string userId, string location)
     {
-        await using (var context = new ApplicationDbContext())
+        await using (var context = contextProvider.GetContext())
         {
             var user = await context.Users.FindAsync(userId);
             if (user == null)
@@ -135,7 +142,7 @@ public class UserService
     public async Task<string?> UpdateStatus(string userId, string status)
     {
         // TODO: Add profanity filter
-        await using (var context = new ApplicationDbContext())
+        await using (var context = contextProvider.GetContext())
         {
             var user = await context.Users.FindAsync(userId);
             if (user == null)
@@ -151,7 +158,7 @@ public class UserService
 
     public async Task<ICollection<Game>> GetUsersGamesAsync(string userId)
     {
-        await using (var context = new ApplicationDbContext())
+        await using (var context = contextProvider.GetContext())
         {
             var user = GetUserWithGames(context, userId);
             if (user == null)
@@ -164,7 +171,7 @@ public class UserService
 
     public ApplicationUser? GetUserFromUserName(string userName)
     {
-        using var context = new ApplicationDbContext();
+        using var context = contextProvider.GetContext();
         return context.Users
             .Include(u => u.Friends)
             .Include(u => u.SentFriendRequests)

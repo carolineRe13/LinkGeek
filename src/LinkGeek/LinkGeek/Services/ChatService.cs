@@ -7,21 +7,28 @@ namespace LinkGeek.Services;
 
 public class ChatService
 {
+    private readonly IContextProvider contextProvider;
+
+    public ChatService(IContextProvider contextProvider)
+    {
+        this.contextProvider = contextProvider;
+    }
+
     public async Task<ApplicationUser> GetUserDetailsAsync(string userId) {
-        using (var context = new ApplicationDbContext())
+        using (var context = contextProvider.GetContext())
         {
             return await context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
         }
     }
     public async Task<List<ApplicationUser>> GetUsersAsync(string userId) {
-        using (var context = new ApplicationDbContext())
+        using (var context = contextProvider.GetContext())
         {
             return await context.Users.Where(user => user.Id != userId).ToListAsync();
         }
     }
 
     public async Task<List<ChatMessage>> GetConversationAsync(string userId, string contactId) {
-        using (var context = new ApplicationDbContext())
+        using (var context = contextProvider.GetContext())
         {
             var messages = await context.ChatMessages
                 .Where(h => (h.FromUserId == contactId && h.ToUserId == userId) || (h.FromUserId == userId && h.ToUserId == contactId))
@@ -45,7 +52,7 @@ public class ChatService
 
     public async Task<int> SaveMessageAsync(ChatMessage message, string userId)
     {
-        using (var context = new ApplicationDbContext())
+        using (var context = contextProvider.GetContext())
         {
             message.FromUserId = userId;
             message.CreatedDate = DateTime.Now;

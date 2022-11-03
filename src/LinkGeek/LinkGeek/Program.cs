@@ -32,6 +32,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // adding all custom services
 builder.Services
+    .AddSingleton<IContextProvider, ContextProvider>()
     .AddSingleton<UserService>()
     .AddSingleton<DiscoverUserService>()
     .AddSingleton<GameDbService>()

@@ -39,12 +39,15 @@ public class GameDbService
     private string? _token;
     private DateTimeOffset _tokenExpiration = DateTimeOffset.MinValue;
 
-    public GameDbService(IConfiguration configuration)
+    private readonly IContextProvider contextProvider;
+
+    public GameDbService(IConfiguration configuration, IContextProvider contextProvider)
     {
         _clientId = configuration["igdb_clientId"];
         _clientSecret = configuration["igdb_clientSecret"];
         _httpClient = new HttpClient();
         _httpClient.DefaultRequestHeaders.Add("Client-ID", _clientId);
+        this.contextProvider = contextProvider;
     }
 
     public async Task<ICollection<Game>> GetPopularGames(int page = 0)
@@ -81,7 +84,7 @@ public class GameDbService
 
     private ICollection<Game>? GetGameSearchCache(string query)
     {
-        using (var context = new ApplicationDbContext())
+        using (var context = contextProvider.GetContext())
         {
             var games = context.GameSearchCache.AsQueryable()
                 .Where(c => c.Query == query)
@@ -106,7 +109,7 @@ public class GameDbService
             return;
         }
 
-        using (var context = new ApplicationDbContext())
+        using (var context = contextProvider.GetContext())
         {
             var gamesDict = GetOrCreateGames(context, searchResult)
                 .ToDictionary(g => g.Id, g => g);
