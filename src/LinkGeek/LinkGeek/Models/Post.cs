@@ -8,4 +8,5 @@ public class Post
     public ApplicationUser ApplicationUser { get; init; }
     public Game? Game { get; init; }
     public string Content { get; init; }
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.Now;
 }

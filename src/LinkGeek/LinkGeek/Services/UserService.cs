@@ -1,6 +1,7 @@
 using LinkGeek.AppIdentity;
 using LinkGeek.Data;
 using LinkGeek.Models;
+using LinkGeek.Pages;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkGeek.Services;
@@ -208,6 +209,22 @@ public class UserService
             .Include(u => u.ReceivedFriendRequests)
             .Include(u => u.Games)
             .FirstOrDefault(u => u.UserName == userName);
+    }
+
+    public List<Post> GetUserFeed(ApplicationUser user)
+    {
+        using var context = contextProvider.GetContext();
+        
+        var feed = context.Posts
+            .Include(p => p.ApplicationUser)
+            .Include(p => p.Game)
+            .Where(post => post.ApplicationUser.Id == user.Id
+                       || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
+                       || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
+            .OrderByDescending(p => p.CreatedAt)
+            .ToList();
+
+        return feed;
     }
 
     private ApplicationUser? GetUserWithGames(ApplicationDbContext context, string userId)

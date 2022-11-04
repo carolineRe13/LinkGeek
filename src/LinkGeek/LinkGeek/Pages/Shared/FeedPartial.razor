@@ -1,0 +1,36 @@
+﻿@using MudBlazor
+
+@foreach (var post in posts)
+{
+    <div class="widget-post">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    @if(@post.ApplicationUser.ProfilePictureContentType != null)
+                    {
+                        <MudAvatar Image="@GetImageSrc(@post.ApplicationUser)" Size="Size.Large"/>
+                    }
+                    else
+                    {
+                        <MudAvatar Color="Color.Primary" Size="Size.Large">@post.ApplicationUser.UserName[..1]</MudAvatar>
+                    }
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1">@post.Game?.Name</MudText>
+                    <MudText Typo="Typo.body2">@post.ApplicationUser?.UserName at @post.CreatedAt</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            @if (@post.Game != null)
+            {
+                <MudCardMedia Image="@post.Game.Logo?.AbsoluteUri"/>
+            }
+            <MudCardContent>
+                <MudText Typo="Typo.body2">@post.Content</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+            </MudCardActions>
+        </MudCard>
+    </div>
+}

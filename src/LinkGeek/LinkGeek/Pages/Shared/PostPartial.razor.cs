@@ -29,6 +29,7 @@ public partial class PostPartial
         {
             postFormModel.Content = string.Empty;
             postFormModel.Game = null;
+            this.StateHasChanged();
         }
     }
 }
