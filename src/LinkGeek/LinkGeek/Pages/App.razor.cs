@@ -1,4 +1,5 @@
-﻿using LinkGeek.AppIdentity;
+﻿using System.Net;
+using LinkGeek.AppIdentity;
 using LinkGeek.Services;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
@@ -7,15 +8,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
+using Cookie = System.Net.Cookie;
 
 namespace LinkGeek.Pages;
 
 [Authorize]
 public partial class App
 {
-    private HubConnection hubConnection;
+    private HubConnection? hubConnection;
     private ApplicationUser currentUser;
-    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
     [Inject]
     UserManager<ApplicationUser> UserManager { get; set; }
     
@@ -33,6 +34,9 @@ public partial class App
 
     [Inject] 
     private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    
+    [Inject]
+    private IHttpContextAccessor HttpContextAccessor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,38 +49,52 @@ public partial class App
             var incompleteUser = await UserManager.GetUserAsync(user);
             currentUser = UserService.GetUserFromUserName(incompleteUser.UserName) ?? incompleteUser;
             currentUserId = currentUser.Id;
-        }
-        
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub"))
-            .Build();
-        
-        await hubConnection.StartAsync();
-        hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
-        {
-            if (currentUserId == receiverUserId)
-            {
-                _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
-                _snackBar.Add(message, Severity.Info, config =>
+            
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub"), options =>
                 {
-                    config.VisibleStateDuration = 10000;
-                    config.HideTransitionDuration = 500;
-                    config.ShowTransitionDuration = 500;
-                    config.Action = "Chat?";
-                    config.ActionColor = Color.Info;
-                    config.Onclick = snackbar =>
-                    {
-                        _navigationManager.NavigateTo($"chat/{senderUserId}");
-                        return Task.CompletedTask;
-                    };
-                });
-            }
-        });
+                    if (HttpContextAccessor.HttpContext != null) {
+                        foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies) {
+                            // IF THE DOMAIN PARAMETER IS WRONG YOU WILL RECEIVE THE JSON ERROR.
+                            options.Cookies.Add(new Cookie(cookie.Key, cookie.Value, null, HttpContextAccessor.HttpContext.Request.Host.Host));
+                        }
+                    }
+                })
+                .WithAutomaticReconnect()
+                .Build();
         
-        hubConnection.Closed += async (error) =>
-        {
-            // restart connection if it was closed
+            hubConnection.On<int>("Connected", i => {
+                StateHasChanged();
+            });
+            
+            hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
+            {
+                if (currentUserId == receiverUserId)
+                {
+                    _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+                    _snackBar.Add(message, Severity.Info, config =>
+                    {
+                        config.VisibleStateDuration = 10000;
+                        config.HideTransitionDuration = 500;
+                        config.ShowTransitionDuration = 500;
+                        config.Action = "Chat?";
+                        config.ActionColor = Color.Info;
+                        config.Onclick = snackbar =>
+                        {
+                            _navigationManager.NavigateTo($"chat/{senderUserId}");
+                            return Task.CompletedTask;
+                        };
+                    });
+                }
+            });
+            
             await hubConnection.StartAsync();
-        };
+        }
+    }
+    
+    public async ValueTask DisposeAsync() {
+        if (hubConnection is not null) {
+            await hubConnection.DisposeAsync();
+        }
     }
 }

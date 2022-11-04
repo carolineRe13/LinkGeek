@@ -77,7 +77,7 @@ public class GameDbService
                 { Id = $"{g.id}", Name = g.name, Logo = g.cover != null ? new Uri($"https:{g.cover.url}") : null })
             .ToList();
         
-        this.StoreGameSearchCache(query, games);
+        // this.StoreGameSearchCache(query, games);
         
         return games;
     }
@@ -166,7 +166,7 @@ public class GameDbService
 
         var response = await _httpClient.PostAsync(Api + endpoint, new StringContent(query, Encoding.UTF8));
         var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(content);
+        return JsonSerializer.Deserialize<T>(content.Replace("t_thumb", "t_cover_big"));
     }
 
     private async Task UpdateToken()
