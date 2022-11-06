@@ -16,7 +16,7 @@ namespace LinkGeek.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     GameId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(4096)", nullable: false)
+                    Content = table.Column<string>(type: "nvarchar(2048)", nullable: false)
                 },
                 constraints: table =>
                 {

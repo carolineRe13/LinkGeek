@@ -12,10 +12,10 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Logo",
                 table: "Game",
-                type: "nvarchar(4096)",
+                type: "nvarchar(2048)",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(4096)");
+                oldType: "nvarchar(2048)");
 
             migrationBuilder.CreateTable(
                 name: "GameSearchCache",
@@ -51,11 +51,11 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Logo",
                 table: "Game",
-                type: "nvarchar(4096)",
+                type: "nvarchar(2048)",
                 nullable: false,
                 defaultValue: "",
                 oldClrType: typeof(string),
-                oldType: "nvarchar(4096)",
+                oldType: "nvarchar(2048)",
                 oldNullable: true);
         }
     }

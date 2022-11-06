@@ -46,7 +46,7 @@ public class UserService
                 return AddGameToUserResponse.GameNotFound;
             }
 
-            var user = GetUserWithGames(context, userId);
+            var user = await GetUserWithGames(context, userId);
 
             if (user == null)
             {
@@ -96,7 +96,7 @@ public class UserService
                 return RemoveGameFromUserResponse.GameNotFound;
             }
 
-            var user = GetUserWithGames(context, userId);
+            var user = await GetUserWithGames(context, userId);
 
             if (user == null)
             {
@@ -126,7 +126,7 @@ public class UserService
                 return false;
             }
 
-            var user = GetUserWithGames(context, userId);
+            var user = await GetUserWithGames(context, userId);
 
             if (user == null)
             {
@@ -186,11 +186,7 @@ public class UserService
     {
         await using (var context = contextProvider.GetContext())
         {
-            var user = GetUserWithGames(context, userId);
-            if (user == null)
-            {
-                return new List<Game>();
-            }
+            var user = await GetUserWithGames(context, userId);
             return user.Games ?? new List<Game>();
         }
     }
@@ -227,9 +223,9 @@ public class UserService
         return feed;
     }
 
-    private ApplicationUser? GetUserWithGames(ApplicationDbContext context, string userId)
+    private Task<ApplicationUser> GetUserWithGames(ApplicationDbContext context, string userId)
     {
         return context.Users.Include(u => u.Games)
-            .FirstAsync(u => u.Id == userId).Result;
+            .FirstAsync(u => u.Id == userId);
     }
 }

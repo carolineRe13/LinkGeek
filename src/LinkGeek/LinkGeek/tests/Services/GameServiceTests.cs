@@ -16,12 +16,9 @@ namespace LinkGeek.tests.Services
         }
 
         [TestMethod]
-        public void testName()
+        public void FindGame()
         {
             // Arrange
-            // Act
-            // 
-            
             var _connection = new SqliteConnection("Data Source=:memory:");
             _connection.Open();
 
@@ -39,8 +36,42 @@ namespace LinkGeek.tests.Services
                 new Game("2", "Game 2", new Uri("https://www.google.com")));
             context.SaveChanges();
 
+
+            // Act
             var game = context.Game.Find("2");
-            
+
+
+            // Assert
+            Assert.AreEqual("Game 2", game?.Name);
+        }
+
+        [TestMethod]
+        public void GetGamePlayers()
+        {
+            // Arrange
+            var _connection = new SqliteConnection("Data Source=:memory:");
+            _connection.Open();
+
+            // These options will be used by the context instances in this test suite, including the connection opened above.
+            var _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlite(_connection)
+                .Options;
+
+            // Create the schema and seed some data
+            using var context = new ApplicationDbContext(_contextOptions);
+            context.Database.Migrate();
+
+            context.AddRange(
+                new Game("1", "Game 1", new Uri("https://www.google.com")),
+                new Game("2", "Game 2", new Uri("https://www.google.com")));
+            context.SaveChanges();
+
+
+            // Act
+            var game = context.Game.Find("2");
+
+
+            // Assert
             Assert.AreEqual("Game 2", game?.Name);
         }
     }

@@ -12,7 +12,7 @@ namespace LinkGeek.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "SteamAccount",
                 table: "AspNetUsers",
-                type: "nvarchar(4096)",
+                type: "nvarchar(2048)",
                 nullable: true);
         }
 

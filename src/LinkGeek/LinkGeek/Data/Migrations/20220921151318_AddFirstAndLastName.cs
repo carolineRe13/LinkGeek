@@ -11,14 +11,14 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "FirstName",
                 table: "AspNetUsers",
-                type: "nvarchar(4096)",
+                type: "nvarchar(2048)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "LastName",
                 table: "AspNetUsers",
-                type: "nvarchar(4096)",
+                type: "nvarchar(2048)",
                 nullable: false,
                 defaultValue: "");
         }

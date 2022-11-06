@@ -1,6 +1,8 @@
-﻿@page "/feed"
+﻿@page "/"
 @using MudBlazor
 @using LinkGeek.Pages.Shared
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>My feed - LinkGeek</PageTitle>
 
@@ -8,5 +10,8 @@
     <h1 class="display-4">Welcome to LinkGeek</h1>
 </div>
 
-<PostPartial/>
-<FeedPartial/>
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <PostPartial/>
+    <FeedPartial/>
+}

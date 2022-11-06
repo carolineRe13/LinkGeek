@@ -34,7 +34,7 @@ namespace LinkGeek.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -45,15 +45,15 @@ namespace LinkGeek.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -70,23 +70,23 @@ namespace LinkGeek.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("ProfilePicture")
                         .IsRequired()
-                        .HasColumnType("varbinary(4096)");
+                        .HasColumnType("varbinary(2048)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("SteamAccount")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -115,7 +115,7 @@ namespace LinkGeek.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -144,10 +144,10 @@ namespace LinkGeek.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
@@ -169,10 +169,10 @@ namespace LinkGeek.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -196,7 +196,7 @@ namespace LinkGeek.Data.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -238,7 +238,7 @@ namespace LinkGeek.Data.Migrations
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(4096)");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 

@@ -26,7 +26,7 @@ namespace LinkGeek.tests.Services
             // Arrange
             // https://nsubstitute.github.io/
             var contextMock = Substitute.For<ApplicationDbContext>();
-            contextMock.ChatMessages.Returns("");
+            // contextMock.ChatMessages.Returns("-");
             contextProvider.Context = contextMock;
 
             // Act

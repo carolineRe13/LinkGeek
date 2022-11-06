@@ -13,8 +13,8 @@ namespace LinkGeek.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(4096)", nullable: false),
-                    Logo = table.Column<string>(type: "nvarchar(4096)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(2048)", nullable: false),
+                    Logo = table.Column<string>(type: "nvarchar(2048)", nullable: false)
                 },
                 constraints: table =>
                 {

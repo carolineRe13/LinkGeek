@@ -68,9 +68,9 @@ public partial class UserCardPartial
         return "data:" + DisplayedUser?.ProfilePictureContentType + ";base64," + DisplayedUser?.ProfilePictureData;
     }
 
-    private async Task<ICollection<Game>> GetGames()
+    private ICollection<Game> GetGames()
     {
-        return DisplayedUser == null ? new List<Game>() : await userService.GetUsersGamesAsync(DisplayedUser.Id);
+        return DisplayedUser == null ? new List<Game>() : userService.GetUsersGamesAsync(DisplayedUser.Id).Result;
     }
 
     private async Task AddFriend()
@@ -112,5 +112,7 @@ public partial class UserCardPartial
     {
         this.CurrentUser = this.userService.GetUserFromUserName(CurrentUser.UserName) ?? this.CurrentUser;
         this.DisplayedUser = this.userService.GetUserFromUserName(DisplayedUser.UserName) ?? this.DisplayedUser;
+
+        this.DisplayedUser.Games = GetGames();
     }
 }

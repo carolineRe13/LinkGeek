@@ -1,4 +1,5 @@
 ﻿@using MudBlazor
+@using LinkGeek.Models
 
 <div class="wrapper">
     <div class="profilePictureBackground">
@@ -49,17 +50,17 @@
         </p>
 
         <div class="gameInterests">
-            @if (@GetGames().Result.Count == 0)
+            @if (@DisplayedUser?.Games == null || @DisplayedUser?.Games?.Count == 0)
             {
                 <p> No games added </p>
             }
             else
             {
-                @foreach (var game in @GetGames().Result)
+                @foreach (var game in @DisplayedUser?.Games)
                 {
                     <a href="/game/@game.Id" class="feature">
                         <div class="featureIcon">
-                            <img src="@game.Logo" alt="@game.Name's logo" />
+                            <img src="@game.Logo" alt="@game.Name's logo"/>
                         </div>
                         <div class="featureText">
                             <p>@game.Name</p>
