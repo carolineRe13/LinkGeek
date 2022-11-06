@@ -17,7 +17,7 @@ namespace LinkGeek.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FromUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ToUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(4096)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

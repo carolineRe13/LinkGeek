@@ -11,19 +11,19 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Status",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "TimeZone",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Location",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: true);
         }
 

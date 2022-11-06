@@ -16,13 +16,13 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "ProfilePictureContentType",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "ProfilePictureData",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: true);
         }
 
@@ -39,7 +39,7 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AddColumn<byte[]>(
                 name: "ProfilePicture",
                 table: "AspNetUsers",
-                type: "varbinary(max)",
+                type: "varbinary(4096)",
                 nullable: true);
         }
     }

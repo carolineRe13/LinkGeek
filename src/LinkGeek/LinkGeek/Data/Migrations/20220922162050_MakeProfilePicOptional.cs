@@ -12,10 +12,10 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<byte[]>(
                 name: "ProfilePicture",
                 table: "AspNetUsers",
-                type: "varbinary(max)",
+                type: "varbinary(4096)",
                 nullable: true,
                 oldClrType: typeof(byte[]),
-                oldType: "varbinary(max)");
+                oldType: "varbinary(4096)");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -23,11 +23,11 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<byte[]>(
                 name: "ProfilePicture",
                 table: "AspNetUsers",
-                type: "varbinary(max)",
+                type: "varbinary(4096)",
                 nullable: false,
                 defaultValue: new byte[0],
                 oldClrType: typeof(byte[]),
-                oldType: "varbinary(max)",
+                oldType: "varbinary(4096)",
                 oldNullable: true);
         }
     }
