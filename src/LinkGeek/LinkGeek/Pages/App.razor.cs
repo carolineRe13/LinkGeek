@@ -55,7 +55,6 @@ public partial class App
                 {
                     if (HttpContextAccessor.HttpContext != null) {
                         foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies) {
-                            // IF THE DOMAIN PARAMETER IS WRONG YOU WILL RECEIVE THE JSON ERROR.
                             options.Cookies.Add(new Cookie(cookie.Key, cookie.Value, null, HttpContextAccessor.HttpContext.Request.Host.Host));
                         }
                     }

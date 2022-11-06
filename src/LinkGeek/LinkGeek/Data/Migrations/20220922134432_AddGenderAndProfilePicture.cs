@@ -12,14 +12,14 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "Gender",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "ProfilePicture",
                 table: "AspNetUsers",
-                type: "varbinary(max)",
+                type: "varbinary(4096)",
                 nullable: false,
                 defaultValue: new byte[0]);
         }

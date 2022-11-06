@@ -11,10 +11,10 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Gender",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "nvarchar(4096)");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -22,11 +22,11 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Gender",
                 table: "AspNetUsers",
-                type: "nvarchar(max)",
+                type: "nvarchar(4096)",
                 nullable: false,
                 defaultValue: "",
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "nvarchar(4096)",
                 oldNullable: true);
         }
     }
