@@ -1,4 +1,5 @@
 ﻿@page "/games"
+@using BlazorPro.Spinkit
 
 <div class="game-search">
     <EditForm Model="@search" OnSubmit="@Search">
@@ -10,9 +11,18 @@
         </div>
     </EditForm>
     <div class="game-cards-container">
-        @foreach (var game in results)
+        @if (results == null || results.Count == 0)
         {
-            <GameCard Game="@game"/>
+            <div class="game-spinner">
+                <Chase/>
+            </div>
+        }
+        else
+        {
+            @foreach (var game in results)
+            {            
+                <GameCard Game="@game"/>
+            }
         }
     </div>
 </div>

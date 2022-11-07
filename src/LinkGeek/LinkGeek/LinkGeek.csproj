@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.368" />
     <PackageReference Include="LigerShark.WebOptimizer.Sass" Version="3.0.91" />
     <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.3" />

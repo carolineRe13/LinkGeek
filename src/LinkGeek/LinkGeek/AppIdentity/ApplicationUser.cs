@@ -35,8 +35,8 @@ public class ApplicationUser : IdentityUser
     
     [JsonIgnore]
     public virtual ICollection<ChatMessage> ChatMessagesToUsers { get; set; }
-    
-    public virtual ICollection<Post> Posts { get; set; }
+
+    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
     public ApplicationUser()
     {
@@ -59,9 +59,9 @@ public class ApplicationUser : IdentityUser
                && ProfilePictureContentType == other.ProfilePictureContentType 
                && ProfilePictureData == other.ProfilePictureData 
                && (Games ?? new List<Game>()).SequenceEqual(other.Games ?? new List<Game>())
-               && Friends.SequenceEqual(other.Friends) 
-               && SentFriendRequests.SequenceEqual(other.SentFriendRequests) 
-               && ReceivedFriendRequests.SequenceEqual(other.ReceivedFriendRequests) 
+               // && Friends.SequenceEqual(other.Friends) 
+               // && SentFriendRequests.SequenceEqual(other.SentFriendRequests) 
+               // && ReceivedFriendRequests.SequenceEqual(other.ReceivedFriendRequests) 
                && Posts.SequenceEqual(other.Posts) 
                && Status == other.Status 
                && TimeZone == other.TimeZone 

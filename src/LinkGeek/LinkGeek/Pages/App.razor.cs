@@ -91,21 +91,6 @@ public partial class App
         }
     }
 
-    // important to get feed and friends updates
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (currentUser != null)
-        {
-            var latestUserData = UserService.GetUserFromUserName(currentUser.UserName);
-
-            if (!currentUser.Equals(latestUserData))
-            {
-                currentUser = latestUserData;
-                StateHasChanged();
-            }
-        }
-    }
-
     public async ValueTask DisposeAsync() {
         if (hubConnection is not null) {
             await hubConnection.DisposeAsync();

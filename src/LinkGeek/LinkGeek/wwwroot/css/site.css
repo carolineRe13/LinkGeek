@@ -68,3 +68,7 @@ body {
 .widget-post p {
   color: white;
 }
+
+.sk-chase-dot::before {
+  background-color: white !important;
+}

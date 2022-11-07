@@ -12,7 +12,7 @@
     <div class="card-body">
         <a class="card-title" href="/game/@Game.Id"> @Game.Name </a>
     </div>
-    @if (!IsGameInLibrary(@Game.Id))
+    @if (!isGameInLibrary)
     {
         <button onclick="@(new Func<object, Task>(e => AddGame(@Game.Id)))" class="btn btn-primary">Add game</button>
     }

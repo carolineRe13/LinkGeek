@@ -13,12 +13,6 @@ namespace LinkGeek.Areas.Games.Pages;
 /// </summary>
 public partial class GameCard
 {
-    [Inject]
-    AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-    
-    [Inject]
-    UserManager<ApplicationUser> UserManager { get; set; }
-
     [Inject] 
     private UserService UserService { get; set; }
     
@@ -30,31 +24,39 @@ public partial class GameCard
 
     [Parameter] 
     public bool DisplayGamePageButton { get; set; } = true;
+    
+    [CascadingParameter] ApplicationUser? currentUser { get; set; }
+    
+    private bool isGameInLibrary = false;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await IsGameInLibrary();
+    }
+    
+    
     /// <summary>
     /// Method <c>AddGame</c> Game will be added to current user's library
     /// </summary>
     private async Task AddGame(string id)
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity is { IsAuthenticated: true })
+        if (currentUser == null) return;
+        
+        var response = await UserService.AddGameToUser(currentUser.Id, id);
+        
+        switch (response)
         {
-            var userId = (await UserManager.GetUserAsync(user)).Id;
-            var response = await UserService.AddGameToUser(userId, id);
-            
-            switch (response)
-            {
-                case AddGameToUserResponse.Success:
-                    Snackbar.Add("Game added to library", Severity.Success);
-                    break;
-                case AddGameToUserResponse.GameAlreadyAdded:
-                    Snackbar.Add("Game already in library", Severity.Warning);
-                    break;
-                default:
-                    Snackbar.Add("Error adding game to library", Severity.Error);
-                    break;
-            }
+            case AddGameToUserResponse.Success:
+                Snackbar.Add("Game added to library", Severity.Success);
+                await IsGameInLibrary();
+                break;
+            case AddGameToUserResponse.GameAlreadyAdded:
+                Snackbar.Add("Game already in library", Severity.Warning);
+                await IsGameInLibrary();
+                break;
+            default:
+                Snackbar.Add("Error adding game to library", Severity.Error);
+                break;
         }
     }
 
@@ -63,41 +65,33 @@ public partial class GameCard
     /// </summary>
     private async Task RemoveGame(string id)
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity is { IsAuthenticated: true })
+        if (currentUser == null) return;
+        
+        var response = await UserService.RemoveGameFromUser(currentUser.Id, id);
+        
+        switch (response)
         {
-            var userId = (await UserManager.GetUserAsync(user)).Id;
-            var response = await UserService.RemoveGameFromUser(userId, id);
-            
-            switch (response)
-            {
-                case RemoveGameFromUserResponse.Success:
-                    Snackbar.Add("Game removed from library", Severity.Success);
-                    break;
-                case RemoveGameFromUserResponse.GameAlreadyRemoved:
-                    Snackbar.Add("Game already removed from library", Severity.Warning);
-                    break;
-                default:
-                    Snackbar.Add("Error adding game to library", Severity.Error);
-                    break;
-            }
+            case RemoveGameFromUserResponse.Success:
+                Snackbar.Add("Game removed from library", Severity.Success);
+                await IsGameInLibrary();
+                break;
+            case RemoveGameFromUserResponse.GameAlreadyRemoved:
+                Snackbar.Add("Game already removed from library", Severity.Warning);
+                await IsGameInLibrary();
+                break;
+            default:
+                Snackbar.Add("Error adding game to library", Severity.Error);
+                break;
         }
     }
 
     /// <summary>
     /// Method <c>IsGameInLibrary</c> returns true if the game is in the current user's library
     /// </summary>
-    private bool IsGameInLibrary(string id)
+    private async Task IsGameInLibrary()
     {
-        var authState = AuthenticationStateProvider.GetAuthenticationStateAsync().Result;
-        var user = authState.User;
-        if (user.Identity is { IsAuthenticated: true })
-        {
-            var userId = (UserManager.GetUserAsync(user)).Result.Id;
-            return UserService.HasGameInLibrary(userId, id).Result;
-        }
-
-        return false;
+        if (currentUser == null) return;
+        isGameInLibrary = await UserService.HasGameInLibrary(currentUser.Id, Game.Id);
+        this.StateHasChanged();
     }
 }

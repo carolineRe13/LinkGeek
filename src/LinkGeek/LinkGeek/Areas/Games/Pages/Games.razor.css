@@ -43,3 +43,7 @@
 .card .btn-primary {
     border-radius: 0;
 }
+
+.game-spinner {
+    margin-top: 2rem;
+}

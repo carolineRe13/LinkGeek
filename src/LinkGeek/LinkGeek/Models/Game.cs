@@ -25,5 +25,23 @@ public class Game
     
     public string Id { get; set; }
     public string Name { get; set; }
-    public Uri? Logo { get; set; } 
+    public Uri? Logo { get; set; }
+
+    protected bool Equals(Game other)
+    {
+        return Id == other.Id && Name == other.Name && Equals(Logo, other.Logo);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((Game)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Id, Name, Logo);
+    }
 }

@@ -17,6 +17,7 @@ public partial class PostPartial
 {
     [Inject] public UserService UserService { get; set; }
     [Inject] public GameService GameService { get; set; }
+    [Inject] public NavigationManager NavigationManager { get; set; }
     [CascadingParameter] public ApplicationUser currentUser { get; set; }
 
     private PostFormModel postFormModel = new();
@@ -29,7 +30,7 @@ public partial class PostPartial
         {
             postFormModel.Content = string.Empty;
             postFormModel.Game = null;
-            this.StateHasChanged();
+            this.NavigationManager.NavigateTo(this.NavigationManager.Uri);
         }
     }
 }

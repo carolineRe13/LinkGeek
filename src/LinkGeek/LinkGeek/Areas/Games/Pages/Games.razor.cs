@@ -21,20 +21,11 @@ public class SearchModel
 [Authorize]
 public partial class Games
 {
-    [Inject]
-    AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-    
-    [Inject]
-    UserManager<ApplicationUser> UserManager { get; set; }
-    
     [Inject] 
     private GameDbService GameDbService { get; set; }
     
-    [Inject] 
-    private UserService UserService { get; set; }
-    
-    public SearchModel search = new SearchModel();
-    public ICollection<Game> results { get; set; } = new List<Game>();
+    public SearchModel search = new();
+    public ICollection<Game>? results { get; set; }
     
     protected override async Task OnInitializedAsync()
     {
@@ -44,6 +35,5 @@ public partial class Games
     public async Task Search()
     {
         results = await GameDbService.SearchGames(search.Search);
-        
     }
 }
