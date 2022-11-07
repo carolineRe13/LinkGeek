@@ -10,11 +10,12 @@ public class Game
         this.Id = new Guid().ToString();
     }
     
-    public Game(string id, string name, Uri? logo)
+    public Game(string id, string name, Uri? logo, ICollection<ApplicationUser> players)
     {
         this.Id = id;
         this.Name = name;
         this.Logo = logo;
+        this.Players = players;
     }
 
     [JsonIgnore]

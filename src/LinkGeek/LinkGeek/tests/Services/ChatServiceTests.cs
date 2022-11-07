@@ -9,15 +9,12 @@ namespace LinkGeek.tests.Services
     [TestClass]
     public class ChatServiceTests
     {
-
-        private TestContextProvider contextProvider = new TestContextProvider();
         private ChatService chatService;
 
         [TestInitialize]
         public void SetUp()
         {
             // common Arrange
-            this.chatService = new ChatService(this.contextProvider);
         }
 
         [TestMethod]
@@ -27,7 +24,6 @@ namespace LinkGeek.tests.Services
             // https://nsubstitute.github.io/
             var contextMock = Substitute.For<ApplicationDbContext>();
             // contextMock.ChatMessages.Returns("-");
-            contextProvider.Context = contextMock;
 
             // Act
             var result = chatService.GetConversationAsync;
