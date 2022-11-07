@@ -1,0 +1,26 @@
+﻿@page "/pendingFriendsRequests"
+@using LinkGeek.Pages.Shared
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <a href="/myFriends" class="btn-primary"> My friends </a>
+    <div class="game-cards-container">
+        @if (pendingFriends.Count > 0)
+        {
+            <lu class="friend-list row">
+                @foreach (var friend in pendingFriends)
+                {
+                    <li class="friend col-3">
+                        <UserCardPartial DisplayedUser="@friend" IsCurrentUser="false"/>
+                    </li>
+                }
+            </lu>
+        }
+        else
+        {
+            <h1>
+                No pending friend requests!
+            </h1>
+        }
+    </div>
+}

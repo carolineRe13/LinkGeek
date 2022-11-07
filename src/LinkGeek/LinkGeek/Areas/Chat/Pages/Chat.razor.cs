@@ -32,6 +32,8 @@ public partial class Chat
     [CascadingParameter] public HubConnection? hubConnection { get; set; }
     [CascadingParameter] public ApplicationUser currentUser { get; set; }
     [Parameter] public string ContactId { get; set; }
+    [Inject]
+    UserService UserService { get; set; }
     
     public string CurrentMessage { get; set; }
     public List<ApplicationUser> ChatUsers = new();
@@ -71,6 +73,8 @@ public partial class Chat
     /// </summary>
     protected override async Task OnParametersSetAsync()
     {
+        // best case we update the user, worst case it is still the same one. We use this to update the new friends
+        currentUser = UserService.GetUserFromUserName(currentUser.UserName) ?? currentUser;
         if (hubConnection == null || currentUser == null)
             return;
         

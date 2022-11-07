@@ -2,8 +2,6 @@
 using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using MudBlazor;
 using System.ComponentModel.DataAnnotations;
 
@@ -40,8 +38,6 @@ public partial class ProfilePage
 
     protected override async Task OnParametersSetAsync()
     {
-        await base.OnParametersSetAsync();
-
         if (this.CurrentUser != null)
         {
             if (DisplayedUserIsCurrentUser())

@@ -1,27 +1,30 @@
 @using MudBlazor
 
-<div class="card" style="width: 18rem;">
-    @if (@Game.Logo != null)
-    {
-        <img class="card-img-top" src="@Game.Logo" alt="Card image cap">
-    }
-    else
-    {
-        <div class="placeholder"></div>
-    }
-    <div class="card-body">
-        <a class="card-title" href="/game/@Game.Id"> @Game.Name </a>
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <div class="card" style="width: 18rem;">
+        @if (@Game.Logo != null)
+        {
+            <img class="card-img-top" src="@Game.Logo" alt="Card image cap">
+        }
+        else
+        {
+            <div class="placeholder"></div>
+        }
+        <div class="card-body">
+            <a class="card-title" href="/game/@Game.Id"> @Game.Name </a>
+        </div>
+        @if (!isGameInLibrary)
+        {
+            <button onclick="@(new Func<object, Task>(e => AddGame(@Game.Id)))" class="btn btn-primary">Add game</button>
+        }
+        else
+        {
+            <button onclick="@(new Func<object, Task>(e => RemoveGame(@Game.Id)))" class="btn btn-remove">Remove game</button>
+        }
+        @if (@DisplayGamePageButton)
+        {
+            <a href="/game/@Game.Id" class="btn btn-secondary">Open game page</a>
+        }
     </div>
-    @if (!isGameInLibrary)
-    {
-        <button onclick="@(new Func<object, Task>(e => AddGame(@Game.Id)))" class="btn btn-primary">Add game</button>
-    }
-    else
-    {
-        <button onclick="@(new Func<object, Task>(e => RemoveGame(@Game.Id)))" class="btn btn-remove">Remove game</button>
-    }
-    @if (@DisplayGamePageButton)
-    {
-        <a href="/game/@Game.Id" class="btn btn-secondary">Open game page</a>
-    }
-</div>
+}

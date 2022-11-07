@@ -1,7 +1,9 @@
 @page "/discover"
 @using LinkGeek.Pages.Shared
 
-<PageTitle>Discover - LinkGeek</PageTitle>
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <PageTitle>Discover - LinkGeek</PageTitle>
 
 @if (users == null || users.Count == 0)
 {
@@ -33,4 +35,5 @@ else
             </div>
         </button>
     </div>
+}
 }

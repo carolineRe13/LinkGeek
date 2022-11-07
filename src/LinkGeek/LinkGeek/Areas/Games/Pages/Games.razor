@@ -1,28 +1,31 @@
 ﻿@page "/games"
 @using BlazorPro.Spinkit
 
-<div class="game-search">
-    <EditForm Model="@search" OnSubmit="@Search">
-        <div class="input-group">
-            <InputText class="form-control" id="name" @bind-Value="search.Search"/>
-            <button type="submit" class="btn btn-primary input-group-addon">
-                <i class="bi-search"></i>
-            </button>
-        </div>
-    </EditForm>
-    <div class="game-cards-container">
-        @if (results == null || results.Count == 0)
-        {
-            <div class="game-spinner">
-                <Chase/>
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <div class="game-search">
+        <EditForm Model="@search" OnSubmit="@Search">
+            <div class="input-group">
+                <InputText class="form-control" id="name" @bind-Value="search.Search"/>
+                <button type="submit" class="btn btn-primary input-group-addon">
+                    <i class="bi-search"></i>
+                </button>
             </div>
-        }
-        else
-        {
-            @foreach (var game in results)
-            {            
-                <GameCard Game="@game"/>
+        </EditForm>
+        <div class="game-cards-container">
+            @if (results == null || results.Count == 0)
+            {
+                <div class="game-spinner">
+                    <Chase/>
+                </div>
             }
-        }
+            else
+            {
+                @foreach (var game in results)
+                {
+                    <GameCard Game="@game"/>
+                }
+            }
+        </div>
     </div>
-</div>
+}

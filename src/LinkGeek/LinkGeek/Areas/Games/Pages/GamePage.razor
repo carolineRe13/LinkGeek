@@ -1,21 +1,24 @@
 @page "/game/{GameId}"
 
-<GameCard Game="@Game" DisplayGamePageButton="false"/>
-<div class="player-cards-container">
-    @foreach (var player in Players)
-    {
-        <div class="card player-card">
-            @if (@player.ProfilePictureData != null && @player.ProfilePictureContentType != null)
-            {
-                <img class="card-img-top" src="@GetImageSrc(player)" alt="Card image cap">
-            }
-            else
-            {
-                <div class="placeholder"></div>
-            }
-            <div class="card-body">
-                <h5 class="card-title">@player.UserName</h5>
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <GameCard Game="@Game" DisplayGamePageButton="false"/>
+    <div class="player-cards-container">
+        @foreach (var player in Players)
+        {
+            <div class="card player-card">
+                @if (@player.ProfilePictureData != null && @player.ProfilePictureContentType != null)
+                {
+                    <img class="card-img-top" src="@GetImageSrc(player)" alt="Card image cap">
+                }
+                else
+                {
+                    <div class="placeholder"></div>
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@player.UserName</h5>
+                </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}

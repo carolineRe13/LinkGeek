@@ -18,6 +18,9 @@ public partial class GameCard
     
     [Inject]
     private ISnackbar Snackbar { get; set; }
+    
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
     [Parameter]
     public Game Game { get; set; }

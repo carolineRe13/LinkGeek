@@ -2,6 +2,7 @@ using LinkGeek.AppIdentity;
 using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor;
 
@@ -17,7 +18,10 @@ public partial class DiscoverabilityPage
     
     [Inject]
     private IJSRuntime JS { get; set; } = null!;
-
+    
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    
     private IList<ApplicationUser>? users;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

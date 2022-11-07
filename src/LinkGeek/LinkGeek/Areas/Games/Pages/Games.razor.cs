@@ -24,6 +24,9 @@ public partial class Games
     [Inject] 
     private GameDbService GameDbService { get; set; }
     
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    
     public SearchModel search = new();
     public ICollection<Game>? results { get; set; }
     

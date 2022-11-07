@@ -1,5 +1,6 @@
 ﻿using LinkGeek.AppIdentity;
 using LinkGeek.Pages.Shared;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace LinkGeek.tests.Pages.Shared
 {
@@ -18,6 +19,8 @@ namespace LinkGeek.tests.Pages.Shared
             // common Arrange
             _currentUser = new ApplicationUser();
             _otherUser = new ApplicationUser();
+            
+            //AuthenticationStateProvider.
 
             partial = new UserCardPartial
             {

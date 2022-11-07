@@ -72,3 +72,9 @@ body {
 .sk-chase-dot::before {
   background-color: white !important;
 }
+.friend.col-3 {
+  scale: 0.59;
+  list-style-type: none;
+  margin-top: -9rem;
+  margin-bottom: -12rem;
+}

@@ -2,6 +2,7 @@ using LinkGeek.AppIdentity;
 using LinkGeek.Models;
 using LinkGeek.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
 
@@ -13,6 +14,9 @@ public partial class GamePage
     public string? GameId { get; set; }
     [Inject]
     public GameService GameService { get; set; }
+    
+    [Inject]
+    private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
     private Game Game { get; set; } = new();
     private ICollection<ApplicationUser> Players { get; set; } = new List<ApplicationUser>();
