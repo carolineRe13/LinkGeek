@@ -30,7 +30,7 @@ public partial class Chat
     [Inject]
     private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [CascadingParameter] public HubConnection? hubConnection { get; set; }
-    [CascadingParameter] public ApplicationUser currentUser { get; set; }
+    [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     [Parameter] public string ContactId { get; set; }
     [Inject]
     UserService UserService { get; set; }
@@ -73,9 +73,14 @@ public partial class Chat
     /// </summary>
     protected override async Task OnParametersSetAsync()
     {
+        if (currentUser == null)
+        {
+            return;
+        }
+        
         // best case we update the user, worst case it is still the same one. We use this to update the new friends
-        currentUser = UserService.GetUserFromUserName(currentUser.UserName) ?? currentUser;
-        if (hubConnection == null || currentUser == null)
+        currentUser = await UserService.GetUserFromUserNameAsync(currentUser.UserName) ?? currentUser;
+        if (hubConnection == null)
             return;
         
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
