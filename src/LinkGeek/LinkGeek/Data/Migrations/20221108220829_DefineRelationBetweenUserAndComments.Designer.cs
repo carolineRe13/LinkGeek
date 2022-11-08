@@ -4,6 +4,7 @@ using LinkGeek.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,10 +12,12 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LinkGeek.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221108220829_DefineRelationBetweenUserAndComments")]
+    partial class DefineRelationBetweenUserAndComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -64,21 +67,6 @@ namespace LinkGeek.Data.Migrations
                     b.HasIndex("PlayersId");
 
                     b.ToTable("ApplicationUserGame");
-                });
-
-            modelBuilder.Entity("ApplicationUserPost", b =>
-                {
-                    b.Property<Guid>("LikedPostsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LikesId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LikedPostsId", "LikesId");
-
-                    b.HasIndex("LikesId");
-
-                    b.ToTable("ApplicationUserPost");
                 });
 
             modelBuilder.Entity("LinkGeek.AppIdentity.ApplicationUser", b =>
@@ -201,7 +189,7 @@ namespace LinkGeek.Data.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("LinkGeek.Models.Game", b =>
@@ -250,7 +238,6 @@ namespace LinkGeek.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -492,21 +479,6 @@ namespace LinkGeek.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ApplicationUserPost", b =>
-                {
-                    b.HasOne("LinkGeek.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("LikedPostsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LinkGeek.AppIdentity.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("LikesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("LinkGeek.Models.Comment", b =>
                 {
                     b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "ApplicationUser")
@@ -537,9 +509,7 @@ namespace LinkGeek.Data.Migrations
                 {
                     b.HasOne("LinkGeek.AppIdentity.ApplicationUser", "ApplicationUser")
                         .WithMany("Posts")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("LinkGeek.Models.Game", "Game")
                         .WithMany("Posts")

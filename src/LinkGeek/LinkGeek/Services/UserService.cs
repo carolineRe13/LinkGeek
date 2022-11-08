@@ -72,27 +72,6 @@ public class UserService
             return AddGameToUserResponse.Success;
         }
     }
-
-    public async Task<CreatePostResponse?> CreatePost(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
-    {
-        await using (var context = contextProvider.GetContext())
-        {
-            var contextUser = GetUserFromUserName(context, user.UserName);
-            var contextGame = game != null ? await context.Game.FindAsync(game.Id) : null;
-            var post = new Post
-            {
-                ApplicationUser = contextUser!,
-                Content = content,
-                Game = contextGame,
-                PlayingAt = playingAt,
-                LookingFor = lookingFor == PlayerRoles.None ? null : lookingFor,
-            };
-            context.Posts.Add(post);
-            await context.SaveChangesAsync();
-        }
-
-        return CreatePostResponse.Success;
-    }
     
     public async Task<RemoveGameFromUserResponse?> RemoveGameFromUser(string userId, string gameId)
     {
@@ -152,7 +131,6 @@ public class UserService
 
     public async Task<string?> UpdateLocation(ApplicationUser user, string location) =>
         await UpdateLocation(user.Id, location);
-
 
     public async Task<string?> UpdateLocation(string userId, string location)
     {
@@ -231,6 +209,47 @@ public class UserService
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
+    public async Task<CreatePostResponse?> CreatePost(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
+    {
+        await using (var context = contextProvider.GetContext())
+        {
+            var contextUser = GetUserFromUserName(context, user.UserName);
+            var contextGame = game != null ? await context.Game.FindAsync(game.Id) : null;
+            var post = new Post
+            {
+                ApplicationUser = contextUser!,
+                Content = content,
+                Game = contextGame,
+                PlayingAt = playingAt,
+                LookingFor = lookingFor == PlayerRoles.None ? null : lookingFor,
+            };
+            context.Posts.Add(post);
+            await context.SaveChangesAsync();
+        }
+
+        return CreatePostResponse.Success;
+    }
+
+    public async Task<Post?> PostComment(ApplicationUser user, Post post, string content)
+    {
+        await using var context = contextProvider.GetContext();
+        var contextUser = await GetUserFromUserNameAsync(context, user.UserName);
+        if (contextUser == null) return default;
+            
+        var existingPost = await context.Posts.Include(p => p.Comments.OrderBy(c => c.CreatedAt)).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
+        if (existingPost == null) return default;
+        var comment = new Comment
+        {
+            ApplicationUser = contextUser,
+            Text = content
+        };
+        context.Comments.Add(comment);
+        existingPost?.Comments.Add(comment);
+        await context.SaveChangesAsync();
+
+        return existingPost;
+    }
+    
     public async Task<UpdatePostResponse> UpdatePost(Post post, ApplicationUser currentUser)
     {
         await using (var context = contextProvider.GetContext())
@@ -277,6 +296,7 @@ public class UserService
         var feed = context.Posts
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
+            .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
             .Where(post => post.ApplicationUser.Id == user.Id
                            || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
                            || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))

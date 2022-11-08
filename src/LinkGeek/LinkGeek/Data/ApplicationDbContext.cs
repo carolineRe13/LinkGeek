@@ -15,6 +15,7 @@ namespace LinkGeek.Data
         public DbSet<GameSearchCacheItem> GameSearchCache { get; set; }
         
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -67,6 +68,10 @@ namespace LinkGeek.Data
             builder.Entity<Post>()
                 .HasMany(p => p.Likes)
                 .WithMany(u => u.LikedPosts);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Comments)
+                .WithOne(c => c.ApplicationUser);
         }
     }
 }

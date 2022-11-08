@@ -21,7 +21,7 @@ public partial class FeedPartial
 
     protected override void OnParametersSet()
     {
-        if (currentUser != null)
+        if (currentUser != null && UserService != null)
         {
             posts = this.UserService.GetUserFeed(currentUser);
         }
@@ -63,6 +63,16 @@ public partial class FeedPartial
             result =  await UserService.IsLiked(post, currentUser);
         }
         return result;
+    }
+
+    public void RefreshPost(Post post)
+    {
+        var index = posts.FindIndex(p => p.Id == post.Id);
+        if (index != -1)
+        {
+            posts[index] = post;
+            this.StateHasChanged();
+        }
     }
 }
 

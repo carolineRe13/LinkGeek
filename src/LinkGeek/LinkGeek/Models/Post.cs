@@ -15,4 +15,6 @@ public class Post
     public DateTimeOffset? PlayingAt { get; init; } = DateTimeOffset.Now;
     
     public PlayerRoles? LookingFor { get; init; }
+    
+    public ICollection<Comment> Comments { get; init; } = new List<Comment>();
 }
