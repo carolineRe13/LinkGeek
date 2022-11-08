@@ -20,6 +20,8 @@ public class ChatService
             return await context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
         }
     }
+    
+    // Not in use
     public async Task<List<ApplicationUser>> GetUsersAsync(string userId) {
         using (var context = contextProvider.GetContext())
         {

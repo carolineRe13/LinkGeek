@@ -9,11 +9,21 @@ namespace LinkGeek.tests.Services
         {
             ContextOptions = contextOptions;
         }
+        
+        public TestContextProvider(ApplicationDbContext dbContext)
+        {
+            DbContext = dbContext;
+        }
 
-        private DbContextOptions<ApplicationDbContext> ContextOptions { get; set;  }
+        private DbContextOptions<ApplicationDbContext>? ContextOptions { get; set;  }
+        private ApplicationDbContext? DbContext { get; set;  }
 
         public ApplicationDbContext GetContext()
         {
+            if (DbContext != null)
+            {
+                return DbContext;
+            }
             return new ApplicationDbContext(ContextOptions);
         }
     }

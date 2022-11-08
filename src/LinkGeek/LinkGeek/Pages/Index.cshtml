@@ -1,40 +1,5 @@
 ﻿@page "/feed"
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome to LinkGeek</h1>
-</div>
-
-@if (User.Identity.IsAuthenticated)
-{
-<div class="widget-post" aria-labelledby="post-header-title">
-  <form id="widget-form" class="widget-post__form" name="form" aria-label="post widget">
-    <div class="widget-post__content">
-      <label for="post-content" class="sr-only">Share</label>
-      <textarea name="post" id="post-content" class="widget-post__textarea scroller" placeholder="Create a post"></textarea>
-    </div>
-    <div class="widget-post__options is--hidden" id="stock-options">
-    </div>
-    <div class="widget-post__actions post--actions">
-      <div class="post-actions__attachments">
-        <button type="button" class="btn post-actions__upload attachments--btn">
-          <label for="upload-image" class="post-actions__label">
-            <i class="fa fa-upload" aria-hidden="true"></i> 
-            upload image
-          </label>
-        </button>
-        <input type="file" id="upload-image" accept="image/*" multiple>
-        Only network
-        <input type="checkbox"> 
-      </div>
-      <div class="post-actions__widget">
-        <button class="btn post-actions__publish">publish</button>
-      </div>
-    </div>
-  </form>
-</div>
 }

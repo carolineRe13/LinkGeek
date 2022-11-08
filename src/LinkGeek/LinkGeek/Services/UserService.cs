@@ -197,6 +197,12 @@ public class UserService
         return GetUserFromUserName(context, userName);
     }
 
+    public async Task<ApplicationUser?> GetUserFromUserNameAsync(string userName)
+    {
+        await using var context = contextProvider.GetContext();
+        return await GetUserFromUserNameAsync(context, userName);
+    }
+
     public ApplicationUser? GetUserFromUserName(ApplicationDbContext context, string userName)
     {
         return context.Users
@@ -205,6 +211,16 @@ public class UserService
             .Include(u => u.ReceivedFriendRequests)
             .Include(u => u.Games)
             .FirstOrDefault(u => u.UserName == userName);
+    }
+
+    public async Task<ApplicationUser?> GetUserFromUserNameAsync(ApplicationDbContext context, string userName)
+    {
+        return await context.Users
+            .Include(u => u.Friends)
+            .Include(u => u.SentFriendRequests)
+            .Include(u => u.ReceivedFriendRequests)
+            .Include(u => u.Games)
+            .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
     public List<Post> GetUserFeed(ApplicationUser user)

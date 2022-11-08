@@ -1,34 +1,82 @@
-﻿using LinkGeek.Data;
+﻿using LinkGeek.AppIdentity;
+using LinkGeek.Data;
 using LinkGeek.Services;
+using LinkGeek.Shared;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkGeek.tests.Services
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using NSubstitute;
 
     [TestClass]
     public class ChatServiceTests
     {
-        private ChatService chatService;
+        private TestContextProvider _contextProvider;
+        private ChatService _chatService;
 
         [TestInitialize]
         public void SetUp()
         {
-            // common Arrange
+            // common Arrange 
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+
+            // These options will be used by the context instances in this test suite, including the connection opened above.
+            var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlite(connection)
+                .Options;
+            
+            this._contextProvider = new TestContextProvider(contextOptions);
+            this._contextProvider.GetContext().Database.Migrate();
+
+            this._chatService = new ChatService(_contextProvider);
         }
 
         [TestMethod]
-        public void GetConversationAsyncTest()
+        public void GetUserDetailsAsyncTest()
         {
             // Arrange
-            // https://nsubstitute.github.io/
-            var contextMock = Substitute.For<ApplicationDbContext>();
-            // contextMock.ChatMessages.Returns("-");
+            // Create the schema and seed some data
+            using var context = _contextProvider.GetContext();
+            
+            var user = new ApplicationUser();
 
+            context.AddRange(user);
+            context.SaveChanges();
+            
             // Act
-            var result = chatService.GetConversationAsync;
+            ApplicationUser userDetails = this._chatService.GetUserDetailsAsync(user.Id).Result;
+            
             // Assert
-            Assert.AreEqual(result,"????????");
+            Assert.AreEqual(userDetails, user);
+        }
+        
+        [TestMethod]
+        public void GetUsersAsyncTest()
+        {
+            // Arrange
+            // Create the schema and seed some data
+            using var context = _contextProvider.GetContext();
+            
+            var fromUser = new ApplicationUser();
+            var toUser = new ApplicationUser();
+            var message = new ChatMessage()
+            {
+                Id = 123,
+                Message = "Hello",
+                ToUserId = "12",
+                CreatedDate = DateTime.Now,
+                FromUserId = "23",
+                FromUser = fromUser,
+                ToUser = toUser
+            };
+            
+            // Act
+            int result = this._chatService.SaveMessageAsync(message, fromUser.Id).Result;
+            
+            // Assert
+            Assert.AreEqual(3, result);
         }
     }
 }

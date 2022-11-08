@@ -31,6 +31,7 @@ public class ChatController : ControllerBase
         return Ok(user);
     }
     
+    // Not in use
     [HttpGet("users")]
     public async Task<IActionResult> GetUsersAsync()
     {
