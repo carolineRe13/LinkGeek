@@ -288,7 +288,7 @@ namespace LinkGeek.tests.Services
             var result= await _userService.RemoveGameFromUser(currentUser.Id, "2");
             
             // Assert
-            Assert.AreEqual(false, result);
+            Assert.AreEqual(true, result);
         }
         
         [TestMethod]
