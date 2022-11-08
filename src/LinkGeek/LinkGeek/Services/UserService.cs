@@ -66,9 +66,8 @@ public class UserService
         }
     }
 
-    public async Task<CreatePostResponse?> CreatePost(ApplicationUser user, string content, Game? game)
+    public async Task<CreatePostResponse?> CreatePost(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
     {
-        
         await using (var context = contextProvider.GetContext())
         {
             var contextUser = GetUserFromUserName(context, user.UserName);
@@ -77,7 +76,9 @@ public class UserService
             {
                 ApplicationUser = contextUser!,
                 Content = content,
-                Game = contextGame
+                Game = contextGame,
+                PlayingAt = playingAt,
+                LookingFor = lookingFor == PlayerRoles.None ? null : lookingFor,
             };
             context.Posts.Add(post);
             await context.SaveChangesAsync();

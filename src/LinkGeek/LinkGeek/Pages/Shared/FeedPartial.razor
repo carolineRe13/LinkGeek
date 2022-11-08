@@ -26,6 +26,22 @@
             }
             <MudCardContent>
                 <MudText Typo="Typo.body2">@post.Content</MudText>
+                @if (@post.LookingFor != null && @post.PlayingAt != null)
+                {
+                    <MudText Typo="Typo.body2">
+                        Looking for @post.LookingFor at @post.PlayingAt
+                    </MudText>
+                } else if (@post.LookingFor != null)
+                {
+                    <MudText Typo="Typo.body2">
+                        Looking for @post.LookingFor
+                    </MudText>
+                } else if (@post.PlayingAt != null)
+                {
+                    <MudText Typo="Typo.body2">
+                        Playing at @post.PlayingAt
+                    </MudText>
+                }
             </MudCardContent>
             <MudCardActions>
                 <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />

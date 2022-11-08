@@ -1,20 +1,47 @@
 ﻿@using MudBlazor
+@using LinkGeek.Models
 
 <div class="widget-post">
     <MudPaper>
         <EditForm Model="postFormModel" OnValidSubmit="CreatePostAsync">
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField T="string" Label="Create a post" Lines="5" @bind-Value="postFormModel.Content"/>
+                    <MudTextField T="string" Label="Create a post" Lines="5" @bind-Value="postFormModel.Content" Required="true"/>
                 </MudItem>
                 @if (@currentUser?.Games?.Count > 0)
                 {
-                    <MudItem xs="9">
+                    <MudItem xs="6">
                         <MudSelect @bind-Value="postFormModel.Game" Label="Game">
                             @foreach (var game in @currentUser.Games)
                             {
                                 <MudSelectItem Value="@game">
                                     <img src="@game.Logo" height="30" alt="@game.Name logo"/> @game.Name
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudSelect @bind-Value="postFormModel.LookingFor" Label="Looking for">
+                            @foreach(PlayerRoles lookingFor in Enum.GetValues(typeof(PlayerRoles)))
+                            {
+                                <MudSelectItem Value="@lookingFor">
+                                    @lookingFor
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudDatePicker Label="Date" @bind-Date="postFormModel.PlayingAtDate"/>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudTimePicker Label="Time" @bind-Time="postFormModel.PlayingAtTime"/>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudSelect @bind-Value="postFormModel.TimeZone" Label="TZ">
+                            @foreach(TimeZoneInfo tz in TimeZoneInfo.GetSystemTimeZones())
+                            {
+                                <MudSelectItem Value="@tz">
+                                    @tz.Id
                                 </MudSelectItem>
                             }
                         </MudSelect>
