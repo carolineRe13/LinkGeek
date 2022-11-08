@@ -5,11 +5,11 @@
     <div class="card" style="width: 18rem;">
         @if (@Game.Logo != null)
         {
-            <img class="card-img-top" src="@Game.Logo" alt="Card image cap">
+            <img class="card-img-top" src="@Game.Logo" alt="@Game.Name's cover">
         }
         else
         {
-            <div class="placeholder"></div>
+            <img class="card-img-top" src="/Content/Images/DefaultGamePic.png" alt="default game pic"/>
         }
         <div class="card-body">
             <a class="card-title" href="/game/@Game.Id"> @Game.Name </a>

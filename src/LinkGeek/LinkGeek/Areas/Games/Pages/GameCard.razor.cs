@@ -32,7 +32,7 @@ public partial class GameCard
     
     private bool isGameInLibrary = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         await IsGameInLibrary();
     }
@@ -94,7 +94,14 @@ public partial class GameCard
     private async Task IsGameInLibrary()
     {
         if (currentUser == null) return;
-        isGameInLibrary = await UserService.HasGameInLibrary(currentUser.Id, Game.Id);
+        if (currentUser.Games != null && currentUser.Games.Any(g => g.Id == Game.Id))
+        {
+            isGameInLibrary = true;
+        }
+        else
+        {
+            isGameInLibrary = await UserService.HasGameInLibrary(currentUser.Id, Game.Id);
+        }
         this.StateHasChanged();
     }
 }

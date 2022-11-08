@@ -108,6 +108,12 @@ public partial class UserCardPartial
         }
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        await this.ReloadUsers();
+        this.StateHasChanged();
+    }
+
     private async Task ReloadUsers()
     {
         this.CurrentUser = this.userService.GetUserFromUserName(CurrentUser.UserName) ?? this.CurrentUser;

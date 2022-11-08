@@ -86,7 +86,7 @@ public class GameDbService
     {
         using (var context = contextProvider.GetContext())
         {
-            var games = context.GameSearchCache.AsQueryable()
+            var games = context.GameSearchCache
                 .Where(c => c.Query == query)
                 .Where(c => c.LastUpdated > DateTimeOffset.UtcNow.AddHours(-12)) // TODO make configurable
                 .OrderBy(c => c.Rank)

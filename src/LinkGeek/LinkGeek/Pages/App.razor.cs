@@ -42,13 +42,11 @@ public partial class App
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        var currentUserId = "-1";
         
         if (user.Identity is { IsAuthenticated: true })
         {
             var incompleteUser = await UserManager.GetUserAsync(user);
             currentUser = UserService.GetUserFromUserName(incompleteUser.UserName) ?? incompleteUser;
-            currentUserId = currentUser.Id;
             
             hubConnection = new HubConnectionBuilder()
                 .WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub"), options =>
@@ -68,7 +66,7 @@ public partial class App
             
             hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
             {
-                if (currentUserId == receiverUserId)
+                if (currentUser?.Id == receiverUserId)
                 {
                     _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
                     _snackBar.Add(message, Severity.Info, config =>
@@ -88,6 +86,18 @@ public partial class App
             });
             
             await hubConnection.StartAsync();
+        }
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity is { IsAuthenticated: true })
+        {
+            var incompleteUser = await UserManager.GetUserAsync(user);
+            currentUser = UserService.GetUserFromUserName(incompleteUser.UserName) ?? incompleteUser;
+            StateHasChanged();
         }
     }
 
