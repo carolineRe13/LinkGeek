@@ -77,7 +77,7 @@ public class GameDbService
                 { Id = $"{g.id}", Name = g.name, Logo = g.cover != null ? new Uri($"https:{g.cover.url}") : null })
             .ToList();
         
-        this.StoreGameSearchCache(query, games);
+        await this.StoreGameSearchCache(query, games);
         
         return games;
     }
