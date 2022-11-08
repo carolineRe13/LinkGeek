@@ -1,0 +1,76 @@
+@using MudBlazor
+
+<div class="widget-post">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    @if(@post.ApplicationUser.ProfilePictureContentType != null)
+                    {
+                        <MudAvatar Image="@GetImageSrc(@post.ApplicationUser)" Size="Size.Large"/>
+                    }
+                    else
+                    {
+                        <MudAvatar Color="Color.Primary" Size="Size.Large">@post.ApplicationUser.UserName[..1]</MudAvatar>
+                    }
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.body1">@post.Game?.Name</MudText>
+                    <MudText Typo="Typo.body2">@post.ApplicationUser?.UserName at @post.CreatedAt</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            @if (@post.Game != null)
+            {
+                <MudCardMedia Image="@post.Game.Logo?.AbsoluteUri"/>
+            }
+            <MudCardContent>
+                <MudText Typo="Typo.body2">@post.Content</MudText>
+                @if (@post.LookingFor != null && @post.PlayingAt != null)
+                {
+                    <MudText Typo="Typo.body2">
+                        Looking for @post.LookingFor at @post.PlayingAt
+                    </MudText>
+                } else if (@post.LookingFor != null)
+                {
+                    <MudText Typo="Typo.body2">
+                        Looking for @post.LookingFor
+                    </MudText>
+                } else if (@post.PlayingAt != null)
+                {
+                    <MudText Typo="Typo.body2">
+                        Playing at @post.PlayingAt
+                    </MudText>
+                }
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+            </MudCardActions>
+            <hr/>
+            <CommentPartial Post="@post" ParentRefreshFunction="this.RefreshPost"/>
+            <MudCardContent>
+                @foreach(var comment in post.Comments)
+                {
+                    <MudCard>
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                @if(@comment.ApplicationUser.ProfilePictureContentType != null)
+                                {
+                                    <MudAvatar Image="@GetImageSrc(@comment.ApplicationUser)" Size="Size.Small"/>
+                                }
+                                else
+                                {
+                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@comment.ApplicationUser.UserName[..1]</MudAvatar>
+                                }
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.body1">@comment.ApplicationUser?.UserName at @comment.CreatedAt</MudText>
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText Typo="Typo.body2">@comment.Text</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </MudCardContent>
+        </MudCard>
+    </div>

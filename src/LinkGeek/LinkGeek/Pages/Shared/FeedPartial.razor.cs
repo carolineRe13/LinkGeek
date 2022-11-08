@@ -17,7 +17,7 @@ public partial class FeedPartial
     private ISnackbar _snackBar { get; set; }
     [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     
-    private List<Post> posts = new List<Post>();
+    private List<Post> posts = new();
 
     protected override void OnParametersSet()
     {

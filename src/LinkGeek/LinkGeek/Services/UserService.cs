@@ -305,6 +305,18 @@ public class UserService
 
         return feed;
     }
+    
+    public async Task<Post?> GetPost(string postId)
+    {
+        await using var context = contextProvider.GetContext();
+        
+        return await context.Posts
+            .Include(p => p.ApplicationUser)
+            .Include(p => p.Game)
+            .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
+            .Where(post => post.Id.ToString() == postId)
+            .FirstOrDefaultAsync();
+    }
 
     private Task<ApplicationUser> GetUserWithGames(ApplicationDbContext context, string userId)
     {
