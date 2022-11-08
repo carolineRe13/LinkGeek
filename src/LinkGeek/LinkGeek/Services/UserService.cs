@@ -27,6 +27,13 @@ public enum CreatePostResponse
     Success,
 }
 
+public enum UpdatePostResponse
+{
+    Success,
+    Failure,
+    SuccessfullyRemoved
+}
+
 public class UserService
 {
     private readonly IContextProvider contextProvider;
@@ -224,6 +231,45 @@ public class UserService
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
+    public async Task<UpdatePostResponse> UpdatePost(Post post, ApplicationUser currentUser)
+    {
+        await using (var context = contextProvider.GetContext())
+        {
+            var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
+            if (contextUser == null) return UpdatePostResponse.Failure;
+
+            var contextPost = await context.Posts.Include(p => p.Likes).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
+            if (contextPost == null) return UpdatePostResponse.Failure;
+            if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
+            {
+                contextPost.Likes.Remove(contextUser);
+                await context.SaveChangesAsync();
+                return UpdatePostResponse.SuccessfullyRemoved;
+            }
+            contextPost.Likes.Add(contextUser);
+            await context.SaveChangesAsync();
+            return UpdatePostResponse.Success;
+        }
+    }
+    
+    public async Task<bool> IsLiked(Post post, ApplicationUser currentUser)
+    {
+        await using (var context = contextProvider.GetContext())
+        {
+            var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
+            if (contextUser == null) return false;
+
+            var contextPost = await context.Posts.Include(p => p.Likes).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
+            if (contextPost == null) return false;
+            if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+    
     public List<Post> GetUserFeed(ApplicationUser user)
     {
         using var context = contextProvider.GetContext();
@@ -232,8 +278,8 @@ public class UserService
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Where(post => post.ApplicationUser.Id == user.Id
-                       || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
-                       || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
+                           || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
+                           || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
             .OrderByDescending(p => p.CreatedAt)
             .ToList();
 

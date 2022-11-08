@@ -44,8 +44,8 @@
                 }
             </MudCardContent>
             <MudCardActions>
-                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
-                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" OnClick="() => Like(post)"> </MudIconButton>
+                <div class="like">@post.Likes.Count</div>
             </MudCardActions>
         </MudCard>
     </div>

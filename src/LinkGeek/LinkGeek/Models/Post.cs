@@ -1,6 +1,4 @@
-using System.Text.Json.Serialization;
 using LinkGeek.AppIdentity;
-using Newtonsoft.Json.Converters;
 
 namespace LinkGeek.Models;
 
@@ -11,6 +9,8 @@ public class Post
     public Game? Game { get; init; }
     public string Content { get; init; }
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.Now;
+
+    public ICollection<ApplicationUser> Likes { get; set; } = new List<ApplicationUser>() { };
     
     public DateTimeOffset? PlayingAt { get; init; } = DateTimeOffset.Now;
     

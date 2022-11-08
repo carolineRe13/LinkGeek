@@ -40,6 +40,10 @@ ul {
     overflow: hidden;
 }
 
+.like {
+    color: #FFFFFF;
+}
+
 .widget-post__header {
     padding: .2em .5em;
 

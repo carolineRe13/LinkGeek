@@ -4,17 +4,20 @@ using LinkGeek.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LinkGeek.Data.Migrations
+namespace LinkGeek.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221108222150_AddLikedPosts")]
+    partial class AddLikedPosts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -233,12 +236,6 @@ namespace LinkGeek.Data.Migrations
 
                     b.Property<string>("GameId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("LookingFor")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset?>("PlayingAt")
-                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -587,6 +584,7 @@ namespace LinkGeek.Data.Migrations
                 {
                     b.Navigation("Posts");
                 });
+#pragma warning restore 612, 618
         }
     }
 }

@@ -3,6 +3,7 @@ using LinkGeek.Models;
 using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace LinkGeek.Pages.Shared;
 
@@ -10,7 +11,10 @@ namespace LinkGeek.Pages.Shared;
 [Authorize]
 public partial class FeedPartial
 {
-    [Inject] public UserService UserService { get; set; }
+    [Inject] 
+    public UserService UserService { get; set; }
+    [Inject] 
+    private ISnackbar _snackBar { get; set; }
     [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     
     private List<Post> posts = new List<Post>();
@@ -26,6 +30,39 @@ public partial class FeedPartial
     private string GetImageSrc(ApplicationUser player)
     {
         return "data:" + player.ProfilePictureContentType + ";base64," + player.ProfilePictureData;
+    }
+    
+    private async Task Like(Post post)
+    {
+        if (currentUser != null)
+        {
+            var result = await UserService.UpdatePost(post, currentUser);
+
+            if (result == UpdatePostResponse.Success)
+            {
+                _snackBar.Add("Liked post");
+            }
+            else if(result == UpdatePostResponse.SuccessfullyRemoved)
+            {
+                _snackBar.Add("Removed like");
+            }
+        }
+        else
+        {
+            _snackBar.Add("Error");
+        }
+        
+        StateHasChanged();
+    }
+    
+    private async Task<bool> Liked(Post post)
+    {
+        var result = false;
+        if (currentUser != null)
+        {
+            result =  await UserService.IsLiked(post, currentUser);
+        }
+        return result;
     }
 }
 

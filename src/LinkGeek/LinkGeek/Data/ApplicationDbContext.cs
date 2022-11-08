@@ -59,6 +59,14 @@ namespace LinkGeek.Data
                 {
                     x.ToTable("FriendRequests");
                 });
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.Posts)
+                .WithOne(p => p.ApplicationUser)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Post>()
+                .HasMany(p => p.Likes)
+                .WithMany(u => u.LikedPosts);
         }
     }
 }

@@ -15,7 +15,10 @@
                 </div>
                 @if (ChatUsers.Count == 0)
                 {
-                    <span class="no-friends">Add some friends to chat with them!</span>
+                    <span class="no-friends">Results are loading or add some friends to chat with them!</span>
+                    <div class="game-spinner">
+                        <Chase/>
+                    </div>
                 }
                 else
                 {
