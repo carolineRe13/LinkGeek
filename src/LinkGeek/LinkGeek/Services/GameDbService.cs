@@ -77,7 +77,7 @@ public class GameDbService
                 { Id = $"{g.id}", Name = g.name, Logo = g.cover != null ? new Uri($"https:{g.cover.url}") : null })
             .ToList();
         
-        // this.StoreGameSearchCache(query, games);
+        this.StoreGameSearchCache(query, games);
         
         return games;
     }
@@ -102,29 +102,39 @@ public class GameDbService
         return null;
     }
 
-    private void StoreGameSearchCache(string query, ICollection<Game> searchResult)
+    private async Task StoreGameSearchCache(string query, ICollection<Game> searchResult)
     {
         if (searchResult.Count == 0)
         {
             return;
         }
 
-        using (var context = contextProvider.GetContext())
+        await using var context = contextProvider.GetContext();
+        var gamesDict = GetOrCreateGames(context, searchResult)
+            .ToDictionary(g => g.Id, g => g);
+
+        var gameSearchCache = searchResult.Select((g, i) => new GameSearchCacheItem()
         {
-            var gamesDict = GetOrCreateGames(context, searchResult)
-                .ToDictionary(g => g.Id, g => g);
-            
-            var gameSearchCache = searchResult.Select((g, i) => new GameSearchCacheItem()
+            Query = query,
+            Rank = i,
+            Game = gamesDict[g.Id],
+            LastUpdated = DateTimeOffset.UtcNow
+        }).ToList();
+
+        foreach (var cacheItem in gameSearchCache)
+        {
+            var existingCacheItem = await context.GameSearchCache.FindAsync(cacheItem.Query, cacheItem.Rank);
+            if (existingCacheItem == null)
             {
-                Query = query,
-                Rank = i,
-                Game = gamesDict[g.Id],
-                LastUpdated = DateTimeOffset.UtcNow
-            }).ToList();
-            
-            context.GameSearchCache.UpdateRange(gameSearchCache);
-            context.SaveChanges();
+                context.GameSearchCache.Add(cacheItem);
+            }
+            else
+            {
+                context.Entry(existingCacheItem).CurrentValues.SetValues(cacheItem);
+            }
         }
+
+        await context.SaveChangesAsync();
     }
 
     private IEnumerable<Game> GetOrCreateGames(ApplicationDbContext context, ICollection<Game> searchResult)
