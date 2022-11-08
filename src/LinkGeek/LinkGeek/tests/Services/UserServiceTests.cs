@@ -285,7 +285,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.RemoveGameFromUser(currentUser.Id, "2");
+            var result= await _userService.HasGameInLibrary(currentUser.Id, "2");
             
             // Assert
             Assert.AreEqual(true, result);
