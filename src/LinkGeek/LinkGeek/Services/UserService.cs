@@ -240,10 +240,11 @@ public class UserService
             
         var existingPost = await context.Posts
             .Include(p => p.Likes)
-            .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
-            .Where(p => p.Id == post.Id).FirstOrDefaultAsync();
+            .Include(p => p.Comments)
+            .Where(p => p.Id == post.Id)
+            .FirstOrDefaultAsync();
         if (existingPost == null) return default;
-        
+
         var comment = new Comment
         {
             ApplicationUser = contextUser,
@@ -252,7 +253,7 @@ public class UserService
         context.Comments.Add(comment);
         existingPost?.Comments.Add(comment);
         await context.SaveChangesAsync();
-
+        
         return existingPost;
     }
     

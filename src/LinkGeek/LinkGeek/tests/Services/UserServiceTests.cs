@@ -366,7 +366,6 @@ namespace LinkGeek.tests.Services
             var result= await _userService.GetUsersGamesAsync(currentUser.Id);
             
             // Assert
-            // Not a good way, missing equals implementation
             Assert.AreEqual(games.ToList()[0], result.ToList()[0]);
         }
         
@@ -387,7 +386,6 @@ namespace LinkGeek.tests.Services
             var result= await _userService.GetUserFromUserNameAsync(currentUser.UserName);
             
             // Assert
-            // Not a good way, missing equals implementation
             Assert.AreEqual(currentUser, result);
         }
         
@@ -401,8 +399,11 @@ namespace LinkGeek.tests.Services
             var currentUser = new ApplicationUser();
             currentUser.UserName = "Smaraktara";
 
-            var post = new Post();
-            // var postWithComment = 
+            var post = new Post
+            {
+                ApplicationUser = currentUser,
+                Content = "test post"
+            };
             
             context.AddRange(currentUser);
             context.AddRange(post);
@@ -412,8 +413,10 @@ namespace LinkGeek.tests.Services
             var result= await _userService.PostComment(currentUser, post, "hey");
             
             // Assert
-            // Not a good way, missing equals implementation
-            Assert.AreEqual(post, result);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(post.Content, result.Content);
+            Assert.AreEqual(post.ApplicationUser.Comments.Count + 1, result.ApplicationUser.Comments.Count);
+            Assert.AreEqual(post.Comments.Count + 1, result.Comments.Count);
         }
     }
 }

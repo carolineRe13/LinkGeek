@@ -3,6 +3,7 @@ using LinkGeek.Models;
 using LinkGeek.Shared;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LinkGeek.Data
 {
@@ -68,6 +69,9 @@ namespace LinkGeek.Data
             builder.Entity<Post>()
                 .HasMany(p => p.Likes)
                 .WithMany(u => u.LikedPosts);
+            builder.Entity<Post>()
+                .Property(p => p.LookingFor)
+                .HasConversion(new EnumToStringConverter<PlayerRoles>());
 
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.Comments)

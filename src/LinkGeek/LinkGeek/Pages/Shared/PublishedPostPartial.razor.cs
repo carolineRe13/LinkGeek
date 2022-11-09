@@ -18,7 +18,8 @@ public partial class PublishedPostPartial
     [Inject] private NavigationManager _navigationManager { get; set; }
     [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     [Parameter] public Post? post { get; set; }
-    
+    private List<Comment>? orderedComments;
+
     private bool isLiked = false;
 
     protected override async Task OnParametersSetAsync()
@@ -26,6 +27,7 @@ public partial class PublishedPostPartial
         if (post != null && currentUser != null)
         {
             isLiked = await UserService.IsLiked(post, currentUser);
+            this.orderedComments = post.Comments.OrderBy(p => p.CreatedAt).ToList();
         }
     }
 
@@ -37,6 +39,7 @@ public partial class PublishedPostPartial
     public void RefreshPost(Post updatedPost)
     {
         this.post = updatedPost;
+        this.orderedComments = post.Comments.OrderBy(p => p.CreatedAt).ToList();
         this.StateHasChanged();
     }
     
