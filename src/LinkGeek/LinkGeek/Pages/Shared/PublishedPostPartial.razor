@@ -6,21 +6,31 @@
                 <CardHeaderAvatar>
                     @if(@post.ApplicationUser.ProfilePictureContentType != null)
                     {
-                        <MudAvatar Image="@GetImageSrc(@post.ApplicationUser)" Size="Size.Large"/>
+                        <MudLink Href="@($"profile/{post.ApplicationUser.UserName}")">
+                            <MudAvatar Image="@GetImageSrc(@post.ApplicationUser)" Size="Size.Large"/>
+                        </MudLink>
                     }
                     else
                     {
-                        <MudAvatar Color="Color.Primary" Size="Size.Large">@post.ApplicationUser.UserName[..1]</MudAvatar>
+                    <MudLink Href="@($"profile/{post.ApplicationUser.UserName}")"></MudLink>
+                            <MudAvatar Color="Color.Primary" Size="Size.Large">@post.ApplicationUser.UserName[..1]</MudAvatar>
+                    <MudLink/>
                     }
                 </CardHeaderAvatar>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.body1">@post.Game?.Name</MudText>
-                    <MudText Typo="Typo.body2">@post.ApplicationUser?.UserName at @post.CreatedAt</MudText>
+                    <MudLink Href="@($"game/{post.Game?.Id}")">
+                        <MudText Typo="Typo.body1">@post.Game?.Name</MudText>
+                    </MudLink>
+                    <MudLink Href="@($"profile/{post.ApplicationUser.UserName}")">
+                        <MudText Typo="Typo.body2">@post.ApplicationUser?.UserName at @post.CreatedAt"</MudText>
+                    </MudLink>
                 </CardHeaderContent>
             </MudCardHeader>
             @if (@post.Game != null)
             {
-                <MudCardMedia Image="@post.Game.Logo?.AbsoluteUri"/>
+                <MudLink Href="@($"game/{post.Game?.Id}")">
+                    <MudCardMedia Image="@post.Game.Logo?.AbsoluteUri"/>
+                </MudLink>
             }
             <MudCardContent>
                 <MudText Typo="Typo.body2">@post.Content</MudText>
@@ -62,15 +72,21 @@
                             <CardHeaderAvatar>
                                 @if(@comment.ApplicationUser.ProfilePictureContentType != null)
                                 {
-                                    <MudAvatar Image="@GetImageSrc(@comment.ApplicationUser)" Size="Size.Small"/>
+                                    <MudLink Href="@($"profile/{post.ApplicationUser.UserName}")">
+                                        <MudAvatar Image="@GetImageSrc(@comment.ApplicationUser)" Size="Size.Small"/>
+                                    </MudLink>
                                 }
                                 else
                                 {
-                                    <MudAvatar Color="Color.Primary" Size="Size.Small">@comment.ApplicationUser.UserName[..1]</MudAvatar>
+                                    <MudLink Href="@($"profile/{post.ApplicationUser.UserName}")">
+                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@comment.ApplicationUser.UserName[..1]</MudAvatar>
+                                    </MudLink>
                                 }
                             </CardHeaderAvatar>
                             <CardHeaderContent>
-                                <MudText Typo="Typo.body1">@comment.ApplicationUser?.UserName at @comment.CreatedAt</MudText>
+                                <MudLink Href="@($"profile/{post.ApplicationUser.UserName}")">
+                                    <MudText Typo="Typo.body1">@comment.ApplicationUser?.UserName at @comment.CreatedAt</MudText>
+                                </MudLink>
                             </CardHeaderContent>
                         </MudCardHeader>
                         <MudCardContent>

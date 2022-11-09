@@ -390,5 +390,30 @@ namespace LinkGeek.tests.Services
             // Not a good way, missing equals implementation
             Assert.AreEqual(currentUser, result);
         }
+        
+        [TestMethod]
+        public async Task PostComment()
+        {
+            // Arrange
+            // Create the schema and seed some data
+            using var context = _contextProvider.GetContext();
+            
+            var currentUser = new ApplicationUser();
+            currentUser.UserName = "Smaraktara";
+
+            var post = new Post();
+            // var postWithComment = 
+            
+            context.AddRange(currentUser);
+            context.AddRange(post);
+            await context.SaveChangesAsync();
+            
+            // Act
+            var result= await _userService.PostComment(currentUser, post, "hey");
+            
+            // Assert
+            // Not a good way, missing equals implementation
+            Assert.AreEqual(post, result);
+        }
     }
 }
