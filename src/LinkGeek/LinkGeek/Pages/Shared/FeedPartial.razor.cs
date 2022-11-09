@@ -18,7 +18,7 @@ public partial class FeedPartial
     
     private List<Post> posts = new();
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         if (currentUser != null && UserService != null)
         {

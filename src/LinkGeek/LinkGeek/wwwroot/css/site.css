@@ -78,3 +78,10 @@ body {
   margin-top: -9rem;
   margin-bottom: -12rem;
 }
+
+.chat-chase {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+}

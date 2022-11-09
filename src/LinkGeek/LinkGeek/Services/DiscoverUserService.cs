@@ -22,9 +22,9 @@ public class DiscoverUserService
         if (completeUser == null) return new List<ApplicationUser>();
 
         var friendIds = completeUser.Friends.Select(f => f.Id).ToList();
-        return context.Users
+        return await context.Users
             .Where(u => u.Id != completeUser.Id)
             .Where(u => friendIds.All(id => id != u.Id))
-            .Take(5).ToList();
+            .Take(5).ToListAsync();
     }
 }

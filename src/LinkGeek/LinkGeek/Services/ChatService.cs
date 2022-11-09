@@ -59,7 +59,7 @@ public class ChatService
 
     public async Task<int> SaveMessageAsync(ChatMessage message, string userId)
     {
-        using (var context = contextProvider.GetContext())
+        await using (var context = contextProvider.GetContext())
         {
             message.FromUserId = userId;
             message.CreatedDate = DateTime.Now;

@@ -36,7 +36,7 @@ public partial class Chat
     UserService UserService { get; set; }
     
     public string CurrentMessage { get; set; }
-    public List<ApplicationUser> ChatUsers = new();
+    public List<ApplicationUser>? ChatUsers;
     private List<ChatMessage> _messages = new();
     private string selectedUserName = "";
 

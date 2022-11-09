@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using LinkGeek.Data;
 using LinkGeek.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkGeek.Services;
 
@@ -66,7 +67,7 @@ public class GameDbService
 
     private async Task<ICollection<Game>> CallGameEndpoint(string query)
     {
-        var cache = this.GetGameSearchCache(query);
+        var cache = await this.GetGameSearchCache(query);
         if (cache != null)
         {
             return cache;
@@ -82,21 +83,19 @@ public class GameDbService
         return games;
     }
 
-    private ICollection<Game>? GetGameSearchCache(string query)
+    private async Task<ICollection<Game>?> GetGameSearchCache(string query)
     {
-        using (var context = contextProvider.GetContext())
-        {
-            var games = context.GameSearchCache
-                .Where(c => c.Query == query)
-                .Where(c => c.LastUpdated > DateTimeOffset.UtcNow.AddHours(-12)) // TODO make configurable
-                .OrderBy(c => c.Rank)
-                .Select(c => c.Game)
-                .ToList();
+        await using var context = contextProvider.GetContext();
+        var games = await context.GameSearchCache
+            .Where(c => c.Query == query)
+            .Where(c => c.LastUpdated > DateTimeOffset.UtcNow.AddHours(-12)) // TODO make configurable
+            .OrderBy(c => c.Rank)
+            .Select(c => c.Game)
+            .ToListAsync();
 
-            if (games.Count > 0)
-            {
-                return games;
-            }
+        if (games.Count > 0)
+        {
+            return games;
         }
 
         return null;

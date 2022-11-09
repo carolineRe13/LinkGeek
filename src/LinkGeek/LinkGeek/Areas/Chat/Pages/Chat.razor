@@ -1,6 +1,7 @@
 ﻿@page "/chat"
 @page "/chat/{ContactId}"
 @using MudBlazor
+@using BlazorPro.Spinkit
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
@@ -13,12 +14,15 @@
                         <input type="text" placeholder="Search...">
                     </div>
                 </div>
-                @if (ChatUsers.Count == 0)
+                @if (ChatUsers == null)
                 {
-                    <span class="no-friends">Results are loading or add some friends to chat with them!</span>
-                    <div class="game-spinner">
-                        <Chase/>
+                    <div>
+                        <Chase class="chat-chase"/>
                     </div>
+                }
+                else if(ChatUsers.Count == 0)
+                {
+                    <span class="no-friends">Add some friends to chat with them!</span>
                 }
                 else
                 {
