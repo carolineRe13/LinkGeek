@@ -50,7 +50,7 @@
                     <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Default" OnClick="() => Like(post)"> </MudIconButton>
                 }
                 <div class="like">@post.Likes.Count</div>
-                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default"/>
+                <MudIconButton Icon="@Icons.Material.Filled.Share" OnClick="CopyShareLinkToClipboard" Color="Color.Default"/>
             </MudCardActions>
             <hr/>
             <CommentPartial Post="@post" ParentRefreshFunction="this.RefreshPost"/>

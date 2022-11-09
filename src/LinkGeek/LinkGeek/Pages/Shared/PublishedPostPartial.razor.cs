@@ -3,6 +3,7 @@ using LinkGeek.Models;
 using LinkGeek.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace LinkGeek.Pages.Shared;
@@ -13,6 +14,8 @@ public partial class PublishedPostPartial
 {
     [Inject] public UserService UserService { get; set; }
     [Inject] private ISnackbar _snackBar { get; set; }
+    [Inject] private IJSRuntime _jsRuntime { get; set; }
+    [Inject] private NavigationManager _navigationManager { get; set; }
     [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     [Parameter] public Post? post { get; set; }
     
@@ -59,7 +62,6 @@ public partial class PublishedPostPartial
             {
                 _snackBar.Add("An error occured while liking post", Severity.Error);
             }
-
         }
         else
         {
@@ -67,5 +69,18 @@ public partial class PublishedPostPartial
         }
         
         StateHasChanged();
+    }
+
+    private async Task CopyShareLinkToClipboard()
+    {
+        var success = await _jsRuntime.InvokeAsync<bool>("clipboardCopy.copyText", _navigationManager.ToAbsoluteUri("/post/" + post?.Id));
+        if (success)
+        {
+            this._snackBar.Add("Copied to clipboard", Severity.Success);
+        }
+        else
+        {
+            this._snackBar.Add("Could not copy to clipboard", Severity.Error);
+        }
     }
 }
