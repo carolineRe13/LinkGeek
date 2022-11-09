@@ -27,12 +27,14 @@ public enum CreatePostResponse
     Success,
 }
 
-public enum UpdatePostResponse
+public enum UpdatePostResponseValue
 {
     Success,
     Failure,
     SuccessfullyRemoved
 }
+
+public record UpdatePostResponse(UpdatePostResponseValue UpdatePostResponseValue, Post? UpdatedPost);
 
 public class UserService
 {
@@ -236,8 +238,12 @@ public class UserService
         var contextUser = await GetUserFromUserNameAsync(context, user.UserName);
         if (contextUser == null) return default;
             
-        var existingPost = await context.Posts.Include(p => p.Comments.OrderBy(c => c.CreatedAt)).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
+        var existingPost = await context.Posts
+            .Include(p => p.Likes)
+            .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
+            .Where(p => p.Id == post.Id).FirstOrDefaultAsync();
         if (existingPost == null) return default;
+        
         var comment = new Comment
         {
             ApplicationUser = contextUser,
@@ -255,19 +261,23 @@ public class UserService
         await using (var context = contextProvider.GetContext())
         {
             var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
-            if (contextUser == null) return UpdatePostResponse.Failure;
+            if (contextUser == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
 
-            var contextPost = await context.Posts.Include(p => p.Likes).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
-            if (contextPost == null) return UpdatePostResponse.Failure;
+            var contextPost = await context.Posts
+                .Include(p => p.Likes)
+                .Where(p => p.Id == post.Id)
+                .FirstOrDefaultAsync();
+            if (contextPost == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
+            
             if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
             {
                 contextPost.Likes.Remove(contextUser);
                 await context.SaveChangesAsync();
-                return UpdatePostResponse.SuccessfullyRemoved;
+                return new UpdatePostResponse(UpdatePostResponseValue.SuccessfullyRemoved, contextPost);
             }
             contextPost.Likes.Add(contextUser);
             await context.SaveChangesAsync();
-            return UpdatePostResponse.Success;
+            return new UpdatePostResponse(UpdatePostResponseValue.Success, contextPost);
         }
     }
     
