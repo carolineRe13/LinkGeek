@@ -179,26 +179,10 @@ public class UserService
         }
     }
 
-    public ApplicationUser? GetUserFromUserName(string userName)
-    {
-        using var context = contextProvider.GetContext();
-        return GetUserFromUserName(context, userName);
-    }
-
     public async Task<ApplicationUser?> GetUserFromUserNameAsync(string userName)
     {
         await using var context = contextProvider.GetContext();
         return await GetUserFromUserNameAsync(context, userName);
-    }
-
-    public ApplicationUser? GetUserFromUserName(ApplicationDbContext context, string userName)
-    {
-        return context.Users
-            .Include(u => u.Friends)
-            .Include(u => u.SentFriendRequests)
-            .Include(u => u.ReceivedFriendRequests)
-            .Include(u => u.Games)
-            .FirstOrDefault(u => u.UserName == userName);
     }
 
     public async Task<ApplicationUser?> GetUserFromUserNameAsync(ApplicationDbContext context, string userName)
@@ -211,11 +195,11 @@ public class UserService
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
-    public async Task<CreatePostResponse?> CreatePost(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
+    public async Task<CreatePostResponse?> CreatePostAsync(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
     {
         await using (var context = contextProvider.GetContext())
         {
-            var contextUser = GetUserFromUserName(context, user.UserName);
+            var contextUser = await GetUserFromUserNameAsync(context, user.UserName);
             var contextGame = game != null ? await context.Game.FindAsync(game.Id) : null;
             var post = new Post
             {
@@ -300,11 +284,11 @@ public class UserService
         }
     }
     
-    public List<Post> GetUserFeed(ApplicationUser user)
+    public async Task<List<Post>> GetUserFeedAsync(ApplicationUser user)
     {
-        using var context = contextProvider.GetContext();
+        await using var context = contextProvider.GetContext();
         
-        var feed = context.Posts
+        var feed = await context.Posts
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Include(p => p.Likes)
@@ -313,7 +297,7 @@ public class UserService
                            || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
                            || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
             .OrderByDescending(p => p.CreatedAt)
-            .ToList();
+            .ToListAsync();
 
         return feed;
     }

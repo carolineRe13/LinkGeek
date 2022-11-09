@@ -48,7 +48,7 @@ public partial class ProfilePage
             }
             else
             {
-                this._displayedUser = _userService.GetUserFromUserName(UserName ?? "");
+                this._displayedUser = await _userService.GetUserFromUserNameAsync(UserName ?? "");
             }
             
             this._loading = false;

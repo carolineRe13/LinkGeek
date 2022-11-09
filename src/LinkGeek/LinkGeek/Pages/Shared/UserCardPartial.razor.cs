@@ -99,7 +99,7 @@ public partial class UserCardPartial
         {
             var result = await method(CurrentUser.Id, DisplayedUser.Id);
             Snackbar.Add(this._friendsResponses[result].Text, this._friendsResponses[result].Severity);
-            await this.ReloadUsers();
+            await this.ReloadUsersAsync();
             StateHasChanged();
         }
         else
@@ -110,14 +110,15 @@ public partial class UserCardPartial
 
     protected override async Task OnParametersSetAsync()
     {
-        await this.ReloadUsers();
+        await this.ReloadUsersAsync();
         this.StateHasChanged();
     }
 
-    private async Task ReloadUsers()
+    private async Task ReloadUsersAsync()
     {
-        this.CurrentUser = this.userService.GetUserFromUserName(CurrentUser.UserName) ?? this.CurrentUser;
-        this.DisplayedUser = this.userService.GetUserFromUserName(DisplayedUser.UserName) ?? this.DisplayedUser;
+        if (CurrentUser == null) return;
+        this.CurrentUser = await this.userService.GetUserFromUserNameAsync(CurrentUser.UserName) ?? this.CurrentUser;
+        this.DisplayedUser = await this.userService.GetUserFromUserNameAsync(DisplayedUser.UserName) ?? this.DisplayedUser;
 
         this.DisplayedUser.Games = await GetGames();
     }

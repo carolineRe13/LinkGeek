@@ -40,7 +40,7 @@ public partial class PostPartial
             playingAt = new DateTimeOffset(this.postFormModel.PlayingAtDate.Value, this.postFormModel.TimeZone.BaseUtcOffset);
             playingAt = playingAt.Value.Add(this.postFormModel.PlayingAtTime.Value);
         }
-        var response = await this.UserService.CreatePost(currentUser, postFormModel.Content, postFormModel.Game, postFormModel.LookingFor, playingAt);
+        var response = await this.UserService.CreatePostAsync(currentUser, postFormModel.Content, postFormModel.Game, postFormModel.LookingFor, playingAt);
 
         if (response == CreatePostResponse.Success)
         {

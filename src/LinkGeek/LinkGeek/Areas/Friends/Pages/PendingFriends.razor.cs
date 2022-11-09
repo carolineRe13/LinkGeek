@@ -25,7 +25,7 @@ public partial class PendingFriends
         if (CurrentUser != null)
         {
             // best case we update the user, worst case it is still the same one. We use this to update the new friends
-            CurrentUser = UserService.GetUserFromUserName(CurrentUser.UserName) ?? CurrentUser;
+            CurrentUser = await UserService.GetUserFromUserNameAsync(CurrentUser.UserName) ?? CurrentUser;
             pendingFriends = CurrentUser?.ReceivedFriendRequests ?? new List<ApplicationUser>();
             StateHasChanged();
         }

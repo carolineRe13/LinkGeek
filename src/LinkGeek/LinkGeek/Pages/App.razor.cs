@@ -46,7 +46,7 @@ public partial class App
         if (user.Identity is { IsAuthenticated: true })
         {
             var incompleteUser = await UserManager.GetUserAsync(user);
-            currentUser = UserService.GetUserFromUserName(incompleteUser.UserName) ?? incompleteUser;
+            currentUser = await UserService.GetUserFromUserNameAsync(incompleteUser.UserName) ?? incompleteUser;
             
             hubConnection = new HubConnectionBuilder()
                 .WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub"), options =>
@@ -96,7 +96,7 @@ public partial class App
         if (user.Identity is { IsAuthenticated: true })
         {
             var incompleteUser = await UserManager.GetUserAsync(user);
-            currentUser = UserService.GetUserFromUserName(incompleteUser.UserName) ?? incompleteUser;
+            currentUser = await UserService.GetUserFromUserNameAsync(incompleteUser.UserName) ?? incompleteUser;
             StateHasChanged();
         }
     }

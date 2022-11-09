@@ -121,7 +121,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.CreatePost(currentUser, "hey", game, PlayerRoles.None, null);
+            var result= await _userService.CreatePostAsync(currentUser, "hey", game, PlayerRoles.None, null);
             
             // Assert
             Assert.AreEqual(CreatePostResponse.Success, result);
@@ -140,7 +140,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.CreatePost(currentUser, "hey", null, PlayerRoles.None, null);
+            var result= await _userService.CreatePostAsync(currentUser, "hey", null, PlayerRoles.None, null);
             
             // Assert
             Assert.AreEqual(CreatePostResponse.Success, result);
@@ -160,7 +160,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.CreatePost(currentUser, "hey", game, PlayerRoles.None, null);
+            var result= await _userService.CreatePostAsync(currentUser, "hey", game, PlayerRoles.None, null);
             
             // Assert
             Assert.AreEqual(CreatePostResponse.Success, result);

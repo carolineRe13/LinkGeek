@@ -12,7 +12,7 @@ namespace LinkGeek.Pages.Shared;
 public partial class FeedPartial
 {
     [Inject] 
-    public UserService UserService { get; set; }
+    public UserService? UserService { get; set; }
     
     [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     
@@ -22,7 +22,7 @@ public partial class FeedPartial
     {
         if (currentUser != null && UserService != null)
         {
-            posts = this.UserService.GetUserFeed(currentUser);
+            posts = await this.UserService.GetUserFeedAsync(currentUser);
         }
     }
 }
