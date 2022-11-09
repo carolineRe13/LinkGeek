@@ -14,7 +14,7 @@ namespace LinkGeek.Data.Migrations
                 type: "int",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
+                oldType: "nvarchar(2048)",
                 oldNullable: true);
         }
 
@@ -23,7 +23,7 @@ namespace LinkGeek.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "LookingFor",
                 table: "Posts",
-                type: "nvarchar(max)",
+                type: "nvarchar(2048)",
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "int",
