@@ -306,6 +306,7 @@ public class UserService
         var feed = context.Posts
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
+            .Include(p => p.Likes)
             .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
             .Where(post => post.ApplicationUser.Id == user.Id
                            || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
