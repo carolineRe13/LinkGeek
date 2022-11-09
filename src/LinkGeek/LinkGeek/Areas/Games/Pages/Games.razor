@@ -1,5 +1,6 @@
 ﻿@page "/games"
 @using BlazorPro.Spinkit
+@using MudBlazor
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
@@ -21,10 +22,14 @@
             }
             else
             {
-                @foreach (var game in results)
-                {
-                    <GameCard Game="@game"/>
-                }
+                <MudGrid>
+                    @foreach (var game in results)
+                    {
+                        <MudItem xs="6" md="3">
+                            <GameCard Game="@game"/>
+                        </MudItem>
+                    }
+                </MudGrid>
             }
         </div>
     </div>

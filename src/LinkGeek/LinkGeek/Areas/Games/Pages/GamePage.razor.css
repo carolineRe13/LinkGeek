@@ -45,7 +45,7 @@
 }
 
 .player-cards-container {
-    width: 18rem;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -56,8 +56,7 @@
     border: solid 1px rgb(81, 81, 81);
     border-radius: 4px;
     
-    min-height: 18rem;
-    max-height: 36rem;
+    min-height: 25rem;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
@@ -86,3 +85,4 @@
     height: 5.5rem;
     background: none;
 }
+

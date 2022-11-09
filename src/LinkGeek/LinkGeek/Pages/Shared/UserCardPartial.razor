@@ -4,19 +4,21 @@
 <div class="wrapper">
     <div class="profilePictureBackground">
         <div class="profilePicture">
-            @if (@DisplayedUser?.ProfilePictureContentType == null)
-            {
-                <img src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
-            }
-            else
-            {
-                <img src="@GetImageSrc()" alt="Profile picture">
-            }
+            <a href="/profile/@DisplayedUser?.UserName">
+                @if (@DisplayedUser?.ProfilePictureContentType == null)
+                {
+                    <img src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture"/>
+                }
+                else
+                {
+                    <img src="@GetImageSrc()" alt="Profile picture"/>
+                }
+            </a>
         </div>
     </div>
 
     <div class="profileSpecifications">
-        <h1> @DisplayedUser?.UserName </h1>
+        <h1> <a href="/profile/@DisplayedUser?.UserName">@DisplayedUser?.UserName</a> </h1>
         <p2>
             @if (@IsCurrentUser)
             {

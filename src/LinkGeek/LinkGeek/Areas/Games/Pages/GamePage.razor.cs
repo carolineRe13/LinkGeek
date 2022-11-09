@@ -21,10 +21,13 @@ public partial class GamePage
     private Game Game { get; set; } = new();
     private ICollection<ApplicationUser> Players { get; set; } = new List<ApplicationUser>();
 
+    private List<Models.Post> gameFeed;
+
     protected override async Task OnInitializedAsync()
     {
         Game = await GameService.GetGameAsync(GameId);
         Players = await GameService.GetGamePlayersAsync(GameId);
+        gameFeed = await GameService.GetGameFeedAsync(GameId);
     }
 
     /// <summary>

@@ -1,6 +1,9 @@
 ﻿@using MudBlazor
 
-@foreach (var post in posts)
+@if (posts != null)
 {
-    <PublishedPostPartial post="@post"/>
+    @foreach (var post in posts)
+    {
+        <PublishedPostPartial post="@post"/>
+    }    
 }

@@ -1,24 +1,33 @@
 @page "/game/{GameId}"
+@using LinkGeek.Pages.Shared
+@using MudBlazor
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
-    <GameCard Game="@Game" DisplayGamePageButton="false"/>
-    <div class="player-cards-container">
-        @foreach (var player in Players)
-        {
-            <div class="card player-card">
-                @if (@player.ProfilePictureData != null && @player.ProfilePictureContentType != null)
+    <MudGrid>
+        <MudItem xs="4">
+            <GameCard Game="@Game" DisplayGamePageButton="false"/>
+            <div class="player-cards-container">
+                @foreach (var player in Players)
                 {
-                    <img class="card-img-top" src="@GetImageSrc(player)" alt="Card image cap">
+                    <div class="card player-card">
+                        @if (@player.ProfilePictureData != null && @player.ProfilePictureContentType != null)
+                        {
+                            <img class="card-img-top" src="@GetImageSrc(player)" alt="Card image cap">
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="/Content/Images/DefaultProfilePic.jpg" alt="Card image cap">
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title">@player.UserName</h5>
+                        </div>
+                    </div>
                 }
-                else
-                {
-                    <img class="card-img-top" src="/Content/Images/DefaultProfilePic.jpg" alt="Card image cap">
-                }
-                <div class="card-body">
-                    <h5 class="card-title">@player.UserName</h5>
-                </div>
             </div>
-        }
-    </div>
+        </MudItem>
+        <MudItem xs="8">
+            <FeedPartial posts="@gameFeed"/>
+        </MudItem>
+    </MudGrid>
 }

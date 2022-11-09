@@ -7,6 +7,7 @@
 .card {
     margin: 10px;
     background-image: linear-gradient(120deg, #343A4F, #0F1620);
+    width: 100%;
 }
 
 .card .placeholder {
@@ -57,4 +58,8 @@
 
 .card .btn-remove {
     border-radius: 0;
+}
+
+.card-body {
+    min-height: 5.2rem;
 }
