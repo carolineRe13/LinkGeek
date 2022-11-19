@@ -191,8 +191,7 @@ public class UserService
         {
             a = a.Include(u => u.LikedPosts);
         }
-        return await context.Users
-            .FirstOrDefaultAsync(u => u.UserName == userName);
+        return await a.FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
     public async Task<CreatePostResponse?> CreatePostAsync(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
