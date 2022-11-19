@@ -3,6 +3,7 @@ using LinkGeek.Data;
 using LinkGeek.Models;
 using LinkGeek.Pages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace LinkGeek.Services;
 
@@ -166,13 +167,31 @@ public class UserService
         return await GetUserFromUserNameAsync(context, userName);
     }
 
-    private async Task<ApplicationUser?> GetUserFromUserNameAsync(ApplicationDbContext context, string userName)
+    private async Task<ApplicationUser?> GetUserFromUserNameAsync(
+        ApplicationDbContext context, 
+        string userName, 
+        bool includeFriends = true,
+        bool includeGames = true,
+        bool includeLikedPosts = true)
     {
+        var a = context.Users.AsQueryable();
+        if (includeFriends)
+        {
+            a = a.Include(u => u.Friends)
+                .Include(u => u.SentFriendRequests)
+                .Include(u => u.ReceivedFriendRequests);
+        }
+
+        if (includeGames)
+        {
+            a = a.Include(u => u.Games);
+        }
+
+        if (includeLikedPosts)
+        {
+            a = a.Include(u => u.LikedPosts);
+        }
         return await context.Users
-            .Include(u => u.Friends)
-            .Include(u => u.SentFriendRequests)
-            .Include(u => u.ReceivedFriendRequests)
-            .Include(u => u.Games)
             .FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
@@ -223,21 +242,21 @@ public class UserService
     public async Task<UpdatePostResponse> UpdatePostAsync(Post post, ApplicationUser currentUser)
     {
         await using var context = _contextProvider.GetContext();
-        var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
-        if (contextUser == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
-
         var contextPost = await context.Posts
             .Include(p => p.Likes)
             .Where(p => p.Id == post.Id)
             .FirstOrDefaultAsync();
         if (contextPost == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
             
-        if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
+        if (contextPost.Likes.Any(u => u.Id == currentUser.Id))
         {
-            contextPost.Likes.Remove(contextUser);
+            contextPost.Likes.Remove(contextPost.Likes.Single(u => u.Id == currentUser.Id));
             await context.SaveChangesAsync();
             return new UpdatePostResponse(UpdatePostResponseValue.SuccessfullyRemoved, contextPost);
         }
+        
+        var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName, includeFriends: false, includeGames: false, includeLikedPosts: false);
+        if (contextUser == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
         contextPost.Likes.Add(contextUser);
         await context.SaveChangesAsync();
         return new UpdatePostResponse(UpdatePostResponseValue.Success, contextPost);
@@ -285,6 +304,7 @@ public class UserService
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
+            .Include(p => p.Likes)
             .Where(post => post.Id.ToString() == postId)
             .FirstOrDefaultAsync();
     }
