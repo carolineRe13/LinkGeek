@@ -195,7 +195,7 @@ public class UserService
         {
             a = a.Include(u => u.LikedPosts);
         }
-        return await a.FirstOrDefaultAsync(u => u.UserName == userName);
+        return await a.AsSplitQuery().FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
     public async Task<CreatePostResponse?> CreatePostAsync(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
@@ -227,6 +227,7 @@ public class UserService
             .Include(p => p.Likes)
             .Include(p => p.Comments)
             .Where(p => p.Id == post.Id)
+            .AsSplitQuery()
             .FirstOrDefaultAsync();
         if (existingPost == null) return default;
 
@@ -272,13 +273,7 @@ public class UserService
         if (contextUser == null) return false;
 
         var contextPost = await context.Posts.Include(p => p.Likes).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
-        if (contextPost == null) return false;
-        if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
-        {
-            return true;
-        }
-
-        return false;
+        return contextPost != null && contextPost.Likes.Any(u => u.Id == contextUser.Id);
     }
     
     public async Task<List<Post>> GetUserFeedAsync(ApplicationUser user)
@@ -295,6 +290,7 @@ public class UserService
                            || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
                            || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
             .OrderByDescending(p => p.CreatedAt)
+            .AsSplitQuery()
             .ToListAsync();
 
         return feed;
@@ -310,6 +306,7 @@ public class UserService
             .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
             .Include(p => p.Likes)
             .Where(post => post.Id.ToString() == postId)
+            .AsSplitQuery()
             .FirstOrDefaultAsync();
     }
 
