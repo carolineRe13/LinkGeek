@@ -289,7 +289,8 @@ public class UserService
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Include(p => p.Likes)
-            .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.ApplicationUser)
             .Where(post => post.ApplicationUser.Id == user.Id
                            || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
                            || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
