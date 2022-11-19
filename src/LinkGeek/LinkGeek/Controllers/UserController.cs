@@ -25,7 +25,7 @@ public class UserController : Controller
         var sessionUser = await _userManager.GetUserAsync(User);
         var userId = sessionUser.Id;
 
-        var result = await _userService.AddGameToUser(userId, gameId);
+        var result = await _userService.AddGameToUserAsync(userId, gameId);
         if (result == null)
         {
             return BadRequest();
@@ -40,7 +40,7 @@ public class UserController : Controller
         var sessionUser = await _userManager.GetUserAsync(User);
         var userId = sessionUser.Id;
 
-        var result = await _userService.UpdateLocation(userId, location);
+        var result = await _userService.UpdateLocationAsync(userId, location);
         if (result == null)
         {
             return BadRequest();
@@ -56,7 +56,7 @@ public class UserController : Controller
         var sessionUser = await _userManager.GetUserAsync(User);
         var userId = sessionUser.Id;
 
-        var result = await _userService.UpdateStatus(userId, status);
+        var result = await _userService.UpdateStatusAsync(userId, status);
         if (result == null)
         {
             return BadRequest();

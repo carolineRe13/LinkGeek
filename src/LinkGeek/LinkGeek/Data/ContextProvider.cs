@@ -1,4 +1,6 @@
-﻿namespace LinkGeek.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace LinkGeek.Data
 {
     public class ContextProvider : IContextProvider
     {

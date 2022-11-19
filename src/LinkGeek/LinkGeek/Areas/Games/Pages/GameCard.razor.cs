@@ -45,7 +45,7 @@ public partial class GameCard
     {
         if (currentUser == null) return;
         
-        var response = await UserService.AddGameToUser(currentUser.Id, id);
+        var response = await UserService.AddGameToUserAsync(currentUser.Id, id);
         
         switch (response)
         {
@@ -70,7 +70,7 @@ public partial class GameCard
     {
         if (currentUser == null) return;
         
-        var response = await UserService.RemoveGameFromUser(currentUser.Id, id);
+        var response = await UserService.RemoveGameFromUserAsync(currentUser.Id, id);
         
         switch (response)
         {
@@ -100,7 +100,7 @@ public partial class GameCard
         }
         else
         {
-            isGameInLibrary = await UserService.HasGameInLibrary(currentUser.Id, Game.Id);
+            isGameInLibrary = await UserService.HasGameInLibraryAsync(currentUser.Id, Game.Id);
         }
         this.StateHasChanged();
     }

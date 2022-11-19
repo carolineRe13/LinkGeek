@@ -31,7 +31,7 @@ public partial class PostPage
         }
         else
         {
-            post = await _userService.GetPost(PostId);
+            post = await _userService.GetPostAsync(PostId);
             if (post == null)
             {
                 NavigationManager.NavigateTo("/404");

@@ -22,7 +22,7 @@ public partial class CommentPartial
     {
         if (currentUser == null) return;
         
-        var updatedPost = await this.UserService.PostComment(currentUser, Post, pendingComment);
+        var updatedPost = await this.UserService.PostCommentAsync(currentUser, Post, pendingComment);
         if (updatedPost == null) return;
         
         this.Post = updatedPost;

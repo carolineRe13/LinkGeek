@@ -52,7 +52,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.AddGameToUser(currentUser.Id, "1");
+            var result= await _userService.AddGameToUserAsync(currentUser.Id, "1");
             
             // Assert
             Assert.AreEqual(AddGameToUserResponse.Success, result);
@@ -70,7 +70,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.AddGameToUser(currentUser.Id, "1");
+            var result= await _userService.AddGameToUserAsync(currentUser.Id, "1");
             
             // Assert
             Assert.AreEqual(AddGameToUserResponse.GameNotFound, result);
@@ -95,7 +95,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.AddGameToUser(currentUser.Id, "2");
+            var result= await _userService.AddGameToUserAsync(currentUser.Id, "2");
             
             // Assert
             Assert.AreEqual(AddGameToUserResponse.GameAlreadyAdded, result);
@@ -185,7 +185,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.RemoveGameFromUser(currentUser.Id, "2");
+            var result= await _userService.RemoveGameFromUserAsync(currentUser.Id, "2");
             
             // Assert
             Assert.AreEqual(RemoveGameFromUserResponse.Success, result);
@@ -210,7 +210,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.RemoveGameFromUser(currentUser.Id, "2");
+            var result= await _userService.RemoveGameFromUserAsync(currentUser.Id, "2");
             
             // Assert
             Assert.AreEqual(RemoveGameFromUserResponse.GameAlreadyRemoved, result);
@@ -235,7 +235,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.RemoveGameFromUser(currentUser.Id, "3");
+            var result= await _userService.RemoveGameFromUserAsync(currentUser.Id, "3");
             
             // Assert
             Assert.AreEqual(RemoveGameFromUserResponse.GameNotFound, result);
@@ -260,7 +260,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.HasGameInLibrary(currentUser.Id, "1");
+            var result= await _userService.HasGameInLibraryAsync(currentUser.Id, "1");
             
             // Assert
             Assert.AreEqual(false, result);
@@ -285,7 +285,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.HasGameInLibrary(currentUser.Id, "2");
+            var result= await _userService.HasGameInLibraryAsync(currentUser.Id, "2");
             
             // Assert
             Assert.AreEqual(true, result);
@@ -303,7 +303,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.UpdateLocation(currentUser.Id, "Oslo");
+            var result= await _userService.UpdateLocationAsync(currentUser.Id, "Oslo");
             
             // Assert
             Assert.AreEqual("Oslo", result);
@@ -321,7 +321,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.UpdateLocation(currentUser.Id, "Munich");
+            var result= await _userService.UpdateLocationAsync(currentUser.Id, "Munich");
             
             // Assert
             Assert.AreNotEqual("Oslo", result);
@@ -339,7 +339,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.UpdateStatus(currentUser.Id, "Hello!");
+            var result= await _userService.UpdateStatusAsync(currentUser.Id, "Hello!");
             
             // Assert
             Assert.AreEqual("Hello!", result);
@@ -410,7 +410,7 @@ namespace LinkGeek.tests.Services
             await context.SaveChangesAsync();
             
             // Act
-            var result= await _userService.PostComment(currentUser, post, "hey");
+            var result= await _userService.PostCommentAsync(currentUser, post, "hey");
             
             // Assert
             Assert.IsNotNull(result);

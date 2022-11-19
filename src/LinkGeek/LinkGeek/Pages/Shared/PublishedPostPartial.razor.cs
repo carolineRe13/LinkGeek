@@ -26,7 +26,7 @@ public partial class PublishedPostPartial
     {
         if (post != null && currentUser != null)
         {
-            isLiked = await UserService.IsLiked(post, currentUser);
+            isLiked = await UserService.IsLikedAsync(post, currentUser);
             this.orderedComments = post.Comments.OrderBy(p => p.CreatedAt).ToList();
         }
     }
@@ -47,7 +47,7 @@ public partial class PublishedPostPartial
     {
         if (currentUser != null)
         {
-            var result = await UserService.UpdatePost(post, currentUser);
+            var result = await UserService.UpdatePostAsync(post, currentUser);
 
             if (result.UpdatePostResponseValue == UpdatePostResponseValue.Success)
             {
