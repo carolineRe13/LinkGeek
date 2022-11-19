@@ -45,7 +45,7 @@ public partial class Chat
     private Dictionary<string, string> LastMessagePerUser = new();
 
     /// <summary>
-    /// Method <c>SumbmitAsync</c> Creates a new ChatMessage and calls the sending function
+    /// Method <c>SubmitAsync</c> Creates a new ChatMessage and calls the sending function
     /// </summary>
     private async Task SubmitAsync()
     {

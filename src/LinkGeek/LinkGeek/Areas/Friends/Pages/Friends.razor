@@ -3,7 +3,6 @@
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
-    <a href="/pendingFriendsRequests" class="btn-primary"> Pending friends requests </a>
     <div class="friends-search">
         <EditForm Model="@search" OnSubmit="@Search">
             <div class="input-group">
@@ -11,6 +10,7 @@
                 <button type="submit" class="btn btn-primary input-group-addon">
                     <i class="bi-search"></i>
                 </button>
+                <a href="/pendingFriendsRequests" class="btn btn-primary input-group-addon">Pending friends requests</a>
             </div>
         </EditForm>
         <div class="game-cards-container">

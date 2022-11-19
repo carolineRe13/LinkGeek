@@ -33,7 +33,7 @@ public partial class Friends
         if (CurrentUser != null)
         {
             // best case we update the user, worst case it is still the same one. We use this to update the new friends
-            CurrentUser = await UserService.GetUserFromUserNameAsync(CurrentUser.UserName) ?? CurrentUser;
+            CurrentUser = await UserService.GetUserFromUserNameAsync(CurrentUser.UserName, includeLikedPosts: false, includeGames: false) ?? CurrentUser;
             friendList = CurrentUser?.Friends ?? new List<ApplicationUser>();
         }
     }
