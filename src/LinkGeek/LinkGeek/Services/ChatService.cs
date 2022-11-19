@@ -14,11 +14,10 @@ public class ChatService
         this.contextProvider = contextProvider;
     }
 
-    public async Task<ApplicationUser> GetUserDetailsAsync(string userId) {
-        using (var context = contextProvider.GetContext())
-        {
-            return await context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
-        }
+    public async Task<ApplicationUser> GetUserDetailsAsync(string userId)
+    {
+        await using var context = contextProvider.GetContext();
+        return await context.Users.Where(user => user.Id == userId).FirstAsync();
     }
     
     // Not in use
@@ -31,30 +30,29 @@ public class ChatService
         }
     }
 
-    public async Task<List<ChatMessage>> GetConversationAsync(string userId, string contactId, int count = int.MaxValue) {
-        using (var context = contextProvider.GetContext())
-        {
-            var messages = await context.ChatMessages
-                .Where(h => (h.FromUserId == contactId && h.ToUserId == userId) || (h.FromUserId == userId && h.ToUserId == contactId))
-                .OrderByDescending(a => a.CreatedDate) // needed to select the count most recent messages
-                .Include(a => a.FromUser)
-                .Include(a => a.ToUser)
-                .Select(x => new ChatMessage
-                {
-                    FromUserId = x.FromUserId,
-                    Message = x.Message,
-                    CreatedDate = x.CreatedDate,
-                    Id = x.Id,
-                    ToUserId = x.ToUserId,
-                    ToUser = x.ToUser,
-                    FromUser = x.FromUser
-                })
-                .Take(count)
-                .OrderBy(a => a.CreatedDate) // needed to re-order the messages in the correct order
-                .ToListAsync();
+    public async Task<List<ChatMessage>> GetConversationAsync(string userId, string contactId, int count = int.MaxValue)
+    {
+        await using var context = contextProvider.GetContext();
+        var messages = await context.ChatMessages
+            .Where(h => (h.FromUserId == contactId && h.ToUserId == userId) || (h.FromUserId == userId && h.ToUserId == contactId))
+            .OrderByDescending(a => a.CreatedDate) // needed to select the count most recent messages
+            .Include(a => a.FromUser)
+            .Include(a => a.ToUser)
+            .Select(x => new ChatMessage
+            {
+                FromUserId = x.FromUserId,
+                Message = x.Message,
+                CreatedDate = x.CreatedDate,
+                Id = x.Id,
+                ToUserId = x.ToUserId,
+                ToUser = x.ToUser,
+                FromUser = x.FromUser
+            })
+            .Take(count)
+            .OrderBy(a => a.CreatedDate) // needed to re-order the messages in the correct order
+            .ToListAsync();
 
-            return messages;
-        }
+        return messages;
     }
 
     public async Task<int> SaveMessageAsync(ChatMessage message, string userId)

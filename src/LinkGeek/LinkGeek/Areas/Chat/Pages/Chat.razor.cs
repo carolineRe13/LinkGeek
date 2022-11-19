@@ -62,8 +62,7 @@ public partial class Chat
             await hubConnection.SendAsync("SendMessageAsync", message, currentUser.UserName);
             
             CurrentMessage = string.Empty;
-            await InvokeAsync(() => StateHasChanged())
-                .ConfigureAwait(true);
+            StateHasChanged();
             await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
         }
     }
@@ -109,8 +108,7 @@ public partial class Chat
                     _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = selectedUserName} });
                 }
                 
-                await InvokeAsync(() => StateHasChanged())
-                    .ConfigureAwait(true);
+                StateHasChanged();
                 await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
             }
         });
@@ -145,11 +143,9 @@ public partial class Chat
         var contact = await _chatManager.GetUserDetailsAsync(contactId);
         ContactId = contact.Id;
         selectedUserName = contact.UserName;
-        await InvokeAsync(StateHasChanged)
-            .ConfigureAwait(true);
+        StateHasChanged();
         _messages = await _chatManager.GetConversationAsync(currentUser.Id, contactId);
-        await InvokeAsync(StateHasChanged)
-            .ConfigureAwait(true);
+        StateHasChanged();
         await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
     }
 
@@ -162,8 +158,7 @@ public partial class Chat
         if (messages.Count > 0)
         {
             LastMessagePerUser[contactId] = messages[0].Message;
-            await InvokeAsync(StateHasChanged)
-                .ConfigureAwait(true);
+            StateHasChanged();
         }
     }
 

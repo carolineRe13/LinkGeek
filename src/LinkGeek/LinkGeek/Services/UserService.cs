@@ -161,10 +161,14 @@ public class UserService
         return user?.Games ?? new List<Game>();
     }
 
-    public async Task<ApplicationUser?> GetUserFromUserNameAsync(string userName)
+    public async Task<ApplicationUser?> GetUserFromUserNameAsync(
+        string userName, 
+        bool includeFriends = true,
+        bool includeGames = true,
+        bool includeLikedPosts = true)
     {
         await using var context = _contextProvider.GetContext();
-        return await GetUserFromUserNameAsync(context, userName);
+        return await GetUserFromUserNameAsync(context, userName, includeFriends, includeGames, includeLikedPosts);
     }
 
     private async Task<ApplicationUser?> GetUserFromUserNameAsync(

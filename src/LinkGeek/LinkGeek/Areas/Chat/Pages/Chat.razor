@@ -117,7 +117,7 @@
                     </div>
                     <div class="footer-chat input-group">
                         <MudTextField Class="form-control" T="string" Placeholder="Type your message here" DisableUnderLine="true"
-                                      @bind-Value="CurrentMessage" Immediate="true" extUpdateSuppression="false"/>
+                                      @bind-Value="CurrentMessage" Immediate="true" extUpdateSuppression="false" OnKeyPress="Enter"/>
                         <MudButton Class="input-group-addon" OnClick="SubmitAsync" StartIcon="@Icons.Material.Outlined.Send" ButtonType="ButtonType.Button">Send</MudButton>
                     </div>
                 </section>
