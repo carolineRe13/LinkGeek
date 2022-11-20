@@ -42,6 +42,10 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+      
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+      
 
   deploy:
     runs-on: ubuntu-latest

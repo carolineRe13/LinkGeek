@@ -1,7 +1,5 @@
 ﻿using LinkGeek.AppIdentity;
-using LinkGeek.Areas.Friends.Pages;
 using LinkGeek.Data;
-using LinkGeek.Models;
 using LinkGeek.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
