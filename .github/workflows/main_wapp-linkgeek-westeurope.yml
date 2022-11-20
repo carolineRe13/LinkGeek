@@ -44,13 +44,15 @@ jobs:
           
   tests_e2e:
     name: Run end-to-end tests
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - name: cd to test project
         run: cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - name: Install playwright browsers
+        run: npm install -D @playwright/test
       - name: Install playwright browsers
         run: npx playwright install --with-deps
       - name: Run tests
