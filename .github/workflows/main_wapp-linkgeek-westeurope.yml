@@ -74,7 +74,7 @@ jobs:
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
           dotnet run &
           sleep 30
-          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
+          cd ../LinkGeekIntegrationTests
           npx playwright test
 
   deploy:
