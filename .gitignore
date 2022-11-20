@@ -92,3 +92,5 @@ artifacts/
 
 
 .config/dotnet-tools.json
+
+/src/LinkGeek/LinkGeekIntegrationTests/node_modules/
