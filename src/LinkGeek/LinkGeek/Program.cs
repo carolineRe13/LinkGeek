@@ -27,7 +27,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // sql server is used as a db of choice
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    if (configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") == "IntegrationTests")
+    {
+        options.UseSqlite("integrationTest.db");
+    }
+    else
+    {
+        options.UseSqlServer(connectionString);
+    }
 });
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();

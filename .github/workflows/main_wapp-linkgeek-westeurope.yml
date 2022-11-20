@@ -56,6 +56,9 @@ jobs:
       - uses: actions/setup-node@v3
 
       - name: Run dotnet
+        env:
+          ASPNETCORE_URLS: "https://localhost:7010;http://localhost:5010"
+          ASPNETCORE_ENVIRONMENT: IntegrationTests
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
           dotnet run &
