@@ -64,7 +64,8 @@ jobs:
           ASPNETCORE_ENVIRONMENT: IntegrationTests
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
-          dotnet run
+          dotnet run &
+          sleep 30
 
       - name: Install dependencies
         run: |
