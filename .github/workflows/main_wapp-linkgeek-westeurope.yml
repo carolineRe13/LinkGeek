@@ -57,7 +57,7 @@ jobs:
 
       - name: Run dotnet
         run: |
-          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
           dotnet run &
 
       - name: Install dependencies
