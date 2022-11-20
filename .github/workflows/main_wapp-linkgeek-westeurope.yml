@@ -49,14 +49,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - name: cd to test project
-        run: cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
       - name: Install dependencies
-        run: npm ci
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
+          npm ci
       - name: Install playwright browsers
-        run: npx playwright install --with-deps
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
+          npx playwright install --with-deps
       - name: Run tests
-        run: npx playwright test
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
+          npx playwright test
 
   deploy:
     runs-on: ubuntu-latest
