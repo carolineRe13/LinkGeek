@@ -24,7 +24,7 @@
             {
                 var location = @DisplayedUser?.Location ?? "Help people find you!";
                 <span id="userLocation">@location</span>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationChange">
+                <button id="locationPencil" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationChange">
                     <i class="bi-pencil"></i>
                 </button>
             }
@@ -40,7 +40,7 @@
             {
                 var status = @DisplayedUser?.Status ?? "Let people know what you're up to!";
                 <span id="userStatus">@status</span>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusChange">
+                <button id="statusPencil" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusChange">
                     <i class="bi-pencil"></i>
                 </button>
             }
