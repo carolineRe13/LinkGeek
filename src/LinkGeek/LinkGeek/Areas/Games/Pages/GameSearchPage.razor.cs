@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using LinkGeek.AppIdentity;
 using LinkGeek.Models;
 using LinkGeek.Services;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace LinkGeek.Areas.Games.Pages;
 
@@ -19,7 +17,7 @@ public class SearchModel
 /// Class <c>Games</c> Overall games tab containing all game pages and a search functionality
 /// </summary>
 [Authorize]
-public partial class Games
+public partial class GameSearchPage
 {
     [Inject] 
     private GameDbService GameDbService { get; set; }

@@ -1,0 +1,7 @@
+.btn.btn-primary {
+    background-image: linear-gradient(176deg, var(--lightblue), var(--darkblue));
+}
+
+.btn:hover {
+    background-image: linear-gradient(176deg, var(--darkblue), var(--darkerblue));
+}

@@ -20,13 +20,20 @@ public partial class PublishedPostPartial
     [Parameter] public Post? post { get; set; }
     private List<Comment>? orderedComments;
 
-    private bool isLiked = false;
+    private bool _isLiked = false;
 
     protected override async Task OnParametersSetAsync()
     {
         if (post != null && currentUser != null)
         {
-            isLiked = await UserService.IsLiked(post, currentUser);
+            if (currentUser.LikedPosts.Count > 1)
+            {
+                _isLiked = currentUser.LikedPosts.Any(p => p.Id == post.Id);
+            }
+            else
+            {
+                _isLiked = await UserService.IsLikedAsync(post, currentUser);
+            }
             this.orderedComments = post.Comments.OrderBy(p => p.CreatedAt).ToList();
         }
     }
@@ -47,17 +54,17 @@ public partial class PublishedPostPartial
     {
         if (currentUser != null)
         {
-            var result = await UserService.UpdatePost(post, currentUser);
+            var result = await UserService.UpdatePostAsync(post, currentUser);
 
             if (result.UpdatePostResponseValue == UpdatePostResponseValue.Success)
             {
-                isLiked = true;
+                _isLiked = true;
                 _snackBar.Add("Liked post", Severity.Info);
                 this.post.Likes = result.UpdatedPost.Likes;
             }
             else if(result.UpdatePostResponseValue == UpdatePostResponseValue.SuccessfullyRemoved)
             {
-                isLiked = false;
+                _isLiked = false;
                 _snackBar.Add("Removed like", Severity.Warning);
                 this.post.Likes = result.UpdatedPost.Likes;
             }

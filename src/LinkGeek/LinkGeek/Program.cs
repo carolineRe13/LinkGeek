@@ -7,7 +7,6 @@ using MudBlazor;
 using MudBlazor.Services;
 
 // Main program that is going to be executed at start
-
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
@@ -26,7 +25,10 @@ services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // sql server is used as a db of choice
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

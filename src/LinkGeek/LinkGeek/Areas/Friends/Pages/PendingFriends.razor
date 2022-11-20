@@ -3,7 +3,7 @@
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
-    <a href="/myFriends" class="btn-primary"> My friends </a>
+    <a href="/myFriends" class="btn btn-primary">My friends</a>
     <div class="game-cards-container">
         @if (pendingFriends.Count > 0)
         {

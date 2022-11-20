@@ -12,6 +12,6 @@ namespace LinkGeek.Pages.Shared;
 public partial class FeedPartial
 {
     [Parameter]
-    public List<Post>? posts { get; set; }
+    public List<Post>? Posts { get; set; }
 }
 

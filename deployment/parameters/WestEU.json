@@ -3,19 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "value": "centralus"
+      "value": "westeurope"
     },
     "databaseOptions": {
       "value": {
-        "databaseName": "LinkGeek-cosmosdb",
-        "databaseNameSQLServer": "LinkGeek-SQLServer"
+        "databaseName": "LinkGeek-cosmosdb-EU",
+        "databaseNameSQLServer": "LinkGeek-SQLServer-EU"
       }
-    },
-    "appServicePlanName": {
-      "value": "appserviceplan-linkgeek"
-    },
-    "webSiteName": {
-      "value": "wapp-linkgeek"
     },
     "sku": {
       "value": "S1"

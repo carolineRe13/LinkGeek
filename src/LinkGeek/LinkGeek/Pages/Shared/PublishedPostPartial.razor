@@ -52,7 +52,7 @@
                 }
             </MudCardContent>
             <MudCardActions>
-                @if (isLiked)
+                @if (_isLiked)
                 {
                     <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" OnClick="() => Like(post)"> </MudIconButton>
                 } else

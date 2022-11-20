@@ -1,6 +1,9 @@
 param databaseOptions object = {}
 
 param location string = resourceGroup().location
+param appServicePlanName string = toLower('AppServicePlan-Linkgeek-${location}')
+param webSiteName string = toLower('wapp-Linkgeek-${location}')
+param sku string = 'F1'
 
 var projectName = 'LinkGeek'
 
@@ -23,6 +26,8 @@ module webApp 'modules/appService.bicep' = {
   name: 'LinkGeek-app'
   params: {
     location: location
-    webAppName: 'LinkGeek'
+    appServicePlanName: appServicePlanName
+    webSiteName: webSiteName
+    sku: sku
   }
 }

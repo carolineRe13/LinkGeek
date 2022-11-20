@@ -20,33 +20,33 @@
                             }
                         </MudSelect>
                     </MudItem>
-                    <MudItem xs="6">
-                        <MudSelect @bind-Value="postFormModel.LookingFor" Label="Looking for">
-                            @foreach(PlayerRoles lookingFor in Enum.GetValues(typeof(PlayerRoles)))
-                            {
-                                <MudSelectItem Value="@lookingFor">
-                                    @lookingFor
-                                </MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudItem>
-                    <MudItem xs="3">
-                        <MudDatePicker Label="Date" @bind-Date="postFormModel.PlayingAtDate"/>
-                    </MudItem>
-                    <MudItem xs="3">
-                        <MudTimePicker Label="Time" @bind-Time="postFormModel.PlayingAtTime"/>
-                    </MudItem>
-                    <MudItem xs="3">
-                        <MudSelect @bind-Value="postFormModel.TimeZone" Label="TZ">
-                            @foreach(TimeZoneInfo tz in TimeZoneInfo.GetSystemTimeZones())
-                            {
-                                <MudSelectItem Value="@tz">
-                                    @tz.Id
-                                </MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudItem>
                 }
+                <MudItem xs="6">
+                    <MudSelect @bind-Value="postFormModel.LookingFor" Label="Looking for">
+                        @foreach(PlayerRoles lookingFor in Enum.GetValues(typeof(PlayerRoles)))
+                        {
+                            <MudSelectItem Value="@lookingFor">
+                                @lookingFor
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudDatePicker Label="Date" @bind-Date="postFormModel.PlayingAtDate"/>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudTimePicker Label="Time" @bind-Time="postFormModel.PlayingAtTime"/>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudSelect @bind-Value="postFormModel.TimeZone" Label="TZ">
+                        @foreach(TimeZoneInfo tz in TimeZoneInfo.GetSystemTimeZones())
+                        {
+                            <MudSelectItem Value="@tz">
+                                @tz.Id
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
                 <MudItem xs="3">
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Publish</MudButton>
                 </MudItem>

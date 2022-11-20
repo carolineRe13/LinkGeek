@@ -3,6 +3,7 @@ using LinkGeek.Data;
 using LinkGeek.Models;
 using LinkGeek.Pages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace LinkGeek.Services;
 
@@ -38,187 +39,187 @@ public record UpdatePostResponse(UpdatePostResponseValue UpdatePostResponseValue
 
 public class UserService
 {
-    private readonly IContextProvider contextProvider;
+    private readonly IContextProvider _contextProvider;
 
     public UserService(IContextProvider contextProvider)
     {
-        this.contextProvider = contextProvider;
+        this._contextProvider = contextProvider;
     }
 
-    public async Task<AddGameToUserResponse?> AddGameToUser(string userId, string gameId)
+    public async Task<AddGameToUserResponse?> AddGameToUserAsync(string userId, string gameId)
     {
-        await using (var context = contextProvider.GetContext())
+        await using var context = _contextProvider.GetContext();
+        var game = await context.Game.FindAsync(gameId);
+        if (game == null)
         {
-            var game = await context.Game.FindAsync(gameId);
-            if (game == null)
-            {
-                return AddGameToUserResponse.GameNotFound;
-            }
-
-            var user = await GetUserWithGames(context, userId);
-
-            if (user == null)
-            {
-                return AddGameToUserResponse.UserNotFound;
-            }
-
-            user.Games ??= new List<Game>();
-            if (user.Games.Contains(game))
-            {
-                return AddGameToUserResponse.GameAlreadyAdded;
-            }
-
-            user.Games.Add(game);
-
-            await context.SaveChangesAsync();
-            return AddGameToUserResponse.Success;
+            return AddGameToUserResponse.GameNotFound;
         }
+
+        var user = await GetUserWithGamesAsync(context, userId);
+        if (user == null)
+        {
+            return AddGameToUserResponse.UserNotFound;
+        }
+
+        user.Games ??= new List<Game>();
+        if (user.Games.Contains(game))
+        {
+            return AddGameToUserResponse.GameAlreadyAdded;
+        }
+
+        user.Games.Add(game);
+
+        await context.SaveChangesAsync();
+        return AddGameToUserResponse.Success;
     }
     
-    public async Task<RemoveGameFromUserResponse?> RemoveGameFromUser(string userId, string gameId)
+    public async Task<RemoveGameFromUserResponse?> RemoveGameFromUserAsync(string userId, string gameId)
     {
-        await using (var context = contextProvider.GetContext())
+        await using var context = _contextProvider.GetContext();
+        var game = await context.Game.FindAsync(gameId);
+        if (game == null)
         {
-            var game = await context.Game.FindAsync(gameId);
-            if (game == null)
-            {
-                return RemoveGameFromUserResponse.GameNotFound;
-            }
-
-            var user = await GetUserWithGames(context, userId);
-
-            if (user == null)
-            {
-                return RemoveGameFromUserResponse.UserNotFound;
-            }
-
-            user.Games ??= new List<Game>();
-            if (!user.Games.Contains(game))
-            {
-                return RemoveGameFromUserResponse.GameAlreadyRemoved;
-            }
-
-            user.Games.Remove(game);
-
-            await context.SaveChangesAsync();
-            return RemoveGameFromUserResponse.Success;
+            return RemoveGameFromUserResponse.GameNotFound;
         }
+
+        var user = await GetUserWithGamesAsync(context, userId);
+        if (user == null)
+        {
+            return RemoveGameFromUserResponse.UserNotFound;
+        }
+
+        user.Games ??= new List<Game>();
+        if (!user.Games.Contains(game))
+        {
+            return RemoveGameFromUserResponse.GameAlreadyRemoved;
+        }
+
+        user.Games.Remove(game);
+
+        await context.SaveChangesAsync();
+        return RemoveGameFromUserResponse.Success;
     }
 
-    public async Task<bool> HasGameInLibrary(string userId, string gameId)
+    public async Task<bool> HasGameInLibraryAsync(string userId, string gameId)
     {
-        await using (var context = contextProvider.GetContext())
+        await using var context = _contextProvider.GetContext();
+        var game = context.Game.FindAsync(gameId).Result;
+        if (game == null)
         {
-            var game = context.Game.FindAsync(gameId).Result;
-            if (game == null)
-            {
-                return false;
-            }
-
-            var user = await GetUserWithGames(context, userId);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            if (user.Games.Contains(game))
-            {
-                return true;
-            }
-
             return false;
         }
-    }
 
-    public async Task<string?> UpdateLocation(ApplicationUser user, string location) =>
-        await UpdateLocation(user.Id, location);
+        var user = await GetUserWithGamesAsync(context, userId);
 
-    public async Task<string?> UpdateLocation(string userId, string location)
-    {
-        await using (var context = contextProvider.GetContext())
+        if (user == null)
         {
-            var user = await context.Users.FindAsync(userId);
-            if (user == null)
-            {
-                return null;
-            }
-
-            user.Location = location;
-            await context.SaveChangesAsync();
-            return user.Location;
+            return false;
         }
+
+        return user.Games != null && user.Games.Contains(game);
     }
 
-    public async Task<string?> UpdateStatus(ApplicationUser user, string status) =>
-        await UpdateStatus(user.Id, status);
+    public async Task<string?> UpdateLocationAsync(ApplicationUser user, string location) =>
+        await UpdateLocationAsync(user.Id, location);
 
-    public async Task<string?> UpdateStatus(string userId, string status)
+    public async Task<string?> UpdateLocationAsync(string userId, string location)
+    {
+        await using var context = _contextProvider.GetContext();
+        var user = await context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return null;
+        }
+
+        user.Location = location;
+        await context.SaveChangesAsync();
+        return user.Location;
+    }
+
+    public async Task<string?> UpdateStatusAsync(ApplicationUser user, string status) =>
+        await UpdateStatusAsync(user.Id, status);
+
+    public async Task<string?> UpdateStatusAsync(string userId, string status)
     {
         // TODO: Add profanity filter
-        await using (var context = contextProvider.GetContext())
+        await using var context = _contextProvider.GetContext();
+        var user = await context.Users.FindAsync(userId);
+        if (user == null)
         {
-            var user = await context.Users.FindAsync(userId);
-            if (user == null)
-            {
-                return null;
-            }
-
-            user.Status = status;
-            await context.SaveChangesAsync();
-            return user.Status;
+            return null;
         }
+
+        user.Status = status;
+        await context.SaveChangesAsync();
+        return user.Status;
     }
 
     public async Task<ICollection<Game>> GetUsersGamesAsync(string userId)
     {
-        await using (var context = contextProvider.GetContext())
+        await using var context = _contextProvider.GetContext();
+        var user = await GetUserWithGamesAsync(context, userId);
+        return user?.Games ?? new List<Game>();
+    }
+
+    public async Task<ApplicationUser?> GetUserFromUserNameAsync(
+        string userName, 
+        bool includeFriends = true,
+        bool includeGames = true,
+        bool includeLikedPosts = true)
+    {
+        await using var context = _contextProvider.GetContext();
+        return await GetUserFromUserNameAsync(context, userName, includeFriends, includeGames, includeLikedPosts);
+    }
+
+    private async Task<ApplicationUser?> GetUserFromUserNameAsync(
+        ApplicationDbContext context, 
+        string userName, 
+        bool includeFriends = true,
+        bool includeGames = true,
+        bool includeLikedPosts = true)
+    {
+        var a = context.Users.AsQueryable();
+        if (includeFriends)
         {
-            var user = await GetUserWithGames(context, userId);
-            return user.Games ?? new List<Game>();
+            a = a.Include(u => u.Friends)
+                .Include(u => u.SentFriendRequests)
+                .Include(u => u.ReceivedFriendRequests);
         }
-    }
 
-    public async Task<ApplicationUser?> GetUserFromUserNameAsync(string userName)
-    {
-        await using var context = contextProvider.GetContext();
-        return await GetUserFromUserNameAsync(context, userName);
-    }
+        if (includeGames)
+        {
+            a = a.Include(u => u.Games);
+        }
 
-    public async Task<ApplicationUser?> GetUserFromUserNameAsync(ApplicationDbContext context, string userName)
-    {
-        return await context.Users
-            .Include(u => u.Friends)
-            .Include(u => u.SentFriendRequests)
-            .Include(u => u.ReceivedFriendRequests)
-            .Include(u => u.Games)
-            .FirstOrDefaultAsync(u => u.UserName == userName);
+        if (includeLikedPosts)
+        {
+            a = a.Include(u => u.LikedPosts);
+        }
+        return await a.AsSplitQuery().FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
     public async Task<CreatePostResponse?> CreatePostAsync(ApplicationUser user, string content, Game? game, PlayerRoles lookingFor, DateTimeOffset? playingAt)
     {
-        await using (var context = contextProvider.GetContext())
+        await using var context = _contextProvider.GetContext();
+        var contextUser = await this.GetUserFromUserNameAsync(context, user.UserName);
+        var contextGame = game != null ? await context.Game.FindAsync(game.Id) : null;
+        var post = new Post
         {
-            var contextUser = await GetUserFromUserNameAsync(context, user.UserName);
-            var contextGame = game != null ? await context.Game.FindAsync(game.Id) : null;
-            var post = new Post
-            {
-                ApplicationUser = contextUser!,
-                Content = content,
-                Game = contextGame,
-                PlayingAt = playingAt,
-                LookingFor = lookingFor == PlayerRoles.None ? null : lookingFor,
-            };
-            context.Posts.Add(post);
-            await context.SaveChangesAsync();
-        }
+            ApplicationUser = contextUser!,
+            Content = content,
+            Game = contextGame,
+            PlayingAt = playingAt,
+            LookingFor = lookingFor == PlayerRoles.None ? null : lookingFor,
+        };
+        context.Posts.Add(post);
+        await context.SaveChangesAsync();
 
         return CreatePostResponse.Success;
     }
 
-    public async Task<Post?> PostComment(ApplicationUser user, Post post, string content)
+    public async Task<Post?> PostCommentAsync(ApplicationUser user, Post post, string content)
     {
-        await using var context = contextProvider.GetContext();
+        await using var context = _contextProvider.GetContext();
         var contextUser = await GetUserFromUserNameAsync(context, user.UserName);
         if (contextUser == null) return default;
             
@@ -226,6 +227,7 @@ public class UserService
             .Include(p => p.Likes)
             .Include(p => p.Comments)
             .Where(p => p.Id == post.Id)
+            .AsSplitQuery()
             .FirstOrDefaultAsync();
         if (existingPost == null) return default;
 
@@ -241,82 +243,76 @@ public class UserService
         return existingPost;
     }
     
-    public async Task<UpdatePostResponse> UpdatePost(Post post, ApplicationUser currentUser)
+    public async Task<UpdatePostResponse> UpdatePostAsync(Post post, ApplicationUser currentUser)
     {
-        await using (var context = contextProvider.GetContext())
-        {
-            var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
-            if (contextUser == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
-
-            var contextPost = await context.Posts
-                .Include(p => p.Likes)
-                .Where(p => p.Id == post.Id)
-                .FirstOrDefaultAsync();
-            if (contextPost == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
+        await using var context = _contextProvider.GetContext();
+        var contextPost = await context.Posts
+            .Include(p => p.Likes)
+            .Where(p => p.Id == post.Id)
+            .FirstOrDefaultAsync();
+        if (contextPost == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
             
-            if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
-            {
-                contextPost.Likes.Remove(contextUser);
-                await context.SaveChangesAsync();
-                return new UpdatePostResponse(UpdatePostResponseValue.SuccessfullyRemoved, contextPost);
-            }
-            contextPost.Likes.Add(contextUser);
+        if (contextPost.Likes.Any(u => u.Id == currentUser.Id))
+        {
+            contextPost.Likes.Remove(contextPost.Likes.Single(u => u.Id == currentUser.Id));
             await context.SaveChangesAsync();
-            return new UpdatePostResponse(UpdatePostResponseValue.Success, contextPost);
+            return new UpdatePostResponse(UpdatePostResponseValue.SuccessfullyRemoved, contextPost);
         }
+        
+        var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName, includeFriends: false, includeGames: false, includeLikedPosts: false);
+        if (contextUser == null) return new UpdatePostResponse(UpdatePostResponseValue.Failure, null);
+        contextPost.Likes.Add(contextUser);
+        await context.SaveChangesAsync();
+        return new UpdatePostResponse(UpdatePostResponseValue.Success, contextPost);
     }
     
-    public async Task<bool> IsLiked(Post post, ApplicationUser currentUser)
+    public async Task<bool> IsLikedAsync(Post post, ApplicationUser currentUser)
     {
-        await using (var context = contextProvider.GetContext())
-        {
-            var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
-            if (contextUser == null) return false;
+        await using var context = _contextProvider.GetContext();
+        var contextUser = await this.GetUserFromUserNameAsync(context, currentUser.UserName);
+        if (contextUser == null) return false;
 
-            var contextPost = await context.Posts.Include(p => p.Likes).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
-            if (contextPost == null) return false;
-            if (contextPost.Likes.Any(u => u.Id == contextUser.Id))
-            {
-                return true;
-            }
-
-            return false;
-        }
+        var contextPost = await context.Posts.Include(p => p.Likes).Where(p => p.Id == post.Id).FirstOrDefaultAsync();
+        return contextPost != null && contextPost.Likes.Any(u => u.Id == contextUser.Id);
     }
     
     public async Task<List<Post>> GetUserFeedAsync(ApplicationUser user)
     {
-        await using var context = contextProvider.GetContext();
+        await using var context = _contextProvider.GetContext();
         
         var feed = await context.Posts
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Include(p => p.Likes)
-            .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
+            .Include(p => p.Comments)
+                .ThenInclude(c => c.ApplicationUser)
             .Where(post => post.ApplicationUser.Id == user.Id
                            || user.Friends.Select(f => f.Id).Contains(post.ApplicationUser.Id)
                            || (user.Games != null && post.Game != null && user.Games.Select(f => f.Id).Contains(post.Game.Id)))
             .OrderByDescending(p => p.CreatedAt)
+            .AsSplitQuery()
             .ToListAsync();
 
         return feed;
     }
     
-    public async Task<Post?> GetPost(string postId)
+    public async Task<Post?> GetPostAsync(string postId)
     {
-        await using var context = contextProvider.GetContext();
+        await using var context = _contextProvider.GetContext();
         
         return await context.Posts
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Include(p => p.Comments.OrderBy(c => c.CreatedAt))
+            .Include(p => p.Likes)
             .Where(post => post.Id.ToString() == postId)
+            .AsSplitQuery()
             .FirstOrDefaultAsync();
     }
 
-    private Task<ApplicationUser> GetUserWithGames(ApplicationDbContext context, string userId)
+    private async Task<ApplicationUser?> GetUserWithGamesAsync(ApplicationDbContext context, string userId)
     {
-        return context.Users.Include(u => u.Games)
-            .FirstAsync(u => u.Id == userId);
+        return await context.Users.Include(u => u.Games)
+            .FirstOrDefaultAsync(u => u.Id == userId);
     }
 }

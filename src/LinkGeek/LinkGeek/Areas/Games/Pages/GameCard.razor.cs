@@ -30,11 +30,11 @@ public partial class GameCard
     
     [CascadingParameter] ApplicationUser? currentUser { get; set; }
     
-    private bool isGameInLibrary = false;
+    private bool _isGameInLibrary = false;
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        await IsGameInLibrary();
+        IsGameInLibrary();
     }
     
     
@@ -44,21 +44,22 @@ public partial class GameCard
     private async Task AddGame(string id)
     {
         if (currentUser == null) return;
+        currentUser?.Games?.Add(this.Game);
         
-        var response = await UserService.AddGameToUser(currentUser.Id, id);
-        
+        var response = await UserService.AddGameToUserAsync(currentUser.Id, id);
         switch (response)
         {
             case AddGameToUserResponse.Success:
                 Snackbar.Add("Game added to library", Severity.Success);
-                await IsGameInLibrary();
+                IsGameInLibrary();
                 break;
             case AddGameToUserResponse.GameAlreadyAdded:
                 Snackbar.Add("Game already in library", Severity.Warning);
-                await IsGameInLibrary();
+                IsGameInLibrary();
                 break;
             default:
                 Snackbar.Add("Error adding game to library", Severity.Error);
+                currentUser?.Games?.Remove(this.Game);
                 break;
         }
     }
@@ -69,21 +70,22 @@ public partial class GameCard
     private async Task RemoveGame(string id)
     {
         if (currentUser == null) return;
-        
-        var response = await UserService.RemoveGameFromUser(currentUser.Id, id);
-        
+        currentUser?.Games?.Remove(this.Game);
+
+        var response = await UserService.RemoveGameFromUserAsync(currentUser.Id, id);
         switch (response)
         {
             case RemoveGameFromUserResponse.Success:
                 Snackbar.Add("Game removed from library", Severity.Success);
-                await IsGameInLibrary();
+                IsGameInLibrary();
                 break;
             case RemoveGameFromUserResponse.GameAlreadyRemoved:
                 Snackbar.Add("Game already removed from library", Severity.Warning);
-                await IsGameInLibrary();
+                IsGameInLibrary();
                 break;
             default:
                 Snackbar.Add("Error adding game to library", Severity.Error);
+                currentUser?.Games?.Add(this.Game);
                 break;
         }
     }
@@ -91,17 +93,10 @@ public partial class GameCard
     /// <summary>
     /// Method <c>IsGameInLibrary</c> returns true if the game is in the current user's library
     /// </summary>
-    private async Task IsGameInLibrary()
+    private void IsGameInLibrary()
     {
         if (currentUser == null) return;
-        if (currentUser.Games != null && currentUser.Games.Any(g => g.Id == Game.Id))
-        {
-            isGameInLibrary = true;
-        }
-        else
-        {
-            isGameInLibrary = await UserService.HasGameInLibrary(currentUser.Id, Game.Id);
-        }
-        this.StateHasChanged();
+        _isGameInLibrary = currentUser.Games != null && currentUser.Games.Any(game => game.Id == Game.Id);
+        StateHasChanged();
     }
 }

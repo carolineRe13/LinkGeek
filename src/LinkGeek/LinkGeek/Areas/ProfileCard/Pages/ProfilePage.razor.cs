@@ -63,7 +63,7 @@ public partial class ProfilePage
         if (CurrentUser == null)
             return;
         
-        var result = await _userService.UpdateLocation(CurrentUser, this._locationForm.Value);
+        var result = await _userService.UpdateLocationAsync(CurrentUser, this._locationForm.Value);
 
         if (result == null)
         {
@@ -84,7 +84,7 @@ public partial class ProfilePage
         if (CurrentUser == null)
             return;
 
-        var result = await _userService.UpdateStatus(CurrentUser, this._statusForm.Value);
+        var result = await _userService.UpdateStatusAsync(CurrentUser, this._statusForm.Value);
 
         if (result == null)
         {
