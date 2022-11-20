@@ -7,9 +7,12 @@
     },
     "databaseOptions": {
       "value": {
-        "databaseName": "LinkGeek-cosmosdb",
-        "databaseNameSQLServer": "LinkGeek-SQLServer"
+        "databaseName": "LinkGeek-cosmosdb-EU",
+        "databaseNameSQLServer": "LinkGeek-SQLServer-EU"
       }
+    },
+    "sku": {
+      "value": "S1"
     }
   }
 }

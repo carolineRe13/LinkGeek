@@ -10,6 +10,15 @@
         "databaseName": "LinkGeek-cosmosdb",
         "databaseNameSQLServer": "LinkGeek-SQLServer"
       }
+    },
+    "appServicePlanName": {
+      "value": "appserviceplan-linkgeek"
+    },
+    "webSiteName": {
+      "value": "wapp-linkgeek"
+    },
+    "sku": {
+      "value": "S1"
     }
   }
 }

@@ -1,9 +1,8 @@
-param webAppName string
-param sku string = 'S1' // The SKU of App Service Plan
+param sku string = 'F1' // The SKU of App Service Plan
 param linuxFxVersion string = 'DOTNETCORE|Latest' // The runtime stack of web app
 param location string = resourceGroup().location
-var appServicePlanName = toLower('AppServicePlan-${webAppName}')
-var webSiteName = toLower('wapp-${webAppName}')
+param appServicePlanName string
+param webSiteName string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: appServicePlanName
