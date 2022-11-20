@@ -49,8 +49,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - name: Install dependencies
-        run: npm i
+      - name: cd to test project
+        run: cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       - name: Install playwright browsers
         run: npx playwright install --with-deps
       - name: Run tests
