@@ -16,25 +16,25 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Authentication from Azure
-services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+if (configuration.GetValue<bool>("UseMicrosoftAuth"))
 {
-    microsoftOptions.ClientId = configuration["ClientId"];
-    microsoftOptions.ClientSecret = configuration["ClientSecret"];
-});
+    services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+    {
+        microsoftOptions.ClientId = configuration["ClientId"];
+        microsoftOptions.ClientSecret = configuration["ClientSecret"];
+    });
+}
+else
+{
+    services.AddAuthentication();
+}
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // sql server is used as a db of choice
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    if (configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") == "IntegrationTests")
-    {
-        options.UseSqlite("integrationTest.db");
-    }
-    else
-    {
-        options.UseSqlServer(connectionString);
-    }
+    options.UseSqlServer(connectionString);
 });
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();

@@ -55,6 +55,9 @@ jobs:
           include-prerelease: true
       - uses: actions/setup-node@v3
 
+      - name: Start sqlServer
+        run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourSTRONG!Passw0rd' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
+
       - name: Run dotnet
         env:
           ASPNETCORE_URLS: "https://localhost:7010;http://localhost:5010"
