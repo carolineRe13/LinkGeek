@@ -8,6 +8,8 @@ public class MyProfileTests
     [Fact]
     public async Task EditProfile()
     {
+        var rand = new Random();
+        var id = rand.Next(10000);
         // Arrange
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -22,9 +24,9 @@ public class MyProfileTests
         await page.GotoAsync("https://localhost:7010/");
         await page.GetByRole(AriaRole.Link, new() { NameString = "Register" }).ClickAsync();
         await page.GetByLabel("Email").ClickAsync();
-        await page.GetByLabel("Email").FillAsync("linkgeek@test.com");
+        await page.GetByLabel("Email").FillAsync("linkgeek-" + id +"@test.com");
         await page.GetByLabel("Username").ClickAsync();
-        await page.GetByLabel("Username").FillAsync("LinkGeekTest");
+        await page.GetByLabel("Username").FillAsync("LinkGeekTest"+id);
         await page.GetByLabel("Confirm password").ClickAsync();
         await page.GetByLabel("Confirm password").FillAsync("AVerySafePassword19*");
         await page.Locator("#Input_Password").ClickAsync();

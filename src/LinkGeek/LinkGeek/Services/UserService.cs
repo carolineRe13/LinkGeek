@@ -280,7 +280,7 @@ public class UserService
     {
         await using var context = _contextProvider.GetContext();
         
-        var feed = await context.Posts
+        return await context.Posts
             .Include(p => p.ApplicationUser)
             .Include(p => p.Game)
             .Include(p => p.Likes)
@@ -292,8 +292,6 @@ public class UserService
             .OrderByDescending(p => p.CreatedAt)
             .AsSplitQuery()
             .ToListAsync();
-
-        return feed;
     }
     
     public async Task<Post?> GetPostAsync(string postId)
