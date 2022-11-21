@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Account creation and update status', async ({ page}) => {
+    test.setTimeout(120000);
     let id = Math.floor(Math.random() * 1000);
     await page.goto('https://localhost:7010/');
     await page.getByRole('link', { name: 'Login' }).click();
@@ -24,7 +25,7 @@ test('Account creation and update status', async ({ page}) => {
     await page.getByRole('button', { name: 'Log in' }).click();
 
     // go to My profile card and change status
-    await page.getByRole('link', { name: 'My Profile card' }).click();
+    await page.getByRole('navigation').getByRole('link', { name: 'My Profile card' }).click();
     await page.locator("id=statusPencil").click();
     await page.locator("#status").click();
     await page.locator("#status").fill("Hey!!");
