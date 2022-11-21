@@ -44,7 +44,6 @@ jobs:
           
   tests_e2e:
     name: Run end-to-end tests
-    # needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -58,28 +57,31 @@ jobs:
       - name: Start sqlServer
         run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourSTRONG!Passw0rd' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
 
+      - name: Run tests
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
+          dotnet run --launch-profile IntegrationTests &
+
       - name: Install dependencies
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
           npm ci
+
       - name: Install playwright browsers
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
           npx playwright install --with-deps
+
       - name: Run tests
-        env:
-          ASPNETCORE_URLS: "https://localhost:7010;http://localhost:5010"
-          ASPNETCORE_ENVIRONMENT: IntegrationTests
         run: |
-          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
-          dotnet run --launch-profile IntegrationTests &
-          sleep 30
-          cd ../LinkGeekIntegrationTests
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
           npx playwright test --config=tests/config.ts
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: 
+      - build
+      - tests_e2e
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
