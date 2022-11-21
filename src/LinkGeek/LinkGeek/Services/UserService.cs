@@ -168,18 +168,34 @@ public class UserService
         bool includeLikedPosts = true)
     {
         await using var context = _contextProvider.GetContext();
-        return await GetUserFromUserNameAsync(null, userName, includeFriends, includeGames, includeLikedPosts);
+        var a = context.Users.AsQueryable();
+        if (includeFriends)
+        {
+            a = a.Include(u => u.Friends)
+                .Include(u => u.SentFriendRequests)
+                .Include(u => u.ReceivedFriendRequests);
+        }
+
+        if (includeGames)
+        {
+            a = a.Include(u => u.Games);
+        }
+
+        if (includeLikedPosts)
+        {
+            a = a.Include(u => u.LikedPosts);
+        }
+        return await a.AsSplitQuery().FirstOrDefaultAsync(u => u.UserName == userName);
     }
 
     public async Task<ApplicationUser?> GetUserFromUserNameAsync(
-        ApplicationDbContext? context, 
+        ApplicationDbContext context, 
         string userName, 
         bool includeFriends = true,
         bool includeGames = true,
         bool includeLikedPosts = true)
     {
-        await using var newContext = context != null ? context : _contextProvider.GetContext();
-        var a = newContext.Users.AsQueryable();
+        var a = context.Users.AsQueryable();
         if (includeFriends)
         {
             a = a.Include(u => u.Friends)
