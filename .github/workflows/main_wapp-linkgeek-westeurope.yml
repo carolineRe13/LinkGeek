@@ -75,7 +75,7 @@ jobs:
           dotnet run &
           sleep 30
           cd ../LinkGeekIntegrationTests
-          npx playwright test
+          npx playwright test --config=tests/config.ts
 
   deploy:
     runs-on: ubuntu-latest

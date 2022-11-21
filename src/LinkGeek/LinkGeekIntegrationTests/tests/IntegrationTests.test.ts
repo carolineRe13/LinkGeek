@@ -1,10 +1,6 @@
-import { test, expect, chromium } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-test('Account creation test', async () => {
-    const browser = await chromium.launch({ headless: false, slowMo: 50 });
-    const context = await browser.newContext({ ignoreHTTPSErrors: true });
-    const page = await context.newPage();
-
+test('Account creation test', async ({ page}) => {
     let id = Math.floor(Math.random() * 1000);
     await page.goto('https://localhost:7010/');
     await page.getByRole('link', { name: 'Login' }).click();
@@ -18,6 +14,4 @@ test('Account creation test', async () => {
     await page.getByLabel('Confirm password').click();
     await page.getByLabel('Confirm password').fill('Tt0#' + id);
     await page.getByRole('button', { name: 'Register' }).click();
-    
-    await browser.close();
 });
