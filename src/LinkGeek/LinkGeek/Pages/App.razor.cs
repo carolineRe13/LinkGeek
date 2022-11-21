@@ -32,6 +32,8 @@ public partial class App
     [Inject] 
     private IJSRuntime _jsRuntime { get; set; }
 
+    [Inject] private IConfiguration _configuration { get; set; }
+
     [Inject] 
     private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     
@@ -51,6 +53,17 @@ public partial class App
             hubConnection = new HubConnectionBuilder()
                 .WithUrl(_navigationManager.ToAbsoluteUri("/signalRHub"), options =>
                 {
+                    if (_configuration.GetValue<bool>("IgnoreSSLErrors"))
+                    {
+                        options.HttpMessageHandlerFactory = (message) =>
+                        {
+                            if (message is HttpClientHandler clientHandler)
+                                // always verify the SSL certificate
+                                clientHandler.ServerCertificateCustomValidationCallback +=
+                                    (sender, certificate, chain, sslPolicyErrors) => { return true; };
+                            return message;
+                        };
+                    }
                     if (HttpContextAccessor.HttpContext != null) {
                         foreach (var cookie in HttpContextAccessor.HttpContext.Request.Cookies) {
                             options.Cookies.Add(new Cookie(cookie.Key, cookie.Value, null, HttpContextAccessor.HttpContext.Request.Host.Host));
