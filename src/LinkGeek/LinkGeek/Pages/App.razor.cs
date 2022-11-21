@@ -60,29 +60,27 @@ public partial class App
                 .WithAutomaticReconnect()
                 .Build();
         
-            hubConnection.On<int>("Connected", i => {
-                StateHasChanged();
+            hubConnection.On<int>("Connected", async _ => {
+                await InvokeAsync(StateHasChanged);
             });
             
-            hubConnection.On<string, string, string>("ReceiveChatNotification", (message, receiverUserId, senderUserId) =>
+            hubConnection.On<string, string, string>("ReceiveChatNotification", async (message, receiverUserId, senderUserId) =>
             {
-                if (currentUser?.Id == receiverUserId)
+                if (currentUser?.Id != receiverUserId) return;
+                _snackBar.Add(message, Severity.Info, config =>
                 {
-                    _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
-                    _snackBar.Add(message, Severity.Info, config =>
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                    config.Action = "Chat?";
+                    config.ActionColor = Color.Info;
+                    config.Onclick = snackbar =>
                     {
-                        config.VisibleStateDuration = 10000;
-                        config.HideTransitionDuration = 500;
-                        config.ShowTransitionDuration = 500;
-                        config.Action = "Chat?";
-                        config.ActionColor = Color.Info;
-                        config.Onclick = snackbar =>
-                        {
-                            _navigationManager.NavigateTo($"chat/{senderUserId}");
-                            return Task.CompletedTask;
-                        };
-                    });
-                }
+                        _navigationManager.NavigateTo($"chat/{senderUserId}");
+                        return Task.CompletedTask;
+                    };
+                });
+                await _jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
             });
             
             await hubConnection.StartAsync();
@@ -97,7 +95,7 @@ public partial class App
         {
             var incompleteUser = await UserManager.GetUserAsync(user);
             currentUser = await UserService.GetUserFromUserNameAsync(incompleteUser.UserName) ?? incompleteUser;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 

@@ -37,7 +37,7 @@ public partial class DiscoverabilityPage
         if (CurrentUser != null)
         {
             this.users = await this.DiscoverUserService.GetUsers(CurrentUser);
-            this.StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

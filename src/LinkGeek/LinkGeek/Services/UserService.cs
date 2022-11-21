@@ -171,7 +171,7 @@ public class UserService
         return await GetUserFromUserNameAsync(context, userName, includeFriends, includeGames, includeLikedPosts);
     }
 
-    private async Task<ApplicationUser?> GetUserFromUserNameAsync(
+    public async Task<ApplicationUser?> GetUserFromUserNameAsync(
         ApplicationDbContext context, 
         string userName, 
         bool includeFriends = true,

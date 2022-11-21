@@ -18,7 +18,7 @@ public class DiscoverUserService
     public async Task<List<ApplicationUser>> GetUsers(ApplicationUser currentUser)
     {
         await using var context = contextProvider.GetContext();
-        var completeUser = await _userService.GetUserFromUserNameAsync(currentUser.UserName, includeLikedPosts: false);
+        var completeUser = await _userService.GetUserFromUserNameAsync(context, currentUser.UserName, includeLikedPosts: false);
         if (completeUser == null) return new List<ApplicationUser>();
 
         var friendIds = completeUser.Friends.Select(f => f.Id).ToList();

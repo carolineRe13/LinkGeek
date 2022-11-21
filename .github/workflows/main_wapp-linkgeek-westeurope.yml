@@ -31,6 +31,11 @@ jobs:
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           dotnet build --configuration Release
 
+      - name: Dotnet test
+        run: |
+          cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          dotnet test
+
       - name: dotnet publish
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

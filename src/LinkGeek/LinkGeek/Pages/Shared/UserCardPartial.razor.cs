@@ -95,7 +95,7 @@ public partial class UserCardPartial
             var result = await method(CurrentUser.Id, DisplayedUser.Id);
             Snackbar.Add(this._friendsResponses[result].Text, this._friendsResponses[result].Severity);
             await this.ReloadUsersAsync();
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
         else
         {
@@ -106,7 +106,7 @@ public partial class UserCardPartial
     protected override async Task OnParametersSetAsync()
     {
         await this.ReloadUsersAsync();
-        this.StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task ReloadUsersAsync()

@@ -72,7 +72,7 @@ public partial class ProfilePage
         else
         {
             CurrentUser.Location = result;
-            this.StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -93,7 +93,7 @@ public partial class ProfilePage
         else
         {
             CurrentUser.Status = result;
-            this.StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 

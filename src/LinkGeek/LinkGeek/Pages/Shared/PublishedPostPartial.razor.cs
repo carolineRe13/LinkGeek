@@ -78,7 +78,7 @@ public partial class PublishedPostPartial
             _snackBar.Add("Error");
         }
         
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task CopyShareLinkToClipboard()

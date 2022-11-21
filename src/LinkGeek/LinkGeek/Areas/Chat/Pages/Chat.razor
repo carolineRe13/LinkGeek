@@ -14,23 +14,23 @@
                         <input type="text" placeholder="Search...">
                     </div>
                 </div>
-                @if (ChatUsers == null)
+                @if (_chatUsers == null)
                 {
                     <div>
                         <Chase class="chat-chase"/>
                     </div>
                 }
-                else if(ChatUsers.Count == 0)
+                else if(_chatUsers.Count == 0)
                 {
                     <span class="no-friends">Add some friends to chat with them!</span>
                 }
                 else
                 {
-                    @foreach (var user in ChatUsers)
+                    @foreach (var user in _chatUsers)
                     {
                         if (user.Id == ContactId)
                         {
-                            <div class="discussion message-active" onclick="@(() => LoadUserChat(user.Id))">
+                            <div class="discussion message-active">
                                 @if (@user.ProfilePictureContentType == null)
                                 {
                                     <img class="photo" src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
@@ -41,7 +41,7 @@
                                 }
                                 <div class="desc-contact">
                                     <a href="/profile/@user.UserName" class="name">@user.UserName</a>
-                                    @if (_messages.Count > 0)
+                                    @if (_messages?.Count > 0)
                                     {
                                         <p class="message">@_messages[^1].Message</p>
                                     }
@@ -62,9 +62,9 @@
                                 <div class="desc-contact">
                                     <a href="/profile/@user.UserName" class="name">@user.UserName</a>
                                     <p class="message">
-                                        @if (LastMessagePerUser.ContainsKey(@user.Id))
+                                        @if (_lastMessagePerUser.ContainsKey(@user.Id))
                                         {
-                                            <text>@LastMessagePerUser[@user.Id]</text>
+                                            <text>@_lastMessagePerUser[@user.Id]</text>
                                         }
                                     </p>
                                 </div>
@@ -74,50 +74,60 @@
                 }
 
             </section>
-            @if (!string.IsNullOrEmpty(selectedUserName))
+            @if (!string.IsNullOrEmpty(_selectedContact?.UserName))
             {
                 <section class="chat col-11 col-md-9">
                     <div class="header-chat">
                         <i class="icon fa fa-user-o" aria-hidden="true"></i>
-                        <a href="profile/@selectedUserName" class="name">@selectedUserName</a>
+                        <a href="profile/@_selectedContact?.UserName" class="name">@_selectedContact?.UserName</a>
                         <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
                     </div>
                     <div class="chat messages-chat" id="chat-container">
-                        @foreach (var message in _messages)
+                        @if (_messages == null)
                         {
-                            if (@message.FromUser.UserName != currentUser.UserName)
+                            <Chase/>
+                        } else if (_messages.Count == 0)
+                        {
+                            <h1>Start your chat with @_selectedContact?.UserName</h1>
+                        }
+                        else
+                        {
+                            @foreach (var message in _messages.ToList())
                             {
-                                <div class="message">
-                                    @if (@message.FromUser.ProfilePictureContentType == null)
-                                    {
-                                        <img class="photo" src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
-                                    }
-                                    else
-                                    {
-                                        <img class="photo" src="@GetImageSrc(@message.FromUser)" alt="Profile picture">
-                                    }
-                                    <div>
-                                        <p class="time time-other"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
-                                        <p class="text">@message.Message</p>
+                                if (@message.FromUser.UserName != currentUser?.UserName)
+                                {
+                                    <div class="message">
+                                        @if (@message.FromUser.ProfilePictureContentType == null)
+                                        {
+                                            <img class="photo" src="/Content/Images/DefaultProfilePic.jpg" alt="Default Profile picture">
+                                        }
+                                        else
+                                        {
+                                            <img class="photo" src="@GetImageSrc(@message.FromUser)" alt="Profile picture">
+                                        }
+                                        <div>
+                                            <p class="time time-other"> @message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
+                                            <p class="text">@message.Message</p>
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="message text-only">
-                                    <div class="response">
+                                }
+                                else
+                                {
+                                    <div class="message text-only">
+                                        <div class="response">
+                                        </div>
+                                        <div>
+                                            <p class="time time-self">@message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
+                                            <p class="text">@message.Message</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="time time-self">@message.CreatedDate.ToString("dd MMM, yyyy hh:mm tt")</p>
-                                        <p class="text">@message.Message</p>
-                                    </div>
-                                </div>
+                                }
                             }
                         }
                     </div>
                     <div class="footer-chat input-group">
                         <MudTextField Class="form-control" T="string" Placeholder="Type your message here" DisableUnderLine="true"
-                                      @bind-Value="CurrentMessage" Immediate="true" extUpdateSuppression="false" OnKeyPress="Enter"/>
+                                      @bind-Value="_currentMessage" Immediate="true" extUpdateSuppression="false" OnKeyPress="Enter"/>
                         <MudButton Class="input-group-addon" OnClick="SubmitAsync" StartIcon="@Icons.Material.Outlined.Send" ButtonType="ButtonType.Button">Send</MudButton>
                     </div>
                 </section>

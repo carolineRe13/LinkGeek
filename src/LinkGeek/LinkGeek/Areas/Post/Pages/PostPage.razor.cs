@@ -36,7 +36,7 @@ public partial class PostPage
             {
                 NavigationManager.NavigateTo("/404");
             }
-            this.StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

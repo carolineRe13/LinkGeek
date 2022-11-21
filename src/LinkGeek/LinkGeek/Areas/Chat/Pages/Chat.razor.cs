@@ -32,28 +32,26 @@ public partial class Chat
     [CascadingParameter] public HubConnection? hubConnection { get; set; }
     [CascadingParameter] public ApplicationUser? currentUser { get; set; }
     [Parameter] public string ContactId { get; set; }
+
     [Inject]
     UserService UserService { get; set; }
-    
-    public string CurrentMessage { get; set; }
-    public List<ApplicationUser>? ChatUsers;
-    private List<ChatMessage> _messages = new();
-    private string selectedUserName = "";
 
-    private EditContext editContext;
-    
-    private Dictionary<string, string> LastMessagePerUser = new();
+    private string? _currentMessage;
+    private List<ApplicationUser>? _chatUsers;
+    private ApplicationUser? _selectedContact;
+    private List<ChatMessage>? _messages;
+    private readonly Dictionary<string, string> _lastMessagePerUser = new();
 
     /// <summary>
     /// Method <c>SubmitAsync</c> Creates a new ChatMessage and calls the sending function
     /// </summary>
     private async Task SubmitAsync()
     {
-        if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(ContactId))
+        if (!string.IsNullOrEmpty(_currentMessage) && !string.IsNullOrEmpty(ContactId))
         {
             var message = new ChatMessage()
             {
-                Message = CurrentMessage,
+                Message = _currentMessage,
                 ToUserId = ContactId,
                 CreatedDate = DateTime.Now,
                 FromUserId = currentUser.Id
@@ -61,8 +59,8 @@ public partial class Chat
             await _chatManager.SaveMessageAsync(message, currentUser.Id);
             await hubConnection.SendAsync("SendMessageAsync", message, currentUser.UserName);
             
-            CurrentMessage = string.Empty;
-            StateHasChanged();
+            _currentMessage = string.Empty;
+            await InvokeAsync(StateHasChanged);
             await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
         }
     }
@@ -84,7 +82,7 @@ public partial class Chat
         
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        if (user is not { Identity: { IsAuthenticated: true } })
+        if (user is not { Identity.IsAuthenticated: true })
         {
             return;
         }
@@ -95,31 +93,34 @@ public partial class Chat
         }
         hubConnection.On<ChatMessage, string>("ReceiveMessage", async (message, userName) =>
         {
+            if (_messages.Any(m => m.Id == message.Id)) return;
             if ((ContactId == message.ToUserId && currentUser.Id == message.FromUserId) 
                 || (ContactId == message.FromUserId && currentUser.Id == message.ToUserId))
             {
-                if ((ContactId == message.ToUserId && currentUser.Id == message.FromUserId))
+                if (ContactId == message.ToUserId && currentUser.Id == message.FromUserId) // if the message is from the current user
                 {
-                    _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = currentUser.UserName} } );
+                    _messages?.Add(new ChatMessage { Id = message.Id, Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser { UserName = currentUser.UserName} } );
+                    // Notify the recipient
                     await hubConnection.SendAsync("ChatNotificationAsync", $"New Message From {userName}", ContactId, currentUser.Id);
                 }
-                else if ((ContactId == message.FromUserId && currentUser.Id == message.ToUserId))
+                else if (ContactId == message.FromUserId && currentUser.Id == message.ToUserId) // if the message is for the current user
                 {
-                    _messages.Add(new ChatMessage { Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser() { UserName = selectedUserName} });
+                    _messages?.Add(new ChatMessage { Id = message.Id, Message = message.Message, CreatedDate = message.CreatedDate, FromUser = new ApplicationUser { UserName = _selectedContact?.UserName} });
                 }
                 
-                StateHasChanged();
+                await InvokeAsync(StateHasChanged);
                 await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
             }
         });
         
-        FetchUsers();
-        foreach (var chatUser in ChatUsers)
+        _chatUsers = new List<ApplicationUser>(currentUser.Friends);
+        foreach (var chatUser in _chatUsers)
         {
             FetchLastMessage(chatUser.Id);
         }
         if (!string.IsNullOrEmpty(ContactId))
         {
+            _selectedContact = _chatUsers.FirstOrDefault(x => x.Id == ContactId);
             await LoadUserChat(ContactId);
         }
     }
@@ -138,36 +139,28 @@ public partial class Chat
     /// <summary>
     /// Method <c>LoadUserChat</c> Loads the users chat
     /// </summary>
-    public async Task LoadUserChat(string contactId)
+    private async Task LoadUserChat(string contactId)
     {
-        var contact = await _chatManager.GetUserDetailsAsync(contactId);
-        ContactId = contact.Id;
-        selectedUserName = contact.UserName;
-        StateHasChanged();
+        _messages = null;
+        _selectedContact = _chatUsers?.FirstOrDefault(x => x.Id == contactId);
+        ContactId = _selectedContact?.Id ?? (await _chatManager.GetUserDetailsAsync(contactId)).Id;
+        await InvokeAsync(StateHasChanged);
         _messages = await _chatManager.GetConversationAsync(currentUser.Id, contactId);
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         await _jsRuntime.InvokeAsync<string>("ScrollToBottom", "chat-container");
     }
 
     /// <summary>
     /// Method <c>LoadUserChat</c> Loads the users chat
     /// </summary>
-    public async Task FetchLastMessage(string contactId)
+    private async Task FetchLastMessage(string contactId)
     {
         var messages = await _chatManager.GetConversationAsync(currentUser.Id, contactId, 1);
         if (messages.Count > 0)
         {
-            LastMessagePerUser[contactId] = messages[0].Message;
-            StateHasChanged();
+            _lastMessagePerUser[contactId] = messages[0].Message;
+            await InvokeAsync(StateHasChanged);
         }
-    }
-
-    /// <summary>
-    /// Method <c>GetUsersAsync</c> Gets the users by calling the service
-    /// </summary>
-    private void FetchUsers()
-    {
-        ChatUsers = new List<ApplicationUser>(currentUser.Friends);
     }
     
     private string GetImageSrc(ApplicationUser player)
