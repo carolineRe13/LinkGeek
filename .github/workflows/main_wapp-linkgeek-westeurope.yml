@@ -72,7 +72,7 @@ jobs:
           ASPNETCORE_ENVIRONMENT: IntegrationTests
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeek
-          dotnet run &
+          dotnet run --launch-profile IntegrationTests &
           sleep 30
           cd ../LinkGeekIntegrationTests
           npx playwright test --config=tests/config.ts
