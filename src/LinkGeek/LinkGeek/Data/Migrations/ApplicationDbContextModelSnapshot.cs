@@ -141,9 +141,6 @@ namespace LinkGeek.Data.Migrations
                     b.Property<string>("ProfilePictureContentType")
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<string>("ProfilePictureData")
-                        .HasColumnType("nvarchar(2048)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(2048)");
 
@@ -166,7 +163,8 @@ namespace LinkGeek.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                        .HasDatabaseName("EmailIndex")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
