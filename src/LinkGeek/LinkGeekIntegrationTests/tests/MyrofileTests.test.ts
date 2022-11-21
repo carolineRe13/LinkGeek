@@ -26,8 +26,6 @@ test('Account creation and update status', async ({ page}) => {
 
     // go to My profile card and change status
     await page.getByRole('navigation').getByRole('link', { name: 'My Profile card' }).click();
-    // not very clean but else the test behaves flaky
-    await page.waitForTimeout(1000);
     await page.locator("id=statusPencil").click();
     await page.locator("#status").click();
     await page.locator("#status").fill("Hey!!");

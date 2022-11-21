@@ -81,6 +81,13 @@ jobs:
         run: |
           cd ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/LinkGeekIntegrationTests
           npx playwright test --config=tests/config.ts
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: playwright-report
+          path: test-results
 
   deploy:
     runs-on: ubuntu-latest
